@@ -1,5 +1,8 @@
 import { MainNav } from "./nav";
 
+import "../styles/styles.css";
+import "../styles/wallet.css";
+
 const Wallet = () => {
   return (
     <div>

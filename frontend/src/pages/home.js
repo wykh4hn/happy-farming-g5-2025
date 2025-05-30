@@ -10,12 +10,14 @@ const Home = () => {
       <div className="main-content">
         <h1>Welcome to our website!</h1>
         <p>Please login</p>
-        <button id="login">
-          <Link to="/login">Login</Link>
-        </button>
-        <button id="create-account">
-          <Link to="/create-account">Create New Account</Link>
-        </button>
+
+        <Link to="/login" id="login">
+          Login
+        </Link>
+
+        <Link to="/create-account" id="create-account">
+          Create New Account
+        </Link>
       </div>
     </div>
   );
