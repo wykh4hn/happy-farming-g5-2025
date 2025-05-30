@@ -28,7 +28,7 @@ class Product extends React.Component {
   }
 }
 
-const Main = () => {
+const Shop = () => {
   return (
     <div>
       <MainNav />
@@ -37,4 +37,4 @@ const Main = () => {
   );
 };
 
-export { Main };
+export { Shop };

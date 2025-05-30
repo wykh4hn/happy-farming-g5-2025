@@ -3,10 +3,10 @@
 import React from "react";
 import { Component } from "react";
 import { NavLink } from "react-router-dom";
-import MainNav from "../nav";
+import { MainNav } from "./nav";
 import "./styles.css";
 
-const Intro = () => {
+const Home = () => {
   return (
     <div>
       <MainNav />
@@ -18,4 +18,4 @@ const Intro = () => {
   );
 };
 
-export default Intro;
+export default Home;
