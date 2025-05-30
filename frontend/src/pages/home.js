@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { MainNav } from "./nav";
-import "./home.css";
+import "../styles/styles.css";
+import "../styles/home.css";
 
 const Home = () => {
   return (
     <div>
       <MainNav />
-      <div id="home-content">
+      <div className="main-content">
         <h1>Welcome to our website!</h1>
         <p>Please login</p>
         <button id="login">

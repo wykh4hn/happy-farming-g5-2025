@@ -1,8 +1,11 @@
 import { MainNav } from "./nav";
 
+import "../styles/styles.css";
+import "../styles/login.css";
+
 const Login = () => {
   return (
-    <div>
+    <div className="main-content">
       <MainNav />
       <form action="post">
         <label htmlFor="username">Username: </label>

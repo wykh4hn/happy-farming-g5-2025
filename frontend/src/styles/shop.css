@@ -7,6 +7,13 @@
 	box-sizing: border-box;
 }
 
+.product * {
+	display: block;
+	object-fit: contain;
+	background-color: black;
+	color: white;
+}
+
 .product img {
 	width: 100%;
 	height: auto;
@@ -14,11 +21,7 @@
 	background-color: black;
 }
 
-.product * {
-	display: block;
-	background-color: black;
-	color: white;
-}
+
 
 .product button {
 	background-color: black;

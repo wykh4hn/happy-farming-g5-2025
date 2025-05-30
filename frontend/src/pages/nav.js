@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-import "./nav.css";
+
+import "../styles/index.css";
+import "../styles/nav.css";
 
 const MainNav = () => {
   return (
@@ -12,7 +14,7 @@ const MainNav = () => {
       </p>
 
       <button id="create-wallet">
-        <Link to="/wallet">Create New Wallet</Link>
+        <Link to="/create-wallet">Create New Wallet</Link>
       </button>
     </nav>
   );
