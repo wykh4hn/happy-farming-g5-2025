@@ -40,7 +40,7 @@ const Shop = () => {
     <div>
       <MainNav />
       <Product
-        img="logo192.png"
+        img="/holstein-friesian-cow-close-up.webp"
         name="bò 1"
         price="234"
         description="bò"

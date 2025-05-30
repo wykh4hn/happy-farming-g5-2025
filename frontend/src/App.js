@@ -5,6 +5,7 @@ import Home from "./pages/home";
 import { Shop } from "./pages/shop";
 import { Wallet } from "./pages/wallet";
 import { Login } from "./pages/login";
+import { CreateAccount } from "./pages/create";
 
 import "./App.css";
 
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/shop" element={<Shop />} />
           <Route path="/create-wallet" element={<Wallet />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/create-account" element={<CreateAccount />} />
         </Routes>
       </Router>
       {/* <Home /> */}
