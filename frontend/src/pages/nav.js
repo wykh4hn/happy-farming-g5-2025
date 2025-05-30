@@ -1,12 +1,17 @@
 import "./styles.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Main } from "./main";
 
 export default function MainNav() {
   return (
     <nav>
-      <a href="google.com">Home</a>
-      <a href="youtube.com">other</a>
+      <Router>
+        <Routes>
+          <Route path="./main" element={<Main />} />
+        </Routes>
+      </Router>
       <button id="create-wallet">
-        <a href="youtube.com">Create New Wallet</a>
+        <a href="https://youtube.com">Create New Wallet</a>
       </button>
     </nav>
   );
