@@ -1,20 +1,24 @@
 import "./styles.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Main } from "./main";
 
-export default function MainNav() {
+const MainNav = () => {
   return (
     <nav>
-      <Router>
-        <Routes>
-          <Route path="./main" element={<Main />} />
-        </Routes>
-      </Router>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to={"/main"}>Shop</Link>
+        </li>
+      </ul>
       <button id="create-wallet">
         <a href="https://youtube.com">Create New Wallet</a>
       </button>
     </nav>
   );
-}
+};
 
 export { MainNav };
