@@ -8,8 +8,10 @@ const Create = () => {
       <MainNav />
       <label htmlFor="email"></label> <br />
       <input type="email" name="email" id="email" /> <br />
-      <label htmlFor="fullName"></label>
+      <label htmlFor="fullName">Full Name:</label>
       <input type="text" name="fullName" id="fullName" />
+      <label htmlFor="password">Password:</label>
+      <br />
     </div>
   );
 };
