@@ -6,25 +6,27 @@ import "../styles/login.css";
 
 const Login = () => {
   return (
-    <div className="main-content">
+    <div>
       <MainNav />
-      <div id="login-form">
-        <form action="post">
-          <label htmlFor="username">Username: </label>
-          <br />
-          <input type="text" name="username" />
-          <br />
-          <label htmlFor="password">Password: </label>
-          <br />
-          <input type="text" name="password" />
-          <br />
-          <input type="submit" value="Register!" />
-          <br />
-        </form>
-        <p>Don't have an account?</p>
-        <button>
-          <Link to="create">Create Account</Link>
-        </button>
+      <div className="main-content">
+        <div id="login-form">
+          <form action="post">
+            <label htmlFor="username">Username: </label>
+            <br />
+            <input type="text" name="username" />
+            <br />
+            <label htmlFor="password">Password: </label>
+            <br />
+            <input type="text" name="password" />
+            <br />
+            <input type="submit" value="Register!" />
+            <br />
+          </form>
+          <p>Don't have an account?</p>
+          <button>
+            <Link to="create">Create Account</Link>
+          </button>
+        </div>
       </div>
     </div>
   );

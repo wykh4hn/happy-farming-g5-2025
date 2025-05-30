@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import "../styles/index.css";
+import "../styles/styles.css";
 import "../styles/nav.css";
 
 const MainNav = () => {
@@ -13,9 +13,13 @@ const MainNav = () => {
         <Link to="/shop">Shop</Link>
       </p>
 
-      <button id="create-wallet">
-        <Link to="/create-wallet">Create New Wallet</Link>
-      </button>
+      {/* <button id="create-wallet"> */}
+
+      <Link to="/create-wallet" id="create-wallet">
+        Create New Wallet
+      </Link>
+
+      {/* </button> */}
     </nav>
   );
 };
