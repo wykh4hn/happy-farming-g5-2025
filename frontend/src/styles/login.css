@@ -1,11 +1,12 @@
 #login-form {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	padding: 40px;
 }
 
 form * {
-	margin: auto;
+	/* margin: auto; */
 	/* border: 1px solid red; */
 }

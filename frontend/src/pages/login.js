@@ -1,4 +1,5 @@
 import { MainNav } from "./nav";
+import { Link } from "react-router-dom";
 
 import "../styles/styles.css";
 import "../styles/login.css";
@@ -20,6 +21,10 @@ const Login = () => {
           <input type="submit" value="Register!" />
           <br />
         </form>
+        <p>Don't have an account?</p>
+        <button>
+          <Link to="create">Create Account</Link>
+        </button>
       </div>
     </div>
   );
