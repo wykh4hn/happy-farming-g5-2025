@@ -2,27 +2,26 @@ import { MainNav } from "./nav";
 import React from "react";
 
 class Product extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
-      name: "as",
-      price: 0,
-      description: "the",
-      detail: (
-        <button>
-          <a href="duckduckgo.com">detail</a>
-        </button>
-      ),
+      img: props.img,
+      name: props.name,
+      price: props.price,
+      description: props.description,
+
+      // detail should be a link
+      detail: props.detail,
     };
   }
 
   render() {
     return (
-      <div>
+      <div className="product">
         <h4>{this.state.name}</h4>
         <p>{"$" + toString(this.state.price)}</p>
         <p>{this.state.description}</p>
-        {this.state.detail}
+        <button>{this.state.detail}</button>
       </div>
     );
   }
