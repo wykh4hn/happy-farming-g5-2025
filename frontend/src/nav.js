@@ -1,21 +1,18 @@
-import "./styles.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
-import "./styles.css";
 import { Link } from "react-router-dom";
+import "./nav.css";
 
 const MainNav = () => {
   return (
-    <nav>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/shop">Shop</Link>
-        </li>
-      </ul>
-      <button id="wallet">
+    <nav id="main-nav">
+      <p>
+        <Link to="/">Home</Link>
+      </p>
+      <p>
+        <Link to="/shop">Shop</Link>
+      </p>
+
+      <button id="create-wallet">
         <Link to="/wallet">Create New Wallet</Link>
       </button>
     </nav>
