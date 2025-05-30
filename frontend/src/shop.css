@@ -1,6 +1,35 @@
 .product {
-	color: black;
+	background-color: black;
+	color: white;
 	width: 200px;
 	height: 200px;
+	padding: 10px;
+	box-sizing: border-box;
+}
 
+.product img {
+	width: 100%;
+	height: auto;
+	display: block;
+	background-color: black;
+}
+
+.product * {
+	display: block;
+	background-color: black;
+	color: white;
+}
+
+.product button {
+	background-color: black;
+	color: white;
+	border: 1px solid white;
+	width: 100%;
+	margin-top: 10px;
+}
+
+.product button a {
+	background-color: black;
+	color: white;
+	text-decoration: none;
 }
