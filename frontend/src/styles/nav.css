@@ -8,19 +8,20 @@ nav a {
 
 #create-wallet {
 	display: flex;
-	background-color: #6750a4;
-	color: #e7e3f0;
+	background-color: #b0cd9d;
+	color: #404d3a;
 	height: 100%;
 	justify-content: center;
 	align-items: center;
+
 }
 
 #main-nav {
-	background-color: #f3ecf6;
-	color: #49444e;
+	background-color: #eef2ba;
+	color: #71705b;
 	display: flex;
 	flex-direction: row;
-	height: 55px;
+	height: 50px;
 	justify-content: center;
 	align-items: center
 }

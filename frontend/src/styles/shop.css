@@ -3,8 +3,10 @@
 	background-color: black;
 	color: white;
 	width: 200px;
-	height: 200px;
+	height: auto;
+
 	padding: 10px;
+	/* padding-top: 200px; */
 	box-sizing: border-box;
 }
 

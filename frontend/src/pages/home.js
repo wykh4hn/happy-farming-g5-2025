@@ -9,7 +9,14 @@ const Home = () => {
       <MainNav />
       <div className="main-content">
         <h1>Welcome to our website!</h1>
-        <p>Please login</p>
+        <p>
+          This is a friendly decentralized transaction website with algrculture
+          products. Enjoy!
+        </p>
+
+        <Link to="/shop" id="shop">
+          See the shop
+        </Link>
 
         <Link to="/login" id="login">
           Login
