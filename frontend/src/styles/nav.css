@@ -20,7 +20,7 @@ nav a {
 	color: #49444e;
 	display: flex;
 	flex-direction: row;
-	height: 60px;
+	height: 55px;
 	justify-content: center;
 	align-items: center
 }

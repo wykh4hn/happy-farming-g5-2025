@@ -1,6 +1,5 @@
 import "../styles/styles.css";
 import "../styles/create.css";
-// import { MainNav } from "../nav";
 
 import { MainNav } from "./nav";
 
@@ -9,15 +8,28 @@ const CreateAccount = () => {
     <div>
       <MainNav />
       <div className="main-content">
-        <label htmlFor="email">Email:</label> <br />
-        <input type="email" name="email" id="email" /> <br />
-        <label htmlFor="fullName">Full Name:</label>
-        <input type="text" name="fullName" id="fullName" />
-        <label htmlFor="password">Password:</label>
-        <input type="password" name="password" id="password" />
-        <label htmlFor="reEnterPassword">Re-enter Password</label>
-        <input type="password" name="reEnterPassword" id="reEnterPassword" />
-        <br />
+        <form action="get">
+          <label htmlFor="email">Email:</label> <br />
+          <input type="email" name="email" id="email" /> <br />
+          <label htmlFor="fullName">Full Name:</label>
+          <br />
+          <input type="text" name="fullName" id="fullName" />
+          <br />
+          <label htmlFor="password">Password:</label>
+          <br />
+          <input type="password" name="password" id="password" />
+          <br />
+          <label htmlFor="reEnterPassword">Re-enter Password</label>
+          <br />
+          <input type="password" name="reEnterPassword" id="reEnterPassword" />
+          <br />
+          <br />
+          <input
+            type="submit"
+            value="Create New Account!"
+            id="create-account-button"
+          />
+        </form>
       </div>
     </div>
   );

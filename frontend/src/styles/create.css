@@ -1,0 +1,15 @@
+form * {
+	margin: 5px;
+	width: 30%;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+#create-account-button {
+	color: #dadada;
+	background-color: #1e1e1e;
+}
