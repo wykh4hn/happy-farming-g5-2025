@@ -44,7 +44,14 @@ const Shop = () => {
         name="bò 1"
         price="234"
         description="bò"
-        detail=""
+        detail="Detail"
+      />
+      <Product
+        img="https://i.imgur.com/l6kBKEN.png"
+        name="job application form"
+        price="41"
+        description="image"
+        detail="Detail"
       />
     </div>
   );
