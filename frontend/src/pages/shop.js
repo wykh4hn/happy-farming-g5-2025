@@ -14,9 +14,6 @@ class Product extends React.Component {
       name: props.name,
       price: props.price,
       description: props.description,
-
-      // detail should be a link
-      // detail: props.detail,
     };
   }
 
@@ -28,11 +25,9 @@ class Product extends React.Component {
         <h4>{this.state.name}</h4>
         <p>{"$" + this.state.price}</p>
         <p>{this.state.description}</p>
-        {/* <button> */}
         <Link to={productLink} className="detail">
           Details
         </Link>
-        {/* </button> */}
       </div>
     );
   }
@@ -42,51 +37,32 @@ const Shop = () => {
   return (
     <div>
       <MainNav />
-<<<<<<< HEAD
-      <h1>Welcome to our shop!</h1>
+      <h1>WELCOME TO OUR SHOP!</h1>
+
       <div id="shop">
         <Product
           img="/holstein-friesian-cow-close-up.webp"
           name="bò 1"
           price="234"
           description="bò"
-          detail="Detail"
         />
         <Product
           img="https://i.imgur.com/l6kBKEN.png"
           name="job application form"
           price="41"
           description="image"
-          detail="Detail"
-        />
+        />uj
         <Product
           img="https://imgs.search.brave.com/rucX6B9VnIVomvImF_sk47HOXPsCyXW1-j2MmUyJOd0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9jMS5u/ZXdlZ2dpbWFnZXMu/Y29tL3Byb2R1Y3Rp/bWFnZS9uYjMwMC83/NS05OTAtNjUzLVMw/MS5qcGc"
           name="random phone charger"
           price="23"
           description="yet another image"
-          detail="Yes"
         />
       </div>
+
       <Footer />
-=======
-      <h1>COME AND SEE OUR PRODUCTS!</h1>
-      <Product
-        img="/holstein-friesian-cow-close-up.webp"
-        name="bò 1"
-        price="234"
-        description="bò"
-        detail="Detail"
-      />
-      <Product
-        img="https://i.imgur.com/l6kBKEN.png"
-        name="job application form"
-        price="41"
-        description="image"
-        detail="Detail"
-      />
->>>>>>> d51343c ( please help me w the create_projuct.js)
     </div>
   );
 };
 
-export { Shop };
+export default Shop;
