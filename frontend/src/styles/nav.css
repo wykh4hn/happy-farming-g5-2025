@@ -7,6 +7,7 @@ nav a {
 }
 
 #create-wallet {
+<<<<<<< HEAD
 	display: flex;
 	background-color: #b0cd9d;
 	color: #404d3a;
@@ -14,9 +15,22 @@ nav a {
 	justify-content: center;
 	align-items: center;
 
+=======
+  display: flex;
+  background-color: #B2CD9C;
+  color: black;
+  width: 120px; /* Điều chỉnh kích thước theo mong muốn */
+  height: 40px; /* Điều chỉnh để vừa với bố cục */
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+>>>>>>> d51343c ( please help me w the create_projuct.js)
 }
 
+
 #main-nav {
+<<<<<<< HEAD
 	background-color: #eef2ba;
 	color: #71705b;
 	display: flex;
@@ -25,3 +39,19 @@ nav a {
 	justify-content: center;
 	align-items: center
 }
+=======
+  position: fixed;  /* Giữ cố định */
+  top: 0;          /* Đặt ngay trên cùng */
+  left: 0;
+  width: 100%;      /* Chiếm toàn bộ chiều ngang */
+  height: 55px;     /* Điều chỉnh theo kích thước mong muốn */
+  background-color: #F0F2BD;
+  color: #49444e;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;    /* Đảm bảo nó luôn nằm trên các phần khác */
+}
+
+>>>>>>> d51343c ( please help me w the create_projuct.js)

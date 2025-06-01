@@ -42,6 +42,7 @@ const Shop = () => {
   return (
     <div>
       <MainNav />
+<<<<<<< HEAD
       <h1>Welcome to our shop!</h1>
       <div id="shop">
         <Product
@@ -67,6 +68,23 @@ const Shop = () => {
         />
       </div>
       <Footer />
+=======
+      <h1>COME AND SEE OUR PRODUCTS!</h1>
+      <Product
+        img="/holstein-friesian-cow-close-up.webp"
+        name="bò 1"
+        price="234"
+        description="bò"
+        detail="Detail"
+      />
+      <Product
+        img="https://i.imgur.com/l6kBKEN.png"
+        name="job application form"
+        price="41"
+        description="image"
+        detail="Detail"
+      />
+>>>>>>> d51343c ( please help me w the create_projuct.js)
     </div>
   );
 };

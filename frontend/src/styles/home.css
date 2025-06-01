@@ -1,12 +1,26 @@
-#home-content {
-	margin: auto;
-	width: 80%;
+/* home.css */
+
+/* Định dạng toàn bộ trang */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f9fa;
 }
 
-#home-content h1 {
-	font-size: 40px;
+/* Cấu trúc chính của trang */
+.container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
 }
 
+<<<<<<< HEAD
 #login-link,
 #create-account-link,
 #shop-link {
@@ -34,5 +48,59 @@
 	background-color: #b17e5a;
 	/* color: #5f5f5e; */
 	height: 100%;
-
+=======
+/* Nội dung chính nằm bên trái */
+.main-content {
+  width: 45%;
+  text-align: left;
+  padding: 20px;
 }
+
+/* Định dạng tiêu đề */
+h1 {
+  font-size: 3.5em;
+  font-weight: bold;
+  color: #4B352A
+  ;
+}
+
+/* Định dạng đoạn mô tả */
+p {
+  font-size: 1.2em;
+  color: black;
+}
+
+/* Định dạng nút */
+#login, #create-account {
+  display: block;
+  width: 180px;
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+#login {
+  background-color: #A4B465;
+}
+
+#create-account {
+  background-color: #B17F59;
+}
+
+.image-container {
+  width: 50%; /* Giữ đúng tỷ lệ một nửa */
+  height: 100vh; /* Chiều cao đầy đủ của container */
+  display: flex;
+  justify-content: center;
+}
+
+.image-container img {
+  width: 100%; /* Đảm bảo ảnh tự động phù hợp với container */
+  height: 100vh;
+}
+>>>>>>> d51343c ( please help me w the create_projuct.js)
+

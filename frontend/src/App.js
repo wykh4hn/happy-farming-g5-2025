@@ -7,6 +7,7 @@ import { Wallet } from "./pages/wallet";
 import { Login } from "./pages/login";
 
 import { CreateAccount } from "./pages/create";
+import CreateProduct from "./create_product";
 
 import "./App.css";
 
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/create-wallet" element={<Wallet />} />
           <Route path="/login" element={<Login />} />
           <Route path="/create-account" element={<CreateAccount />} />
+           <Route path="/create_product" element={<CreateProduct />} />
         </Routes>
       </Router>
       {/* <Home /> */}
