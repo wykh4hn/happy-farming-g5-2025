@@ -5,6 +5,7 @@ import Home from "./pages/home";
 import { Shop } from "./pages/shop";
 import { Wallet } from "./pages/wallet";
 import { Login } from "./pages/login";
+
 import { CreateAccount } from "./pages/create";
 
 import "./App.css";
