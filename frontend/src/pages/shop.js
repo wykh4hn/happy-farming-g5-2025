@@ -16,7 +16,7 @@ class Product extends React.Component {
       description: props.description,
 
       // detail should be a link
-      detail: props.detail,
+      // detail: props.detail,
     };
   }
 
@@ -57,6 +57,13 @@ const Shop = () => {
           price="41"
           description="image"
           detail="Detail"
+        />
+        <Product
+          img="https://imgs.search.brave.com/rucX6B9VnIVomvImF_sk47HOXPsCyXW1-j2MmUyJOd0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9jMS5u/ZXdlZ2dpbWFnZXMu/Y29tL3Byb2R1Y3Rp/bWFnZS9uYjMwMC83/NS05OTAtNjUzLVMw/MS5qcGc"
+          name="random phone charger"
+          price="23"
+          description="yet another image"
+          detail="Yes"
         />
       </div>
       <Footer />

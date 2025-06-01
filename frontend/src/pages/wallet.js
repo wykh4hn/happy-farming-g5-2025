@@ -8,7 +8,8 @@ const Wallet = () => {
   return (
     <div>
       <MainNav />
-      <p>0</p>
+      <h1>Create wallet</h1>
+      <h2>Page in progress</h2>
       <Footer />
     </div>
   );
