@@ -3,5 +3,12 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	padding: 40px;
+	padding: 4px;
+	border: 1px solid red;
+}
+
+#login-form form {
+	width: 50%;
+	left: 0;
+	padding: 2px;
 }
