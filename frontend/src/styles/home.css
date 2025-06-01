@@ -11,7 +11,21 @@ body {
   height: 100vh;
   background-color: #f8f9fa;
 }
-
+/*I added something bc it's cute :3*/
+@keyframes fadeIn {
+  from {
+    opacity: 0; 
+  }
+  to {
+    opacity: 1; 
+  }
+}
+.main-content {
+  width: 45%;
+  text-align: left;
+  padding: 20px;
+  animation: fadeIn 0.5s ease-in-out; 
+}
 .container {
   display: flex;
   width: 100%;
@@ -60,13 +74,16 @@ p {
 
 .image-container {
   width: 50%;
-  height: 100vh; 
+  height: 100vh;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end; /* Đẩy ảnh sang phải */
+  align-items: center;
+  overflow: hidden; /* Ẩn phần dư thừa */
 }
 
 .image-container img {
-  width: 100%; 
-  height: 100vh;
+  width: 120vh; /* Giữ nguyên kích thước gốc */
+  height: 100vh; /* Ảnh phủ toàn bộ chiều cao */
 }
+
 

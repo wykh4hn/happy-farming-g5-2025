@@ -51,7 +51,7 @@ const Shop = () => {
           name="job application form"
           price="41"
           description="image"
-        />uj
+        />
         <Product
           img="https://imgs.search.brave.com/rucX6B9VnIVomvImF_sk47HOXPsCyXW1-j2MmUyJOd0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9jMS5u/ZXdlZ2dpbWFnZXMu/Y29tL3Byb2R1Y3Rp/bWFnZS9uYjMwMC83/NS05OTAtNjUzLVMw/MS5qcGc"
           name="random phone charger"

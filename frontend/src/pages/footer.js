@@ -4,7 +4,8 @@ import "../styles/footer.css";
 const Footer = () => {
   return (
     <div id="footer">
-      <p>Footer by group 5</p>
+      <p>Create by Group 5</p>
+      <p>Please contact: group5@gmail.com</p>
     </div>
   );
 };
