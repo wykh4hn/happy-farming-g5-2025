@@ -15,9 +15,6 @@ const Home = () => {
           <h1>WELCOME TO OUR WEBSITE</h1>
           <p>This is a friendly decentralized transaction web with agriculture products. Enjoy!</p>
 
-          <Link to="/shop" id="shop-link">
-            See the shop
-          </Link>
 
           <Link to="#" id="login">
             Create new product
