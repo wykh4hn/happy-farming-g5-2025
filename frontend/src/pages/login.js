@@ -13,19 +13,21 @@ const Login = () => {
         <div id="login-form">
           <form action="post">
             <label htmlFor="username">Username: </label>
-            <br />
+            {/* <br /> */}
             <input type="text" name="username" />
-            <br />
+            {/* <br /> */}
             <label htmlFor="password">Password: </label>
-            <br />
-            <input type="text" name="password" />
-            <br />
+            {/* <br /> */}
+            <input type="password" name="password" />
+            {/* <br /> */}
             <input type="submit" value="Register!" />
-            <br />
+            {/* <br /> */}
           </form>
           <p>Don't have an account?</p>
 
-          <Link to="/create-account">Create Account</Link>
+          <Link to="/create-account" id="create-account-link">
+            Create Account
+          </Link>
         </div>
       </div>
       <Footer />
