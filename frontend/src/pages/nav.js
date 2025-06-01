@@ -13,13 +13,9 @@ const MainNav = () => {
         <Link to="/shop">Shop</Link>
       </p>
 
-      {/* <button id="create-wallet"> */}
-
       <Link to="/create-wallet" id="create-wallet">
         Create New Wallet
       </Link>
-
-      {/* </button> */}
     </nav>
   );
 };

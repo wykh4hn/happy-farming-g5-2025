@@ -2,6 +2,7 @@ import "../styles/styles.css";
 import "../styles/create.css";
 
 import { MainNav } from "./nav";
+import { Footer } from "./footer";
 
 const CreateAccount = () => {
   return (
@@ -31,6 +32,7 @@ const CreateAccount = () => {
           />
         </form>
       </div>
+      <Footer />
     </div>
   );
 };

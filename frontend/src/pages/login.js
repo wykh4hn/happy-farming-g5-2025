@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import "../styles/styles.css";
 import "../styles/login.css";
+import { Footer } from "./footer";
 
 const Login = () => {
   return (
@@ -28,6 +29,7 @@ const Login = () => {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

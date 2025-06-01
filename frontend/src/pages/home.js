@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { MainNav } from "./nav";
+import { Footer } from "./footer";
 import "../styles/styles.css";
 import "../styles/home.css";
 
@@ -14,18 +15,19 @@ const Home = () => {
           products. Enjoy!
         </p>
 
-        <Link to="/shop" id="shop">
+        <Link to="/shop" id="shop-link">
           See the shop
         </Link>
 
-        <Link to="/login" id="login">
+        <Link to="/login" id="login-link">
           Login
         </Link>
 
-        <Link to="/create-account" id="create-account">
+        <Link to="/create-account" id="create-account-link">
           Create New Account
         </Link>
       </div>
+      <Footer />
     </div>
   );
 };

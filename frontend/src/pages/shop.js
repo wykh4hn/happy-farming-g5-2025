@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import "../styles/styles.css";
 import "../styles/shop.css";
+import { Footer } from "./footer";
 
 class Product extends React.Component {
   constructor(props) {
@@ -20,16 +21,18 @@ class Product extends React.Component {
   }
 
   render() {
-    const product_link = "/product/" + this.state.name;
+    const productLink = "/product/" + this.state.name;
     return (
       <div className="product">
         <img src={this.state.img} alt={this.state.name} />
         <h4>{this.state.name}</h4>
         <p>{"$" + this.state.price}</p>
         <p>{this.state.description}</p>
-        <button>
-          <Link to={product_link}>Details</Link>
-        </button>
+        {/* <button> */}
+        <Link to={productLink} className="detail">
+          Details
+        </Link>
+        {/* </button> */}
       </div>
     );
   }
@@ -39,20 +42,24 @@ const Shop = () => {
   return (
     <div>
       <MainNav />
-      <Product
-        img="/holstein-friesian-cow-close-up.webp"
-        name="bò 1"
-        price="234"
-        description="bò"
-        detail="Detail"
-      />
-      <Product
-        img="https://i.imgur.com/l6kBKEN.png"
-        name="job application form"
-        price="41"
-        description="image"
-        detail="Detail"
-      />
+      <h1>Welcome to our shop!</h1>
+      <div id="shop">
+        <Product
+          img="/holstein-friesian-cow-close-up.webp"
+          name="bò 1"
+          price="234"
+          description="bò"
+          detail="Detail"
+        />
+        <Product
+          img="https://i.imgur.com/l6kBKEN.png"
+          name="job application form"
+          price="41"
+          description="image"
+          detail="Detail"
+        />
+      </div>
+      <Footer />
     </div>
   );
 };

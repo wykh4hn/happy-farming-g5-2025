@@ -7,9 +7,9 @@
 	font-size: 40px;
 }
 
-#login,
-#create-account,
-#shop {
+#login-link,
+#create-account-link,
+#shop-link {
 	display: block;
 	width: 200px;
 	padding: 5px;
@@ -20,16 +20,16 @@
 	color: #f1fbdd
 }
 
-#shop {
+#shop-link {
 	background-color: #a4b462;
 }
 
-#login {
+#login-link {
 	/* color: #dadada; */
 	background-color: #1e1e1e;
 }
 
-#create-account {
+#create-account-link {
 	/* margin: 10px; */
 	background-color: #b17e5a;
 	/* color: #5f5f5e; */
