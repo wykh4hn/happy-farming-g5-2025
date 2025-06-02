@@ -1,20 +1,23 @@
 import { Link } from "react-router-dom";
 import { MainNav } from "./nav";
-import { Footer } from "./footer"; 
-import introImage from "../images/intro.png";
+import { Footer } from "./footer";
+
 import "../styles/styles.css";
 import "../styles/home.css";
 
+const introImage = "/intro.png";
 const Home = () => {
   return (
     <div>
-      <MainNav /> 
+      <MainNav />
 
-      <div className="container"> 
+      <div className="container">
         <div className="main-content">
           <h1>WELCOME TO OUR WEBSITE</h1>
-          <p>This is a friendly decentralized transaction web with agriculture products. Enjoy!</p>
-
+          <p>
+            This is a friendly decentralized transaction web with agriculture
+            products. Enjoy!
+          </p>
 
           <Link to="#" id="login">
             Create new product

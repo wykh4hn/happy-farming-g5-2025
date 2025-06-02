@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import LogoWeb from "../images/logo1.png";
+// import LogoWeb from "../images/logo1.png";
 import "../styles/styles.css";
 import "../styles/nav.css";
 
+const LogoWeb = "/logo1.png";
 const MainNav = () => {
   return (
     <nav id="main-nav">
