@@ -7,7 +7,21 @@ const CreateProduct = () => {
   return (
     <div>
       <MainNav />
-      <form action="get"></form>
+      <div class="main-content">
+        <form action="get">
+          <label htmlFor="name">Name:</label>
+          <br />
+          <input type="text" name="name" id="name" />
+          <br />
+          <label htmlFor="price">Price:</label>
+          <br />
+          <input type="number" name="price" id="price" />
+          <br />
+          <label htmlFor="description">Description</label>
+          <br />
+          <input type="submit" value="Add product!" />
+        </form>
+      </div>
       <Footer />
     </div>
   );
