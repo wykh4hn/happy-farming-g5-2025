@@ -2,11 +2,10 @@ import React from "react";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/home";
-import Shop from "./pages/shop"; 
+import Shop from "./pages/shop";
 import { Wallet } from "./pages/wallet";
 import { Login } from "./pages/login";
-import { CreateAccount } from "./pages/create";
-
+import { CreateAccount } from "./pages/create_account";
 
 import "./App.css";
 
@@ -20,7 +19,6 @@ const App = () => {
           <Route path="/create-wallet" element={<Wallet />} />
           <Route path="/login" element={<Login />} />
           <Route path="/create-account" element={<CreateAccount />} />
-        
         </Routes>
       </Router>
       {/* <Home /> */}
