@@ -1,4 +1,5 @@
 import { MainNav } from "./nav";
+import { useState } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -51,6 +52,26 @@ const Sidebar = () => {
   );
 };
 
+function myFunction() {
+  // Declare variables
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('myInput');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("myUL");
+  li = ul.getElementsByTagName('li');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByTagName("a")[0];
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}
+
 const ProductList = [
   new Product({
     img: "/holstein-friesian-cow-close-up.webp",
@@ -72,16 +93,25 @@ const ProductList = [
   }),
 ];
 
+
+
 const Shop = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredProducts = ProductList.filter((product) =>
+  product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
+
   return (
     <div>
       <MainNav />
       <Sidebar />
       <div id="shop-container">
         <h1>WELCOME TO OUR SHOP!</h1>
-        <textarea name="search" id="search" rows={1}></textarea>
-        <div id="shop">{ProductList.map((product, _) => product.render())}</div>
-      </div>
+        <input type="text" id="search" placeholder="Search for product..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+
+        <div id="shop">{ProductList.map((product, _) => product.render())}</div>   </div>
       <Footer />
     </div>
   );

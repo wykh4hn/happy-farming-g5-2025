@@ -9,7 +9,8 @@ form {
 	justify-content: space-between;
 }
 
-#create-account-button {
-	color: #dadada;
-	background-color: #1e1e1e;
+#create-account-button, #create-product {
+	color: black;
+	background-color: #A4B465;
+	border-radius: 10px;
 }
