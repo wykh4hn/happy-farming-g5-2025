@@ -66,10 +66,25 @@ p {
 
 #login {
   background-color: #A4B465;
+  transition: all 0.3s ease-in-out;
+}
+
+#login:hover {
+  background-color: #8A9B4A; 
+  padding: 12px 60px;
+  font-size: 1.1em;;
+  text-decoration: none;
 }
 
 #create-account {
   background-color: #B17F59;
+  transition: all 0.3s ease-in-out;
+}
+#create-account:hover {
+  background-color: #A16D4C; 
+  padding: 12px 60px;
+  font-size: 1.1em;;
+  text-decoration: none;
 }
 
 .image-container {

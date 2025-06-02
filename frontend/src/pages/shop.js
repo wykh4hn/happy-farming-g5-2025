@@ -32,12 +32,25 @@ class Product extends React.Component {
     );
   }
 }
+const Sidebar = () => {
+  return (
+    <div id="sidebar">
+      <p><Link to="#">Menu Item</Link></p>
+      <p><Link to="#">Menu Item</Link></p>
+      <p><Link to="/create-product">Create new product</Link></p>
+      <p><Link to="/transaction-history">Transaction history</Link></p>
+    </div>
+  );
+};
 
 const Shop = () => {
   return (
     <div>
       <MainNav />
+      <Sidebar />
+      <div id="shop-container">
       <h1>WELCOME TO OUR SHOP!</h1>
+
 
       <div id="shop">
         <Product
@@ -60,6 +73,7 @@ const Shop = () => {
         />
       </div>
 
+    </div>
       <Footer />
     </div>
   );

@@ -34,6 +34,12 @@ nav a:hover {
   border-radius: 10px;
 }
 
+#create-wallet:hover {
+  background-color: #A4B465; 
+  padding: 12px 60px;
+  font-size: 1.05em;
+  text-decoration: none;
+}
 
 #main-nav {
   position: fixed;  
