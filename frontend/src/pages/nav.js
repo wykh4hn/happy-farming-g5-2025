@@ -20,6 +20,7 @@ const MainNav = () => {
       <Link to="/create-wallet" id="create-wallet">
         Create New Wallet
       </Link>
+
     </nav>
   );
 };

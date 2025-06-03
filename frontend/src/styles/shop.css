@@ -1,5 +1,5 @@
 #shop {
-	display: flex;
+display: flex;
 	flex-wrap: wrap;
 	/*the products will go down if there are too much tho :))))*/
 	flex-direction: row;
@@ -61,6 +61,7 @@
 	max-height: 200px;
 	display: block;
 	object-fit: cover;
+	border-radius: 10px;
 	/* background-color: black; */
 }
 
@@ -85,10 +86,8 @@ why are those css can not be applied :<<< */
 
 .product .price {
 	font-size: 2.5em;
-	/* Tăng kích thước chữ */
 	font-weight: bold;
 	color: #e8e7e2;
-	/* Dùng màu vàng nổi bật */
 	text-align: left;
 	margin-bottom: 10px;
 }

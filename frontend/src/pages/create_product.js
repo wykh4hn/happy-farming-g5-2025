@@ -3,6 +3,7 @@ import "../styles/create.css";
 import "../styles/create-product.css";
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MainNav } from "./nav";
 import { Footer } from "./footer";
 import { Sidebar } from "./sidebar";
@@ -15,6 +16,9 @@ const CreateProduct = () => {
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("Animal"); 
+  const navigate = useNavigate();
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -24,10 +28,22 @@ const CreateProduct = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Product Created:", productName, price, image);
+
+    const newProduct = {
+      name: productName,
+      price,
+      img: image,
+      description,
+      category,
+    };
+     const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
+    existingProducts.push(newProduct);
+    localStorage.setItem("products", JSON.stringify(existingProducts));
+
     alert("Product created!");
+    navigate("/shop"); 
   };
 
   return (
@@ -51,6 +67,22 @@ const CreateProduct = () => {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
+
+          <label>Description:</label> 
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+
+          <label>Category:</label> 
+          <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <option value="Animal">Animal</option>
+            <option value="Vegetable">Vegetable</option>
+            <option value="Tree">Other</option>
+            <option value="Agriculture products">Other</option>
+            <option value="Other">Other</option>
+          </select>
 
           <label>Upload Image:</label>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
