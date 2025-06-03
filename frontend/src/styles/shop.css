@@ -63,6 +63,7 @@
 	object-fit: cover;
 	/* background-color: black; */
 }
+
 /*please help me w the price, details and description on our product
 why are those css can not be applied :<<< */
 .product .detail {
@@ -83,13 +84,6 @@ why are those css can not be applied :<<< */
 }
 
 .product .price {
-<<<<<<< HEAD
-  font-size: 2.5em; /* Tăng kích thước chữ */
-  font-weight: bold;
-  color: #edece6; /* Dùng màu vàng nổi bật */
-  text-align: left;
-  margin-bottom: 10px;
-=======
 	font-size: 2.5em;
 	/* Tăng kích thước chữ */
 	font-weight: bold;
@@ -97,7 +91,6 @@ why are those css can not be applied :<<< */
 	/* Dùng màu vàng nổi bật */
 	text-align: left;
 	margin-bottom: 10px;
->>>>>>> 3d1377edb7aa72c0737a7d59101f27548c5e6d25
 }
 
 .product .description {

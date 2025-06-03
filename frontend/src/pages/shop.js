@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import { Footer } from "./footer";
 import { Sidebar } from "./sidebar";
 
+// import leafmustard from "../images/leafmustard.png";
+
 class Product extends React.Component {
   constructor(props) {
     super();
@@ -36,8 +38,6 @@ class Product extends React.Component {
   }
 }
 
-<<<<<<< HEAD
-=======
 function myFunction() {
   // Declare variables
   var input, filter, ul, li, a, i, txtValue;
@@ -57,7 +57,6 @@ function myFunction() {
     }
   }
 }
->>>>>>> 3d1377edb7aa72c0737a7d59101f27548c5e6d25
 
 const ProductList = [
   new Product({
@@ -73,7 +72,7 @@ const ProductList = [
     description: "let's have a job",
   }),
   new Product({
-    img: "https://sgeviet.vn/wp-content/uploads/2022/02/cai-xoan-Curly-Kale.jpg",
+    img: "/leafmustard.jpg",
     name: "LEAF MUSTARD",
     price: "2",
     description: "a leafy green vegetable",
@@ -89,17 +88,10 @@ const ProductList = [
 const Shop = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
-<<<<<<< HEAD
- 
-  const filteredProducts = ProductList.filter((product) =>
-    (product.state.name && product.state.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (product.state.description && product.state.description.toLowerCase().includes(searchTerm.toLowerCase()))
-=======
   const filteredProducts = ProductList.filter(
     (product) =>
       product.name &&
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
->>>>>>> 3d1377edb7aa72c0737a7d59101f27548c5e6d25
   );
 
   return (
@@ -109,10 +101,6 @@ const Shop = () => {
 
       <div id="shop-container">
         <h1>WELCOME TO OUR SHOP!</h1>
-<<<<<<< HEAD
-
-=======
->>>>>>> 3d1377edb7aa72c0737a7d59101f27548c5e6d25
         <input
           type="text"
           id="search"
@@ -120,20 +108,7 @@ const Shop = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-<<<<<<< HEAD
-
-        <div id="shop">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product, index) => (
-              <React.Fragment key={index}>{product.render()}</React.Fragment>
-            ))
-          ) : (
-            <p>No matching products found.</p>
-          )}
-        </div>
-=======
         <div id="shop">{ProductList.map((product, _) => product.render())}</div>{" "}
->>>>>>> 3d1377edb7aa72c0737a7d59101f27548c5e6d25
       </div>
       <Footer />
     </div>
@@ -141,8 +116,3 @@ const Shop = () => {
 };
 
 export { Shop };
-
-
-
-
-
