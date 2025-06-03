@@ -19,7 +19,7 @@ const Home = () => {
             products. Enjoy!
           </p>
 
-          <Link to="#" id="login">
+          <Link to="/create-product" id="login">
             Create new product
           </Link>
 
