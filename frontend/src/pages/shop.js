@@ -52,44 +52,31 @@ const Sidebar = () => {
   );
 };
 
-function myFunction() {
-  // Declare variables
-  var input, filter, ul, li, a, i, txtValue;
-  input = document.getElementById('myInput');
-  filter = input.value.toUpperCase();
-  ul = document.getElementById("myUL");
-  li = ul.getElementsByTagName('li');
-
-  // Loop through all list items, and hide those who don't match the search query
-  for (i = 0; i < li.length; i++) {
-    a = li[i].getElementsByTagName("a")[0];
-    txtValue = a.textContent || a.innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      li[i].style.display = "";
-    } else {
-      li[i].style.display = "none";
-    }
-  }
-}
 
 const ProductList = [
   new Product({
     img: "/holstein-friesian-cow-close-up.webp",
-    name: "cow",
+    name: "COW (JENNIFER)",
     price: "234",
-    description: "cow",
+    description: "she is a cow",
   }),
   new Product({
     img: "https://i.imgur.com/l6kBKEN.png",
-    name: "job application form",
+    name: "JOB APPLICATION FORM",
     price: "41",
-    description: "image",
+    description: "let's have a job",
   }),
   new Product({
-    img: "https://imgs.search.brave.com/rucX6B9VnIVomvImF_sk47HOXPsCyXW1-j2MmUyJOd0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9jMS5u/ZXdlZ2dpbWFnZXMu/Y29tL3Byb2R1Y3Rp/bWFnZS9uYjMwMC83/NS05OTAtNjUzLVMw/MS5qcGc",
-    name: "random phone charger",
-    price: "20948234",
-    description: "charger",
+    img: "https://sgeviet.vn/wp-content/uploads/2022/02/cai-xoan-Curly-Kale.jpg",
+    name: "LEAF MUSTARD",
+    price: "2",
+    description: "a leafy green vegetable",
+  }),
+  new Product({
+    img: "https://www.cookerru.com/wp-content/uploads/2022/07/egg-fried-rice-main-preview.jpg",
+    name: "FRIED RICE",
+    price: "48",
+    description: "egg, fried, and rice",
   }),
 ];
 
@@ -98,10 +85,11 @@ const ProductList = [
 const Shop = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
+ 
   const filteredProducts = ProductList.filter((product) =>
-  product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase())
-);
-
+    (product.state.name && product.state.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (product.state.description && product.state.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   return (
     <div>
@@ -109,12 +97,33 @@ const Shop = () => {
       <Sidebar />
       <div id="shop-container">
         <h1>WELCOME TO OUR SHOP!</h1>
-        <input type="text" id="search" placeholder="Search for product..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
 
-        <div id="shop">{ProductList.map((product, _) => product.render())}</div>   </div>
+        <input
+          type="text"
+          id="search"
+          placeholder="Search for product..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <div id="shop">
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product, index) => (
+              <React.Fragment key={index}>{product.render()}</React.Fragment>
+            ))
+          ) : (
+            <p>No matching products found.</p>
+          )}
+        </div>
+      </div>
       <Footer />
     </div>
   );
 };
 
 export { Shop };
+
+
+
+
+

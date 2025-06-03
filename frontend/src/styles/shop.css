@@ -79,7 +79,8 @@
 	object-fit: cover;
 	/* background-color: black; */
 }
-
+/*please help me w the price, details and description on our product
+why are those css can not be applied :<<< */
 .product .detail {
 	position: absolute;
 	padding: 8px 15px;
@@ -100,7 +101,7 @@
 .product .price {
   font-size: 2.5em; /* Tăng kích thước chữ */
   font-weight: bold;
-  color: #e8e7e2; /* Dùng màu vàng nổi bật */
+  color: #edece6; /* Dùng màu vàng nổi bật */
   text-align: left;
   margin-bottom: 10px;
 }
