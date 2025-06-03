@@ -1,52 +1,36 @@
 #shop {
 	display: flex;
-	flex-wrap: wrap; /*the products will go down if there are too much tho :))))*/
+	flex-wrap: wrap;
+	/*the products will go down if there are too much tho :))))*/
 	flex-direction: row;
 	justify-content: center;
 	background: none;
 	gap: 10px;
 }
+
 #nav-bar {
-	display:flex;
-}
-#sidebar {
-	width: 200px;
-	height: 100vh;
-	background-color: #B2CD9C;
-	padding: 20px;
-	position: fixed;
-	left: 0;
-	top: 0;
-	overflow: hidden;
-	word-wrap: break-word;
+	display: flex;
 }
 
-#sidebar p {
-  	margin-bottom: 15px;
-	white-space: nowrap; 
-  	overflow: hidden; 
-  	text-overflow: ellipsis; /*when the options too long it will write ...*/
-}
-#sidebar p:hover {
-  	overflow: visible;
-  	white-space: normal;
-	background-color: #9eb88a; 
-}
+
+
 @keyframes fadeIn {
-  from {
-    opacity: 0; 
-  }
-  to {
-    opacity: 1; 
-  }
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
 }
 
 #shop-container {
-	margin-left: 220px; 
+	margin-left: 220px;
 	width: calc(100% - 220px);
 	padding: 20px;
-	animation: fadeIn 0.3s ease-in-out; 
+	animation: fadeIn 0.3s ease-in-out;
 }
+
 .product {
 	display: flex;
 	flex-direction: column;
@@ -85,7 +69,7 @@
 	padding: 8px 15px;
 	background-color: #e1cda4;
 	text-decoration: none;
-  	font-weight: bold;
+	font-weight: bold;
 	border-radius: 5px;
 	align-items: right;
 }
@@ -94,15 +78,17 @@
 	font-size: 1.2em;
 	font-weight: bold;
 	margin-bottom: 10px;
-	color:#9eb88a;
+	color: #9eb88a;
 }
 
 .product .price {
-  font-size: 2.5em; /* Tăng kích thước chữ */
-  font-weight: bold;
-  color: #e8e7e2; /* Dùng màu vàng nổi bật */
-  text-align: left;
-  margin-bottom: 10px;
+	font-size: 2.5em;
+	/* Tăng kích thước chữ */
+	font-weight: bold;
+	color: #e8e7e2;
+	/* Dùng màu vàng nổi bật */
+	text-align: left;
+	margin-bottom: 10px;
 }
 
 .product .description {
@@ -113,14 +99,12 @@
 
 /*for the search*/
 #myInput {
-  background-position: 10px 12px; 
-  background-repeat: no-repeat; 
-  width: 100%; 
-  font-size: 16px; 
-  padding: 12px 20px 12px 40px; 
-  border: 1px solid #785e5e; 
-  border-radius: 10px;
-  margin-bottom: 12px; 
+	background-position: 10px 12px;
+	background-repeat: no-repeat;
+	width: 100%;
+	font-size: 16px;
+	padding: 12px 20px 12px 40px;
+	border: 1px solid #785e5e;
+	border-radius: 10px;
+	margin-bottom: 12px;
 }
-
-

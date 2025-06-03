@@ -1,11 +1,13 @@
+import "../styles/styles.css";
+import "../styles/shop.css";
+
 import { MainNav } from "./nav";
 import { useState } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-import "../styles/styles.css";
-import "../styles/shop.css";
 import { Footer } from "./footer";
+import { Sidebar } from "./sidebar";
 
 class Product extends React.Component {
   constructor(props) {
@@ -33,32 +35,14 @@ class Product extends React.Component {
     );
   }
 }
-const Sidebar = () => {
-  return (
-    <div id="sidebar">
-      <p>
-        <Link to="#">Menu Item</Link>
-      </p>
-      <p>
-        <Link to="#">Menu Item</Link>
-      </p>
-      <p>
-        <Link to="/create-product">Create new product</Link>
-      </p>
-      <p>
-        <Link to="/transaction-history">Transaction history</Link>
-      </p>
-    </div>
-  );
-};
 
 function myFunction() {
   // Declare variables
   var input, filter, ul, li, a, i, txtValue;
-  input = document.getElementById('myInput');
+  input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
   ul = document.getElementById("myUL");
-  li = ul.getElementsByTagName('li');
+  li = ul.getElementsByTagName("li");
 
   // Loop through all list items, and hide those who don't match the search query
   for (i = 0; i < li.length; i++) {
@@ -93,25 +77,31 @@ const ProductList = [
   }),
 ];
 
-
-
 const Shop = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredProducts = ProductList.filter((product) =>
-  product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase())
-);
-
+  const filteredProducts = ProductList.filter(
+    (product) =>
+      product.name &&
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
-      <MainNav />
       <Sidebar />
+      <MainNav />
+
       <div id="shop-container">
         <h1>WELCOME TO OUR SHOP!</h1>
-        <input type="text" id="search" placeholder="Search for product..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-
-        <div id="shop">{ProductList.map((product, _) => product.render())}</div>   </div>
+        <input
+          type="text"
+          id="search"
+          placeholder="Search for product..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <div id="shop">{ProductList.map((product, _) => product.render())}</div>{" "}
+      </div>
       <Footer />
     </div>
   );
