@@ -11,21 +11,25 @@ body {
   height: 100vh;
   background-color: #f8f9fa;
 }
+
 /*I added something bc it's cute :3*/
 @keyframes fadeIn {
   from {
-    opacity: 0; 
+    opacity: 0;
   }
+
   to {
-    opacity: 1; 
+    opacity: 1;
   }
 }
+
 .main-content {
   width: 45%;
   text-align: left;
   padding: 20px;
-  animation: fadeIn 0.5s ease-in-out; 
+  animation: fadeIn 0.5s ease-in-out;
 }
+
 .container {
   display: flex;
   width: 100%;
@@ -42,8 +46,7 @@ body {
 h1 {
   font-size: 3.5em;
   font-weight: bold;
-  color: #4B352A
-  ;
+  color: #4B352A;
 }
 
 p {
@@ -52,7 +55,8 @@ p {
 }
 
 /* Định dạng nút */
-#login, #create-account {
+#create-product,
+#create-account {
   display: block;
   width: 180px;
   padding: 12px;
@@ -64,15 +68,16 @@ p {
   text-align: center;
 }
 
-#login {
+#create-product {
   background-color: #A4B465;
   transition: all 0.3s ease-in-out;
 }
 
 #login:hover {
-  background-color: #8A9B4A; 
+  background-color: #8A9B4A;
   padding: 12px 60px;
-  font-size: 1.1em;;
+  font-size: 1.1em;
+  ;
   text-decoration: none;
 }
 
@@ -80,10 +85,12 @@ p {
   background-color: #B17F59;
   transition: all 0.3s ease-in-out;
 }
+
 #create-account:hover {
-  background-color: #A16D4C; 
+  background-color: #A16D4C;
   padding: 12px 60px;
-  font-size: 1.1em;;
+  font-size: 1.1em;
+  ;
   text-decoration: none;
 }
 
@@ -91,15 +98,16 @@ p {
   width: 50%;
   height: 100vh;
   display: flex;
-  justify-content: flex-end; /* Đẩy ảnh sang phải */
+  justify-content: flex-end;
+  /* Đẩy ảnh sang phải */
   align-items: center;
-  overflow: hidden; /* Ẩn phần dư thừa */
+  overflow: hidden;
+  /* Ẩn phần dư thừa */
 }
 
 .image-container img {
-  width: 120vh; /* Giữ nguyên kích thước gốc */
-  height: 100vh; /* Ảnh phủ toàn bộ chiều cao */
+  width: 120vh;
+  /* Giữ nguyên kích thước gốc */
+  height: 100vh;
+  /* Ảnh phủ toàn bộ chiều cao */
 }
-
-
-

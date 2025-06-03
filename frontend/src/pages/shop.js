@@ -1,11 +1,13 @@
+import "../styles/styles.css";
+import "../styles/shop.css";
+
 import { MainNav } from "./nav";
 import { useState } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-import "../styles/styles.css";
-import "../styles/shop.css";
 import { Footer } from "./footer";
+import { Sidebar } from "./sidebar";
 
 class Product extends React.Component {
   constructor(props) {
@@ -33,25 +35,29 @@ class Product extends React.Component {
     );
   }
 }
-const Sidebar = () => {
-  return (
-    <div id="sidebar">
-      <p>
-        <Link to="#">Menu Item</Link>
-      </p>
-      <p>
-        <Link to="#">Menu Item</Link>
-      </p>
-      <p>
-        <Link to="/create-product">Create new product</Link>
-      </p>
-      <p>
-        <Link to="/transaction-history">Transaction history</Link>
-      </p>
-    </div>
-  );
-};
 
+<<<<<<< HEAD
+=======
+function myFunction() {
+  // Declare variables
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("myUL");
+  li = ul.getElementsByTagName("li");
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByTagName("a")[0];
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}
+>>>>>>> 3d1377edb7aa72c0737a7d59101f27548c5e6d25
 
 const ProductList = [
   new Product({
@@ -80,24 +86,33 @@ const ProductList = [
   }),
 ];
 
-
-
 const Shop = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
+<<<<<<< HEAD
  
   const filteredProducts = ProductList.filter((product) =>
     (product.state.name && product.state.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (product.state.description && product.state.description.toLowerCase().includes(searchTerm.toLowerCase()))
+=======
+  const filteredProducts = ProductList.filter(
+    (product) =>
+      product.name &&
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+>>>>>>> 3d1377edb7aa72c0737a7d59101f27548c5e6d25
   );
 
   return (
     <div>
-      <MainNav />
       <Sidebar />
+      <MainNav />
+
       <div id="shop-container">
         <h1>WELCOME TO OUR SHOP!</h1>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3d1377edb7aa72c0737a7d59101f27548c5e6d25
         <input
           type="text"
           id="search"
@@ -105,6 +120,7 @@ const Shop = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+<<<<<<< HEAD
 
         <div id="shop">
           {filteredProducts.length > 0 ? (
@@ -115,6 +131,9 @@ const Shop = () => {
             <p>No matching products found.</p>
           )}
         </div>
+=======
+        <div id="shop">{ProductList.map((product, _) => product.render())}</div>{" "}
+>>>>>>> 3d1377edb7aa72c0737a7d59101f27548c5e6d25
       </div>
       <Footer />
     </div>
