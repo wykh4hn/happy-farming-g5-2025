@@ -98,7 +98,7 @@ const Shop = () => {
         product.state.description.toLowerCase().includes(searchTerm.toLowerCase()));
 
     const matchCategory =
-      selectedCategory === "All" || product.state.category === selectedCategory;
+    selectedCategory === "All" || product.state.category === selectedCategory;
 
     return matchSearch && matchCategory;
   });
@@ -134,21 +134,23 @@ const Shop = () => {
 
 
         <div id="shop">
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product, index) => (
-                <div className="product" key={index}>
-                  <img src={product.state.img} alt={product.state.name} />
-                  <h4>{product.state.name}</h4>
-                  <h3>{"$" + product.state.price}</h3>
-                  <p>{product.state.description}</p>
-                  <Link to={"/product/" + product.state.name} className="detail">
-                    Details
-                  </Link>
-                </div>
-            ))
-          ) : (
-            <p>Uh oh it's not here.</p>
-          )}
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product, index) => (
+              <div className="product" key={index}>
+                <img src={product.state.img} alt={product.state.name} />
+                <h4>{product.state.name}</h4>
+                <h3>{"$" + product.state.price}</h3>
+                <p>{product.state.description}</p>
+                <Link to={"/product/" + product.state.name} className="detail">
+                  Details
+                </Link>
+              </div>
+          ))
+        ) : (
+          <h3>Uh oh it's not here. Wanna add more products with this category? <Link to="/create-product" id="create-product">
+            Create new product
+          </Link></h3>
+        )}
         </div>
       </div>
       <Footer />
