@@ -77,7 +77,7 @@ const ProductList = [
     category: "Vegetable",
   }),
   new Product({
-    img: "https://www.cookerru.com/wp-content/uploads/2022/07/egg-fried-rice-main-preview.jpg",
+    img: "/egg-fried-rice-main-preview.webp",
     name: "FRIED RICE",
     price: "48",
     description: "egg, fried, and rice",
