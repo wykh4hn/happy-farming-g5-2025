@@ -28,9 +28,8 @@ import { Footer } from "./footer";
   );
 };*/
 
-
 /*sorry Duc but im gonna change something so we can add the image for the product tho
-i just add that past, please test and check againn -Khanh*/ 
+i just add that past, please test and check againn -Khanh*/
 const CreateProduct = () => {
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
@@ -56,29 +55,27 @@ const CreateProduct = () => {
 
       <form onSubmit={handleSubmit}>
         <label>Product Name:</label>
-        <input 
-          type="text" 
-          value={productName} 
-          onChange={(e) => setProductName(e.target.value)} 
+        <input
+          type="text"
+          value={productName}
+          onChange={(e) => setProductName(e.target.value)}
         />
 
         <label>Price:</label>
-        <input 
-          type="number" 
-          value={price} 
-          onChange={(e) => setPrice(e.target.value)} 
+        <input
+          type="number"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
         />
 
         <label>Upload Image:</label>
-        <input 
-          type="file" 
-          accept="image/*"
-          onChange={handleImageUpload}
-        />
+        <input type="file" accept="image/*" onChange={handleImageUpload} />
 
-        {image && <img src={image} alt="Uploaded Preview" className="preview-img" />}  
+        {image && (
+          <img src={image} alt="Uploaded Preview" className="preview-img" />
+        )}
 
-        <button type="submit" id="create-product">Create product</button>
+        <input type="submit" id="create-product" value="Create Product" />
       </form>
 
       <Footer />
