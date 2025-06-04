@@ -21,3 +21,5 @@ const TransactionHistory = () => {
     </div>
   );
 };
+
+export { TransactionHistory };
