@@ -7,17 +7,23 @@ import { Footer } from "./footer";
 import { Sidebar } from "./sidebar";
 
 import * as d3 from "d3";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+
 import { useRef } from "react";
 // import
 
-const testX = [1, 2, 3, 4, 5, 6, 7];
+const testX = [];
 const testY = [];
+
+const testN = 10;
+
+for (let i = 0; i < testN; i++) {
+  testX.push(i);
+}
+
 for (let i = 0; i < testX.length; i++) {
   testY.push(Math.random() * 100);
 }
-
-const Chart = () => {};
 
 const TransactionHistory = () => {
   const chartRef = useRef(null);
@@ -80,7 +86,8 @@ const TransactionHistory = () => {
       <MainNav />
       <Sidebar />
       <div id="transaction-history" className="main-content">
-        <p>Page in progress</p>
+        <h1>Your recent transactions:</h1>
+        <p>View your recent spendings:</p>
         <div ref={chartRef}></div>
         {/* <Chart /> */}
       </div>
