@@ -56,9 +56,6 @@ const CreateProduct = () => {
     navigate("/shop"); //it will return to the shop page tho
   };
 
-  {
-    /*the form to create the product */
-  }
   return (
     <div>
       <Sidebar />
