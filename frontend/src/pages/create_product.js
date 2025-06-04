@@ -14,12 +14,15 @@ i just add that past, please test and check againn -Khanh*/
 // it's ok Khanh =))))))))))))))))))) - Đức
 const CreateProduct = () => {
   const [productName, setProductName] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState("")
+  const [currency, setCurrency] = useState("USD");
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Animal"); 
   const navigate = useNavigate();
-
+//i added something here to handle the image upload
+// sometimes when i test the image, and put console.log(image) it returns null
+// this is why i put these line tho :))) i think thats the best way
   const handleImageUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -30,7 +33,7 @@ const CreateProduct = () => {
     };
   }
 };
-
+//handle the submission 
   const handleSubmit = (e) => {
   e.preventDefault();
 
@@ -38,6 +41,9 @@ const CreateProduct = () => {
     name: productName.trim(), 
     price: price || "0",
     img: image,
+    currency, 
+    //i changed this line to use the image state
+    // if the image is null, it wont be added to the product -khanh
     description: description.trim() || "No description available",
     category: category || "Other",
   };
@@ -47,10 +53,10 @@ const CreateProduct = () => {
   localStorage.setItem("products", JSON.stringify(existingProducts));
 
   alert("Product created! Happy farming!");
-  navigate("/shop");
+  navigate("/shop"); //it will return to the shop page tho 
 };
 
-
+{/*the form to create the product */}
   return (
     <div>
       <Sidebar />
@@ -67,11 +73,20 @@ const CreateProduct = () => {
           />
 
           <label>Price:</label>
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
+            <input
+              type="number"
+              placeholder="Enter amount"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+
+            <label>Currency:</label>
+            <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+              <option value="USD">$ - USD</option>
+              <option value="EUR">€ - EUR</option>
+              <option value="VND">₫ - VND</option>
+              <option value="JPY">¥ - JPY</option>
+            </select>
 
           <label>Description:</label> 
           <textarea
@@ -93,6 +108,7 @@ const CreateProduct = () => {
           <input type="file" accept="image/*" onChange={handleImageUpload} />
 
           {/* that broke the site, gotta fix */}
+          {/* it's ok Duc this part is fine to me */}
           {image && (
             <img src={image} alt="Uploaded Preview" className="preview-img" />
           )}

@@ -63,7 +63,7 @@ const Shop = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         
-        {/* Categories */}
+        {/* categories */}
         <select
           id="category"
           value={selectedCategory}
@@ -84,7 +84,7 @@ const Shop = () => {
               <div className="product" key={index}>
                 <img src={product.img ? product.img : "/default-image.jpg"} alt={product.name} />
                 <h4>{product.name}</h4>
-                <h3>{"$" + product.price}</h3>
+                <h3>{product.price} {product.currency}</h3>
                 <p>{product.description}</p>
                 <Link to={"/product/" + product.name} className="detail">
                   Details
