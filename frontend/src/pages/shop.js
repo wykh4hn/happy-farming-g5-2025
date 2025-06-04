@@ -53,13 +53,8 @@ const Shop = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-<<<<<<< HEAD
-        
-        {/* categories */}
-=======
 
         {/* Categories */}
->>>>>>> 0c4f161866c2ddb6b436b72aaec5858a9c548dd1
         <select
           id="category"
           value={selectedCategory}
@@ -74,7 +69,7 @@ const Shop = () => {
         </select>
 
         {/*the product list, i changed that tho it is so hard so... */}
-        <div id="shop">
+        <div id="shop" className="main-content">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product, index) => (
               <div className="product" key={index}>
@@ -83,7 +78,9 @@ const Shop = () => {
                   alt={product.name}
                 />
                 <h4>{product.name}</h4>
-                <h3>{product.price} {product.currency}</h3>
+                <h3>
+                  {product.price} {product.currency}
+                </h3>
                 <p>{product.description}</p>
                 <Link to={"/product/" + product.name} className="detail">
                   Details

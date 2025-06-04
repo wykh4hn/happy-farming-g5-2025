@@ -14,7 +14,7 @@ const TransactionHistory = () => {
     <div>
       <MainNav />
       <Sidebar />
-      <div id="transaction-history">
+      <div id="transaction-history" className="main-content">
         <p>Page in progress</p>
       </div>
       <Footer />
