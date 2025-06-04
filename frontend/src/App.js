@@ -7,6 +7,7 @@ import { Wallet } from "./pages/wallet";
 import { Login } from "./pages/login";
 import { CreateAccount } from "./pages/create_account";
 import { CreateProduct } from "./pages/create_product";
+import { TransactionHistory } from "./pages/trans_history";
 
 import "./App.css";
 
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/create-product" element={<CreateProduct />} />
+          <Route path="/transaction-history" element={<TransactionHistory />} />
         </Routes>
       </Router>
       {/* <Home /> */}
