@@ -16,6 +16,37 @@ const getProductsFromLocalStorage = () => {
   return storedProducts;
 };
 
+//save the transaction to the localStorage tho
+const saveTransaction = (product) => {
+  const transaction = {
+    name: product.name,
+    price: product.price,
+    currency: product.currency || "$",
+    date: new Date().toLocaleString(),
+  };
+  const existingTransactions =
+    JSON.parse(localStorage.getItem("transactions")) || [];
+  existingTransactions.push(transaction);
+  localStorage.setItem("transactions", JSON.stringify(existingTransactions));
+};
+
+// handle the cancel purchase 
+const handleCancelProductPurchase = (product) => {
+  const transactions =
+    JSON.parse(localStorage.getItem("transactions")) || [];
+
+  const indexToRemove = [...transactions].reverse().findIndex(
+    (tx) => tx.name === product.name
+  );
+
+  if (indexToRemove === -1) {
+    const actualIndex = transactions.length - 1 - indexToRemove;
+    transactions.splice(actualIndex, 1);
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+  }
+  alert(`Last purchase has been cancelled:<`);
+};
+
 const Shop = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -25,6 +56,28 @@ const Shop = () => {
     setProductList(getProductsFromLocalStorage());
   }, []);
 
+  //i added this to buy the product, but it is not working yet
+  // i will fix it later, but now i  so tired
+  const handleBuy = (product) => {
+    const updatedProducts = productList.map((p) =>
+      p.id === product.id ? { ...p, bought: true } : p
+    );
+    localStorage.setItem("products", JSON.stringify(updatedProducts));
+    setProductList(updatedProducts);
+    saveTransaction(product); //save the transaction tho
+    alert(`You have bought "${product.name}" successfully!`);
+  };
+
+  // Updated cancel function to reset the "bought" flag
+  const handleCancelProductPurchase = (product) => {
+    const updatedProducts = productList.map((p) =>
+      p.id === product.id ? { ...p, bought: false } : p
+    );
+    localStorage.setItem("products", JSON.stringify(updatedProducts));
+    setProductList(updatedProducts);
+    alert(`Purchase for "${product.name}" has been cancelled.`);
+  };
+  
   const filteredProducts = productList.filter((product) => {
     const matchSearch =
       (product.name &&
@@ -85,6 +138,24 @@ const Shop = () => {
                 <Link to={"/product/" + product.name} className="detail">
                   Details
                 </Link>
+
+                {/* if we have not bought this product yet */}
+                {/* if not yet bought, show Buy button */}
+                {!product.bought && (
+                  <button onClick={() => handleBuy(product)}>Buy</button>
+                )}
+
+                {/* if already bought, show purchase info and Cancel button */}
+                {product.bought && (
+                  <>
+                    <p style={{ color: "green", fontWeight: "bold" }}>
+                      Purchased ✔️
+                    </p>
+                    <button onClick={() => handleCancelProductPurchase(product)}>
+                      Cancel Purchase
+                    </button>
+                  </>
+                )}
               </div>
             ))
           ) : (
