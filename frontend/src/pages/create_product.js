@@ -21,30 +21,35 @@ const CreateProduct = () => {
   const navigate = useNavigate();
 
   const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageURL = URL.createObjectURL(file);
-      setImage(imageURL);
-    }
-  };
-
-   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const newProduct = {
-      name: productName,
-      price,
-      img: image,
-      description,
-      category,
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImage(reader.result); 
     };
-     const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
-    existingProducts.push(newProduct);
-    localStorage.setItem("products", JSON.stringify(existingProducts));
+  }
+};
 
-    alert("Product created!");
-    navigate("/shop"); 
+  const handleSubmit = (e) => {
+  e.preventDefault();
+
+  const newProduct = {
+    name: productName.trim(), 
+    price: price || "0",
+    img: image,
+    description: description.trim() || "No description available",
+    category: category || "Other",
   };
+
+  const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
+  existingProducts.push(newProduct);
+  localStorage.setItem("products", JSON.stringify(existingProducts));
+
+  alert("Product created! Happy farming!");
+  navigate("/shop");
+};
+
 
   return (
     <div>
@@ -79,8 +84,8 @@ const CreateProduct = () => {
           <select value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="Animal">Animal</option>
             <option value="Vegetable">Vegetable</option>
-            <option value="Tree">Other</option>
-            <option value="Agriculture products">Other</option>
+            <option value="Tree">Tree</option>
+            <option value="Agriculture products">Agriculture products</option>
             <option value="Other">Other</option>
           </select>
 
