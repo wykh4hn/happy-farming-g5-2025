@@ -8,18 +8,9 @@ import { useState, useEffect } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Footer } from "./footer";
+import { Sidebar } from "./sidebar";
 
-const Sidebar = () => {
-  return (
-    <div id="sidebar">
-      <p><Link to="#">Menu Item</Link></p>
-      <p><Link to="/create-product">Create new product</Link></p>
-      <p><Link to="/transaction-history">Transaction history</Link></p>
-    </div>
-  );
-};
-
-// ab the localStorage, i learned smt and it is quite useful tho :)))) 
+// ab the localStorage, i learned smt and it is quite useful tho :))))
 const getProductsFromLocalStorage = () => {
   const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
   return storedProducts;
@@ -30,7 +21,6 @@ const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [productList, setProductList] = useState([]);
 
- 
   useEffect(() => {
     setProductList(getProductsFromLocalStorage());
   }, []);
@@ -42,7 +32,8 @@ const Shop = () => {
       (product.description &&
         product.description.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const matchCategory = selectedCategory === "All" || product.category === selectedCategory;
+    const matchCategory =
+      selectedCategory === "All" || product.category === selectedCategory;
 
     return matchSearch && matchCategory;
   });
@@ -62,7 +53,7 @@ const Shop = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        
+
         {/* Categories */}
         <select
           id="category"
@@ -82,7 +73,10 @@ const Shop = () => {
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product, index) => (
               <div className="product" key={index}>
-                <img src={product.img ? product.img : "/default-image.jpg"} alt={product.name} />
+                <img
+                  src={product.img ? product.img : "/default-image.jpg"}
+                  alt={product.name}
+                />
                 <h4>{product.name}</h4>
                 <h3>{"$" + product.price}</h3>
                 <p>{product.description}</p>
@@ -94,7 +88,9 @@ const Shop = () => {
           ) : (
             <h3>
               Uh oh, it's not here. Wanna add more products?{" "}
-              <Link to="/create-product" id="create-product">Create new product</Link>
+              <Link to="/create-product" id="create-product">
+                Create new product
+              </Link>
             </h3>
           )}
         </div>
@@ -105,5 +101,3 @@ const Shop = () => {
 };
 
 export { Shop };
-
-
