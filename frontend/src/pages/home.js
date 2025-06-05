@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { MainNav } from "./nav";
-import { Sidebar } from "./sidebar";
+// import { Sidebar } from "./sidebar";
 
 import "../styles/styles.css";
 import "../styles/home.css";

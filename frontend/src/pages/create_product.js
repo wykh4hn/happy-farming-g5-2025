@@ -8,6 +8,9 @@ import { MainNav } from "./nav";
 import { Footer } from "./footer";
 import { Sidebar } from "./sidebar";
 
+import imageCompression from "browser-image-compression";
+// import console from "console";
+
 /*sorry Duc but im gonna change something so we can add the image for the product tho
 i just add that past, please test and check againn -Khanh*/
 
@@ -23,14 +26,34 @@ const CreateProduct = () => {
   //i added something here to handle the image upload
   // sometimes when i test the image, and put console.log(image) it returns null
   // this is why i put these line tho :))) i think thats the best way
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImage(reader.result);
+  const handleImageUpload = async (event) => {
+    let file = event.target.files[0];
+
+    // compress image by browser-image-compression
+    try {
+      const compressOptions = {
+        maxSizeMB: 0.05,
+        maxWidthOrHeight: 800,
+        useWebWorker: true,
       };
+
+      const compressedFile = await imageCompression(file, compressOptions);
+      console.log(
+        `Image compressed from ${file.size / 1024 / 1024} MB to ${
+          compressedFile.size / 1024 / 1024
+        } MB`
+      );
+
+      if (compressedFile) {
+        const reader = new FileReader();
+        reader.readAsDataURL(compressedFile);
+        reader.onloadend = () => {
+          setImage(reader.result);
+        };
+      }
+    } catch (error) {
+      console.error("Error compressing image:", error);
+      alert("Error uploading image!");
     }
   };
   //handle the submission
