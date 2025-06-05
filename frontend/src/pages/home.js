@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { MainNav } from "./nav";
 import { Footer } from "./footer";
+import { Sidebar } from "./sidebar";
 
 import "../styles/styles.css";
 import "../styles/home.css";
@@ -9,7 +10,8 @@ const introImage = "/intro.png";
 const Home = () => {
   return (
     <div>
-      <MainNav />
+          <MainNav />
+          <Sidebar />
 
       <div className="container">
         <div className="main-content">
