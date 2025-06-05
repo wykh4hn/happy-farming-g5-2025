@@ -1,13 +1,14 @@
 #sidebar {
 	width: 200px;
+	height: 100%;
 	position: fixed;
 	left: 0;
 	top: 55px;
-	bottom: 55px;
 	background-color: #B2CD9C;
 	padding: 20px;
 	overflow-y: auto;
 	word-wrap: break-word;
+	grid-area: sidebar;
 }
 
 #sidebar p {

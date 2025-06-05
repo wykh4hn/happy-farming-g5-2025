@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainNav } from "./nav";
 import { Footer } from "./footer";
-import { Sidebar } from "./sidebar";
+
 
 /*sorry Duc but im gonna change something so we can add the image for the product tho
 i just add that past, please test and check againn -Khanh*/
@@ -46,6 +46,8 @@ const CreateProduct = () => {
       // if the image is null, it wont be added to the product -khanh
       description: description.trim() || "No description available",
       category: category || "Other",
+      timestamp: new Date().toISOString(), // ISO format for better compatibility
+      id: Date.now(), // Unique ID based on timestamp
     };
 
     const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
@@ -58,10 +60,9 @@ const CreateProduct = () => {
 
   return (
     <div>
-      <Sidebar />
+      <MainNav />
       <div id="create-product-page" className="main-content">
-        <MainNav />
-        <h1>Create a New Product</h1>
+        <h1>CREATE NEW PRODUCT</h1>
 
         <form onSubmit={handleSubmit}>
           <label>Product Name:</label>

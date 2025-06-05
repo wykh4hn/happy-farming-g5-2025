@@ -1,6 +1,11 @@
+h1 {
+  white-space: nowrap;
+padding: 170px 0 20px;
+}
+
 form * {
 	margin: 5px;
-	width: 30%;
+	width: 100%;
 }
 
 form {
@@ -8,17 +13,34 @@ form {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	background-color: #b2c17688;
+	border-radius: 10px;
+	padding: 30px;
+	align-items: center;
+}
+form input, select, textarea{
+	width: 100%;
+	padding: 10px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
 }
 
 /* Add to frontend/src/styles/create-product.css or create.css */
 #create-product-page {
-	margin-left: 220px;
-	/* 200px sidebar + 20px sidebar padding */
+	max-width: 1200px;      
+  	margin: 0 auto;         
+  	padding: 170px 20px 80px;
+  	box-sizing: border-box;
+	animation: fadeIn 0.3s ease-in-out;
 }
 
 #create-account-button,
 #create-product {
 	color: black;
-	background-color: #A4B465;
+	background-color: #f0f2ab;
 	border-radius: 10px;
+	border: olive;
 }
+
+

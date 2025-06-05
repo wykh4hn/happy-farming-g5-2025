@@ -1,12 +1,19 @@
 nav a {
-  
+  grid-area: nav;
+	padding-left: 55px;
+	padding-right: 55px;
+	height: 100%;
+	text-decoration: none;
+}
+nav a .nav-hover {
+  grid-area: nav;
 	padding-left: 55px;
 	padding-right: 55px;
 	height: 100%;
 	text-decoration: none;
   transition: all 0.3s ease-in-out;
 }
-nav a:hover {
+nav a.nav-hover:hover {
   background-color: #d2d499;
   border-radius: 5px;
   padding: 12px 60px;

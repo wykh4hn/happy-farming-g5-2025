@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { MainNav } from "./nav";
-import { Footer } from "./footer";
 
 import "../styles/styles.css";
 import "../styles/home.css";
@@ -13,7 +12,7 @@ const Home = () => {
 
       <div className="container">
         <div className="main-content">
-          <h1>WELCOME TO OUR WEBSITE</h1>
+          <h1>HAPPY FARMING WEBSITE</h1>
           <p>
             This is a friendly decentralized transaction web with agriculture
             products. Enjoy!
@@ -33,7 +32,6 @@ const Home = () => {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 };
