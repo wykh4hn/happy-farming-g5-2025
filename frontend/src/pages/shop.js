@@ -8,7 +8,6 @@ import { useState, useEffect } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Footer } from "./footer";
-import { Sidebar } from "./sidebar";
 
 // ab the localStorage, i learned smt and it is quite useful tho :))))
 const getProductsFromLocalStorage = () => {
@@ -16,36 +15,6 @@ const getProductsFromLocalStorage = () => {
   return storedProducts;
 };
 
-//save the transaction to the localStorage tho
-const saveTransaction = (product) => {
-  const transaction = {
-    name: product.name,
-    price: product.price,
-    currency: product.currency || "$",
-    date: new Date().toLocaleString(),
-  };
-  const existingTransactions =
-    JSON.parse(localStorage.getItem("transactions")) || [];
-  existingTransactions.push(transaction);
-  localStorage.setItem("transactions", JSON.stringify(existingTransactions));
-};
-
-// handle the cancel purchase 
-const handleCancelProductPurchase = (product) => {
-  const transactions =
-    JSON.parse(localStorage.getItem("transactions")) || [];
-
-  const indexToRemove = [...transactions].reverse().findIndex(
-    (tx) => tx.name === product.name
-  );
-
-  if (indexToRemove === -1) {
-    const actualIndex = transactions.length - 1 - indexToRemove;
-    transactions.splice(actualIndex, 1);
-    localStorage.setItem("transactions", JSON.stringify(transactions));
-  }
-  alert(`Last purchase has been cancelled:<`);
-};
 
 const Shop = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,18 +29,16 @@ const Shop = () => {
   // i will fix it later, but now i  so tired
   const handleBuy = (product) => {
     const updatedProducts = productList.map((p) =>
-      p.id === product.id ? { ...p, bought: true } : p
+      p.name === product.name ? { ...p, bought: true } : p
     );
     localStorage.setItem("products", JSON.stringify(updatedProducts));
     setProductList(updatedProducts);
-    saveTransaction(product); //save the transaction tho
     alert(`You have bought "${product.name}" successfully!`);
   };
 
-  // Updated cancel function to reset the "bought" flag
   const handleCancelProductPurchase = (product) => {
     const updatedProducts = productList.map((p) =>
-      p.id === product.id ? { ...p, bought: false } : p
+      p.name === product.name ? { ...p, bought: false } : p
     );
     localStorage.setItem("products", JSON.stringify(updatedProducts));
     setProductList(updatedProducts);
@@ -88,16 +55,26 @@ const Shop = () => {
     const matchCategory =
       selectedCategory === "All" || product.category === selectedCategory;
 
-    return matchSearch && matchCategory;
+      return matchSearch && matchCategory;
   });
+
+  //this is the style tho bc css doesnt work
+  const productDescriptionStyle = {
+    fontSize: "0.9em",
+    color: "#f2efef",
+    textAlign: "left",
+    marginBottom: "10px",
+  };
+
+  //nah css works now but it think i will keep this code for later use
 
   return (
     <div>
       <MainNav />
-      <Sidebar />
       <div id="shop-container">
         <h1>WELCOME TO OUR SHOP!</h1>
 
+        <div className="search-categories">
         {/* search */}
         <input
           type="text"
@@ -120,6 +97,7 @@ const Shop = () => {
           <option value="Agriculture products">Agriculture products</option>
           <option value="Other">Other</option>
         </select>
+        </div>
 
         {/*the product list, i changed that tho it is so hard so... */}
         <div id="shop" className="main-content">
@@ -130,28 +108,21 @@ const Shop = () => {
                   src={product.img ? product.img : "/default-image.jpg"}
                   alt={product.name}
                 />
-                <h4>{product.name}</h4>
+                <h4>{product.name.toUpperCase()}</h4>
                 <h3>
                   {product.price} {product.currency}
                 </h3>
-                <p>{product.description}</p>
-                <Link to={"/product/" + product.name} className="detail">
-                  Details
-                </Link>
-
+                <p style={productDescriptionStyle}>{product.description}</p>
                 {/* if we have not bought this product yet */}
                 {/* if not yet bought, show Buy button */}
                 {!product.bought && (
-                  <button onClick={() => handleBuy(product)}>Buy</button>
+                  <button id="buy" onClick={() => handleBuy(product)}>Buy</button>
                 )}
-
+                {/* i think the detail button quite unesessary tho, we can click on the product to see details (maybe backend) */}
                 {/* if already bought, show purchase info and Cancel button */}
                 {product.bought && (
                   <>
-                    <p style={{ color: "green", fontWeight: "bold" }}>
-                      Purchased ✔️
-                    </p>
-                    <button onClick={() => handleCancelProductPurchase(product)}>
+                    <button id="cancel" onClick={() => handleCancelProductPurchase(product)}>
                       Cancel Purchase
                     </button>
                   </>
