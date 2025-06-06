@@ -7,6 +7,16 @@ import { useNavigate } from "react-router-dom";
 import { MainNav } from "./nav";
 import { Footer } from "./footer";
 
+<<<<<<< HEAD
+=======
+import imageCompression from "browser-image-compression";
+// import console from "console";
+
+/*sorry Duc but im gonna change something so we can add the image for the product tho
+i just add that past, please test and check againn -Khanh*/
+
+// it's ok Khanh =))))))))))))))))))) - Đức
+>>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
 const CreateProduct = () => {
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
@@ -16,6 +26,7 @@ const CreateProduct = () => {
   const [category, setCategory] = useState("Animal");
   const [showPopup, setShowPopup] = useState(false); // ✅ Khai báo popup state
   const navigate = useNavigate();
+<<<<<<< HEAD
 
   // ✅ Xử lý upload ảnh
   const handleImageUpload = (event) => {
@@ -25,7 +36,39 @@ const CreateProduct = () => {
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         setImage(reader.result);
+=======
+  //i added something here to handle the image upload
+  // sometimes when i test the image, and put console.log(image) it returns null
+  // this is why i put these line tho :))) i think thats the best way
+  const handleImageUpload = async (event) => {
+    let file = event.target.files[0];
+
+    // compress image by browser-image-compression
+    try {
+      const compressOptions = {
+        maxSizeMB: 0.05,
+        maxWidthOrHeight: 800,
+        useWebWorker: true,
+>>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
       };
+
+      const compressedFile = await imageCompression(file, compressOptions);
+      console.log(
+        `Image compressed from ${file.size / 1024 / 1024} MB to ${
+          compressedFile.size / 1024 / 1024
+        } MB`
+      );
+
+      if (compressedFile) {
+        const reader = new FileReader();
+        reader.readAsDataURL(compressedFile);
+        reader.onloadend = () => {
+          setImage(reader.result);
+        };
+      }
+    } catch (error) {
+      console.error("Error compressing image:", error);
+      alert("Error uploading image!");
     }
   };
 

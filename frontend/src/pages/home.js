@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { MainNav } from "./nav";
+// import { Sidebar } from "./sidebar";
 
 import "../styles/styles.css";
 import "../styles/home.css";
@@ -8,8 +9,13 @@ const introImage = "/intro.png";
 const Home = () => {
   return (
     <div>
+<<<<<<< HEAD
           <MainNav />
  
+=======
+      <MainNav />
+      {/* <Sidebar /> */}
+>>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
 
       <div className="container">
         <div className="main-content">
@@ -32,7 +38,6 @@ const Home = () => {
           <img src={introImage} alt="Intro tho" />
         </div>
       </div>
-
     </div>
   );
 };
