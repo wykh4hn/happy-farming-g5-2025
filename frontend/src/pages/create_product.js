@@ -1,17 +1,12 @@
 import "../styles/styles.css";
 import "../styles/create.css";
 import "../styles/create-product.css";
-
+import { WalletPopup } from "./walletPopup";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainNav } from "./nav";
 import { Footer } from "./footer";
-import { Sidebar } from "./sidebar";
 
-/*sorry Duc but im gonna change something so we can add the image for the product tho
-i just add that past, please test and check againn -Khanh*/
-
-// it's ok Khanh =))))))))))))))))))) - Đức
 const CreateProduct = () => {
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
@@ -19,10 +14,10 @@ const CreateProduct = () => {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Animal");
+  const [showPopup, setShowPopup] = useState(false); // ✅ Khai báo popup state
   const navigate = useNavigate();
-  //i added something here to handle the image upload
-  // sometimes when i test the image, and put console.log(image) it returns null
-  // this is why i put these line tho :))) i think thats the best way
+
+  // ✅ Xử lý upload ảnh
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -33,8 +28,15 @@ const CreateProduct = () => {
       };
     }
   };
-  //handle the submission
-  const handleSubmit = (e) => {
+
+  // ✅ Submit form để kích hoạt popup
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setShowPopup(true); // Gọi popup ví
+  };
+
+  // ✅ Khi xác nhận trong popup ví
+  const handleConfirm = (e) => {
     e.preventDefault();
 
     const newProduct = {
@@ -42,10 +44,11 @@ const CreateProduct = () => {
       price: price || "0",
       img: image,
       currency,
-      //i changed this line to use the image state
-      // if the image is null, it wont be added to the product -khanh
       description: description.trim() || "No description available",
       category: category || "Other",
+      timestamp: new Date().toISOString(),
+      id: Date.now(),
+      bought: false // ✅ Mặc định chưa mua
     };
 
     const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
@@ -53,22 +56,28 @@ const CreateProduct = () => {
     localStorage.setItem("products", JSON.stringify(existingProducts));
 
     alert("Product created! Happy farming!");
-    navigate("/shop"); //it will return to the shop page tho
+    navigate("/shop");
+  };
+
+  // ✅ Khi huỷ tạo sản phẩm
+  const handleCancel = () => {
+    console.log("Product creation canceled.");
+    setShowPopup(false);
   };
 
   return (
     <div>
-      <Sidebar />
+      <MainNav />
       <div id="create-product-page" className="main-content">
-        <MainNav />
-        <h1>Create a New Product</h1>
+        <h1>CREATE NEW PRODUCT</h1>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleFormSubmit}>
           <label>Product Name:</label>
           <input
             type="text"
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
+            required
           />
 
           <label>Price:</label>
@@ -77,6 +86,7 @@ const CreateProduct = () => {
             placeholder="Enter amount"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            required
           />
 
           <label>Currency:</label>
@@ -112,14 +122,21 @@ const CreateProduct = () => {
           <label>Upload Image:</label>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
 
-          {/* that broke the site, gotta fix */}
-          {/* it's ok Duc this part is fine to me */}
           {image && (
             <img src={image} alt="Uploaded Preview" className="preview-img" />
           )}
 
           <input type="submit" id="create-product" value="Create Product" />
         </form>
+
+        {showPopup && (
+          <WalletPopup
+            bidAmount={0.2}
+            balance={30033}
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+        )}
 
         <Footer />
       </div>

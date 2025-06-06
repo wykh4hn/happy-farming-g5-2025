@@ -81,18 +81,33 @@ const TransactionHistory = () => {
       .attr("transform", `translate(${margin.left},0)`)
       .call(d3.axisLeft(y));
   }, []);
+
   return (
     <div>
       <MainNav />
       <Sidebar />
       <div id="transaction-history" className="main-content">
-        <h1>Your recent transactions:</h1>
+        <h1>YOUR TANSACTION HISTORY</h1>
         <p>View your recent spendings:</p>
         <div ref={chartRef}></div>
         {/* <Chart /> */}
       </div>
+
+      <div id="transaction-history-info" >
+        <h2>Transaction History</h2>
+        <p>
+          This is a simple line chart showing your recent transactions. The X-axis
+          represents the transaction number, and the Y-axis represents the amount
+          spent in each transaction.
+        </p>
+        <p>
+          You can use this chart to track your spending habits and make informed
+          decisions about your purchases.
+        </p>
+        </div>
       <Footer />
     </div>
+
   );
 };
 
