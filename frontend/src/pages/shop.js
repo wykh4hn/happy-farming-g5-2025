@@ -173,9 +173,9 @@ const Shop = () => {
             <MainNav />
             <div id="shop-container" style={homeStyle}>
                 {/* Header + Search & Category */}
-                <div style={headerContainerStyle}>
+                <div style={headerContainerStyle} id="header-container">
                     <h1>SHOPPING WITH US</h1>
-                    {/* Search & Category */}
+                    
                     <div style={searchContainerStyle}>
                         <input
                             type="text"

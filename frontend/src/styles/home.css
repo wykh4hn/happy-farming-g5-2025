@@ -1,30 +1,49 @@
-#home-container {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  min-height: 100vh;
-  margin: 0;
-  font-family: sans-serif;
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-/*I added something bc it's cute :3*/
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+@media screen and (min-width: 1024px) { /*For laptop user*/
+  #home-container {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+    animation: fadeIn 0.5s ease-in-out;
   }
 
-  to {
-    opacity: 1;
+  /*I added something bc it's cute :3*/
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
+
+  img{
+    width: 700px;
+    height: 700px;
+    align-items: bottom;
+    border-radius: 100%;
+    border: 10px solid #095a5d;
+    box-shadow: 30px 8px 20px rgba(109, 98, 49, 0.4);
+    clip-path: ellipse(100% 75% at center);
+}
 }
 
-img{
-  width: 700px;
-  height: 700px;
-  align-items: bottom;
-  border-radius: 100%;
-  border: 10px solid #095a5d;
-  box-shadow: 30px 8px 20px rgba(109, 98, 49, 0.4);
-  clip-path: ellipse(100% 75% at center);
-}
+@media screen and (max-width: 1023px) {
+  
+    .image-wrapper, #intro-image  {
+      display: none;
+    }
+    #header, #description-intro {
+      font-size: -6em;
+      text-align: center;
+    }
+
+
+
+
+  }
+
+

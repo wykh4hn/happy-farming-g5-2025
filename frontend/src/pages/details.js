@@ -50,7 +50,7 @@ const Detail = () => {
     <>
       <MainNav />
       <div id="shop-container" style={pageStyle}>
-        <div style={headerContainerStyle}> 
+        <div style={headerContainerStyle}  id="header-container"> 
           <h1>DETAIL OF PRODUCT: {product.name.toUpperCase()}</h1> 
         </div>
 

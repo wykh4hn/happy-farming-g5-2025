@@ -40,16 +40,15 @@ const CreateProduct = () => {
   const headingStyle = {
     fontFamily: '"Abril Fatface", sans-serif',
     fontSize: "2.5em",
-    textAlign: "center", // Căn giữa văn bản
+    textAlign: "center",
     color: "#044b4d",
     backgroundColor: "#f8f4eb",
     padding: "15px 40px",
     borderRadius: "50px",
     position: "absolute",
-    top: "20%", // Đưa header lên vị trí hợp lý
+    top: "20%", 
     left: "50%",
-    transform: "translate(-50%, -50%)", // Đảm bảo căn giữa hoàn hảo
-    width: "80%", // Giữ khoảng rộng phù hợp
+    transform: "translate(-50%, -50%)", 
 };
 
 
@@ -65,7 +64,7 @@ const formStyle = {
     padding: "20px",
     width: "100%",
     maxWidth: "500px", 
-    textAlign: "left", // Đảm bảo văn bản cũng căn sang phải
+    textAlign: "left", 
 };
 
 
@@ -150,11 +149,13 @@ const formStyle = {
   };
 
   return (
+    <>
+    <MainNav />
     <div style={pageStyle}>
-      <MainNav />
       <div id="create-product-page" style={containerStyle}>
-        <h1 style={headingStyle}>CREATE NEW PRODUCT</h1>
-        <form onSubmit={handleFormSubmit} style={formStyle}>
+        <h1 style={headingStyle} id="heading-container">CREATE NEW PRODUCT</h1>
+        
+        <form onSubmit={handleFormSubmit} style={formStyle} id="create-product-form">
           <label>Product Name:</label>
           <input
             type="text"
@@ -252,6 +253,7 @@ const formStyle = {
 
       </div>
     </div>
+    </>
   );
 };
 

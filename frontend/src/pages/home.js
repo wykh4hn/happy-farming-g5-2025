@@ -3,6 +3,7 @@ import { MainNav } from "../components/nav";
 
 {/*I add some parts of the css into this bc idk why all in css so lag and even effect on other pages */}
 const Home = () => {
+
   const bgImage = `${process.env.PUBLIC_URL}/background.png`;
 
   const homeStyle = {
