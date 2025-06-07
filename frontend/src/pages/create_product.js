@@ -7,8 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { MainNav } from "./nav";
 import { Footer } from "./footer";
 
-<<<<<<< HEAD
-=======
 import imageCompression from "browser-image-compression";
 // import console from "console";
 
@@ -16,7 +14,6 @@ import imageCompression from "browser-image-compression";
 i just add that past, please test and check againn -Khanh*/
 
 // it's ok Khanh =))))))))))))))))))) - Đức
->>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
 const CreateProduct = () => {
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
@@ -26,17 +23,6 @@ const CreateProduct = () => {
   const [category, setCategory] = useState("Animal");
   const [showPopup, setShowPopup] = useState(false); // ✅ Khai báo popup state
   const navigate = useNavigate();
-<<<<<<< HEAD
-
-  // ✅ Xử lý upload ảnh
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImage(reader.result);
-=======
   //i added something here to handle the image upload
   // sometimes when i test the image, and put console.log(image) it returns null
   // this is why i put these line tho :))) i think thats the best way
@@ -49,7 +35,6 @@ const CreateProduct = () => {
         maxSizeMB: 0.05,
         maxWidthOrHeight: 800,
         useWebWorker: true,
->>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
       };
 
       const compressedFile = await imageCompression(file, compressOptions);
@@ -91,7 +76,7 @@ const CreateProduct = () => {
       category: category || "Other",
       timestamp: new Date().toISOString(),
       id: Date.now(),
-      bought: false // ✅ Mặc định chưa mua
+      bought: false, // ✅ Mặc định chưa mua
     };
 
     const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
