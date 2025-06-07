@@ -9,13 +9,8 @@ const introImage = "/intro.png";
 const Home = () => {
   return (
     <div>
-<<<<<<< HEAD
-          <MainNav />
- 
-=======
       <MainNav />
       {/* <Sidebar /> */}
->>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
 
       <div className="container">
         <div className="main-content">
