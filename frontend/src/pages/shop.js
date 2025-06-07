@@ -8,9 +8,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Footer } from "./footer";
-<<<<<<< HEAD
 
-//set the default products, i think we can use this to test the shop page
 const defaultProducts = [
   {
     name: "JAKE",
@@ -21,7 +19,7 @@ const defaultProducts = [
     category: "Animal",
     timestamp: new Date().toISOString(),
     id: Date.now(),
-    bought: false
+    bought: false,
   },
   {
     name: "JENNIFER",
@@ -32,7 +30,7 @@ const defaultProducts = [
     category: "Vegetable",
     timestamp: new Date().toISOString(),
     id: Date.now() + 1,
-    bought: false
+    bought: false,
   },
   {
     name: "MANGO",
@@ -43,23 +41,19 @@ const defaultProducts = [
     category: "Vegetable",
     timestamp: new Date().toISOString(),
     id: Date.now() + 2,
-    bought: false
+    bought: false,
   },
 ];
 
-=======
->>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
-
 // ab the localStorage, i learned smt and it is quite useful tho :))))
 const getProductsFromLocalStorage = () => {
-   const storedProducts = JSON.parse(localStorage.getItem("products"));
-      if (!storedProducts || storedProducts.length === 0) {
-      localStorage.setItem("products", JSON.stringify(defaultProducts));
-      return defaultProducts;
+  const storedProducts = JSON.parse(localStorage.getItem("products"));
+  if (!storedProducts || storedProducts.length === 0) {
+    localStorage.setItem("products", JSON.stringify(defaultProducts));
+    return defaultProducts;
   }
   return storedProducts;
 };
-
 
 const Shop = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -73,23 +67,6 @@ const Shop = () => {
   //i added this to buy the product, but it is not working yet
   // i will fix it later, but now i  so tired
   const handleBuy = (product) => {
-<<<<<<< HEAD
-      const updatedProducts = productList.map((p) =>
-        p.id === product.id ? { ...p, bought: true } : p
-      );
-      localStorage.setItem("products", JSON.stringify(updatedProducts));
-      setProductList(updatedProducts);
-      alert(`You have bought "${product.name}" successfully!`);
-    };
-
-  const handleCancelProductPurchase = (product) => {
-    const updatedProducts = productList.map((p) =>
-      p.id === product.id ? { ...p, bought: false } : p
-      );
-      localStorage.setItem("products", JSON.stringify(updatedProducts));
-      setProductList(updatedProducts);
-      alert(`Purchase for "${product.name}" has been cancelled.`);
-=======
     const updatedProducts = productList.map((p) =>
       p.name === product.name ? { ...p, bought: true } : p
     );
@@ -105,10 +82,8 @@ const Shop = () => {
     localStorage.setItem("products", JSON.stringify(updatedProducts));
     setProductList(updatedProducts);
     alert(`Purchase for "${product.name}" has been cancelled.`);
->>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
   };
 
-  
   const filteredProducts = productList.filter((product) => {
     const matchSearch =
       (product.name &&
@@ -117,12 +92,8 @@ const Shop = () => {
         product.description.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchCategory =
       selectedCategory === "All" || product.category === selectedCategory;
-<<<<<<< HEAD
-    return matchSearch && matchCategory;
-=======
 
-      return matchSearch && matchCategory;
->>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
+    return matchSearch && matchCategory;
   });
 
   //this is the style tho bc css doesnt work
@@ -136,17 +107,13 @@ const Shop = () => {
   //nah css works now but it think i will keep this code for later use
 
   return (
-   <div>
+    <div>
       <MainNav />
-<<<<<<< HEAD
-      
-=======
->>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
       <div id="shop-container">
         <h1>WELCOME TO OUR SHOP!</h1>
 
         <div className="search-categories">
-<<<<<<< HEAD
+          {/* search */}
           <input
             type="text"
             id="search"
@@ -154,6 +121,8 @@ const Shop = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+
+          {/* Categories */}
           <select
             id="category"
             value={selectedCategory}
@@ -168,33 +137,7 @@ const Shop = () => {
           </select>
         </div>
 
-=======
-        {/* search */}
-        <input
-          type="text"
-          id="search"
-          placeholder="Search for product..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-
-        {/* Categories */}
-        <select
-          id="category"
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
-          <option value="All">All Categories</option>
-          <option value="Animal">Animal</option>
-          <option value="Vegetable">Vegetable</option>
-          <option value="Tree">Tree</option>
-          <option value="Agriculture products">Agriculture products</option>
-          <option value="Other">Other</option>
-        </select>
-        </div>
-
         {/*the product list, i changed that tho it is so hard so... */}
->>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
         <div id="shop" className="main-content">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product, index) => (
@@ -208,29 +151,24 @@ const Shop = () => {
                   {product.price} {product.currency}
                 </h3>
                 <p style={productDescriptionStyle}>{product.description}</p>
-<<<<<<< HEAD
-                {!product.bought && (
-                  <button id="buy" onClick={() => handleBuy(product)}>Buy</button>
-                )}
-                {product.bought && (
-                  <button id="cancel" onClick={() => handleCancelProductPurchase(product)}>
-                    Cancel Purchase
-                  </button>
-=======
                 {/* if we have not bought this product yet */}
                 {/* if not yet bought, show Buy button */}
                 {!product.bought && (
-                  <button id="buy" onClick={() => handleBuy(product)}>Buy</button>
+                  <button id="buy" onClick={() => handleBuy(product)}>
+                    Buy
+                  </button>
                 )}
                 {/* i think the detail button quite unesessary tho, we can click on the product to see details (maybe backend) */}
                 {/* if already bought, show purchase info and Cancel button */}
                 {product.bought && (
                   <>
-                    <button id="cancel" onClick={() => handleCancelProductPurchase(product)}>
+                    <button
+                      id="cancel"
+                      onClick={() => handleCancelProductPurchase(product)}
+                    >
                       Cancel Purchase
                     </button>
                   </>
->>>>>>> 275f6a37a19e576082ee27a93bcf53467a2315fb
                 )}
               </div>
             ))
@@ -244,7 +182,7 @@ const Shop = () => {
           )}
         </div>
       </div>
-      
+
       <Footer />
     </div>
   );
