@@ -1,25 +1,62 @@
-#sidebar {
-	width: 200px;
-	position: fixed;
-	left: 0;
-	top: 55px;
-	bottom: 55px;
-	background-color: #B2CD9C;
-	padding: 20px;
-	overflow-y: auto;
-	word-wrap: break-word;
+/* src/styles/sidebar.css */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 250px;
+  height: 100%;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
 }
 
-#sidebar p {
-	margin-bottom: 15px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	/*when the options too long it will write ...*/
+.sidebar.open {
+  left: 0;
 }
 
-#sidebar p:hover {
-	overflow: visible;
-	white-space: normal;
-	background-color: #9eb88a;
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  float: right;
+  cursor: pointer;
 }
+
+.sidebar p {
+  margin: 0.8rem 0;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.sidebar a:hover {
+  color: #0a6d3b;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(204, 202, 202, 0.4);
+  z-index: 999;
+}
+
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-bottom: 20px;
+  color: black;
+  font-size: 1.1rem;
+
+}
+

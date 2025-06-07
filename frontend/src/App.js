@@ -1,33 +1,29 @@
 import React from "react";
-
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Home } from "./pages/home";
-import { Shop } from "./pages/shop";
-import Wallet from "./pages/wallet";
-import { Login } from "./pages/login";
-import { CreateAccount } from "./pages/create_account";
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Home } from "./pages/home"; 
+import { Shop } from "./pages/shop"; 
 import { CreateProduct } from "./pages/create_product";
-import { TransactionHistory } from "./pages/trans_history";
+import Wallet from "./pages/wallet";
+import { Detail } from "./pages/details";
+import {TransactionHistory} from "./pages/trans_history";
 
-import "./App.css";
 
-const App = () => {
+function App() {
   return (
     <div>
       <Router>
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/create-wallet" element={<Wallet />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/create-product" element={<CreateProduct />} />
-          <Route path="/transaction-history" element={<TransactionHistory />} />
+          <Route path="/create-wallet" element={<Wallet />} />
+          <Route path="/details" element={<Detail />} />
+          <Route path="/trans-history" element={<TransactionHistory />} />
         </Routes>
       </Router>
-      {/* <Home /> */}
     </div>
   );
-};
+}
 
 export default App;

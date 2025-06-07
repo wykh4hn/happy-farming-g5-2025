@@ -1,15 +1,11 @@
-/* home.css */
-
-
-body {
-  font-family: Arial, sans-serif;
+#home-container {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
   margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f8f9fa;
+  font-family: sans-serif;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 /*I added something bc it's cute :3*/
@@ -23,91 +19,12 @@ body {
   }
 }
 
-.main-content {
-  width: 45%;
-  text-align: left;
-  padding: 20px;
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.container {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.main-content {
-  width: 45%;
-  text-align: left;
-  padding: 20px;
-}
-
-h1 {
-  font-size: 3.5em;
-  font-weight: bold;
-  color: #4B352A;
-}
-
-p {
-  font-size: 1.2em;
-  color: black;
-}
-
-/* Định dạng nút */
-#create-product,
-#create-account {
-  display: block;
-  width: 180px;
-  padding: 12px;
-  margin: 15px 0;
-  border-radius: 8px;
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-  text-align: center;
-}
-
-#create-product {
-  background-color: #A4B465;
-  transition: all 0.3s ease-in-out;
-}
-
-#login:hover {
-  background-color: #8A9B4A;
-  padding: 12px 60px;
-  font-size: 1.1em;
-  ;
-  text-decoration: none;
-}
-
-#create-account {
-  background-color: #B17F59;
-  transition: all 0.3s ease-in-out;
-}
-
-#create-account:hover {
-  background-color: #A16D4C;
-  padding: 12px 60px;
-  font-size: 1.1em;
-  ;
-  text-decoration: none;
-}
-
-.image-container {
-  width: 50%;
-  height: 100vh;
-  display: flex;
-  justify-content: flex-end;
-  /* Đẩy ảnh sang phải */
-  align-items: center;
-  overflow: hidden;
-  /* Ẩn phần dư thừa */
-}
-
-.image-container img {
-  width: 120vh;
-  /* Giữ nguyên kích thước gốc */
-  height: 100vh;
-  /* Ảnh phủ toàn bộ chiều cao */
+img{
+  width: 700px;
+  height: 700px;
+  align-items: bottom;
+  border-radius: 100%;
+  border: 10px solid #095a5d;
+  box-shadow: 30px 8px 20px rgba(109, 98, 49, 0.4);
+  clip-path: ellipse(100% 75% at center);
 }

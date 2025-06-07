@@ -3,11 +3,8 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
 import { Button, Card } from "react-bootstrap";
-import { MainNav } from "./nav";
-import { Footer } from "./footer";
-
-import "../styles/wallet.css";
-import "../styles/styles.css";
+import { MainNav } from "../components/nav";
+import "../styles/wallet.css"
 
 function Wallet() {
     // usetstate for storing and retrieving wallet details
@@ -66,7 +63,7 @@ function Wallet() {
             {/* Calling all values which we 
        have stored in usestate */}
             <MainNav />
-            <Footer />
+
 
             <Card className="text-center">
                 <Card.Header>

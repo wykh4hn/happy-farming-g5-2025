@@ -1,5 +1,5 @@
-import React from "react";
-import "../styles/walletPopup.css";
+import React from 'react';
+import '../styles/walletPopup.css';
 
 const WalletPopup = ({ bidAmount, balance, onConfirm, onCancel }) => {
   return (
@@ -13,9 +13,7 @@ const WalletPopup = ({ bidAmount, balance, onConfirm, onCancel }) => {
         <div className="wallet-balance">$1.000000000 USD</div>
         <div className="wallet-balance-info">
           <span>+ $0.1 (+10%) </span>
-          <a href="#" className="wallet-portfolio">
-            Portfolio ↗
-          </a>
+          <a href="javascript:void(0)" className="wallet-portfolio">Portfolio ↗</a>
         </div>
         {/*just a demo im bad at math :))) -khanh*/}
         <div className="actions-container">
@@ -55,10 +53,10 @@ const WalletPopup = ({ bidAmount, balance, onConfirm, onCancel }) => {
         </div>
         <div className="popup-buttons">
           <button className="cancel-button" onClick={onCancel}>
-            Cancel purchase
+            Cancel purchase 
           </button>
           <button className="confirm-button" onClick={onConfirm}>
-            Confirm purchase
+            Confirm purchase 
           </button>
         </div>
       </div>

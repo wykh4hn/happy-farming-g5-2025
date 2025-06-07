@@ -1,71 +1,126 @@
-import "../styles/styles.css";
-import "../styles/create.css";
-import "../styles/create-product.css";
-import { WalletPopup } from "./walletPopup";
+
+import "../styles/create_product.css";
+import { WalletPopup } from "../components/walletPopup";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MainNav } from "./nav";
-import { Footer } from "./footer";
+import { MainNav } from "../components/nav";
 
-import imageCompression from "browser-image-compression";
-// import console from "console";
-
-/*sorry Duc but im gonna change something so we can add the image for the product tho
-i just add that past, please test and check againn -Khanh*/
-
-// it's ok Khanh =))))))))))))))))))) - Đức
 const CreateProduct = () => {
-  const [productName, setProductName] = useState("");
-  const [price, setPrice] = useState("");
-  const [currency, setCurrency] = useState("USD");
-  const [image, setImage] = useState(null);
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("Animal");
-  const [showPopup, setShowPopup] = useState(false); // ✅ Khai báo popup state
-  const navigate = useNavigate();
-  //i added something here to handle the image upload
-  // sometimes when i test the image, and put console.log(image) it returns null
-  // this is why i put these line tho :))) i think thats the best way
-  const handleImageUpload = async (event) => {
-    let file = event.target.files[0];
 
-    // compress image by browser-image-compression
-    try {
-      const compressOptions = {
-        maxSizeMB: 0.05,
-        maxWidthOrHeight: 800,
-        useWebWorker: true,
-      };
+  const bgImage = `${process.env.PUBLIC_URL}/background1.png`;
 
-      const compressedFile = await imageCompression(file, compressOptions);
-      console.log(
-        `Image compressed from ${file.size / 1024 / 1024} MB to ${
-          compressedFile.size / 1024 / 1024
-        } MB`
-      );
+  // Page background that covers the entire window
+  const pageStyle = {
+    backgroundImage: `url(${bgImage})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+    minHeight: "100vh",
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start", 
+    alignItems: "center",
+    paddingTop: "30px", 
+};
 
-      if (compressedFile) {
+
+  // Container style (replacing #create-product-page)
+  const containerStyle = {
+    maxWidth: "800px", 
+    width: "90%", 
+    padding: "50px 20px",
+    boxSizing: "border-box",
+    animation: "fadeIn 0.3s ease-in-out",
+};
+
+
+
+  const headingStyle = {
+    fontFamily: '"Abril Fatface", sans-serif',
+    fontSize: "2.5em",
+    textAlign: "center", // Căn giữa văn bản
+    color: "#044b4d",
+    backgroundColor: "#f8f4eb",
+    padding: "15px 40px",
+    borderRadius: "50px",
+    position: "absolute",
+    top: "20%", // Đưa header lên vị trí hợp lý
+    left: "50%",
+    transform: "translate(-50%, -50%)", // Đảm bảo căn giữa hoàn hảo
+    width: "80%", // Giữ khoảng rộng phù hợp
+};
+
+
+  // Form container style
+const formStyle = {
+    margin: "auto",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "left",
+    marginTop: "170px",
+    backgroundColor: "#f8f4eb8e",
+    borderRadius: "10px",
+    padding: "20px",
+    width: "100%",
+    maxWidth: "500px", 
+    textAlign: "left", // Đảm bảo văn bản cũng căn sang phải
+};
+
+
+
+  const commonInputStyle = {
+    width: "100%",
+    padding: "10px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+    boxSizing: "border-box",
+    margin: "5px",
+  };
+
+  // Submit button style (for #create-product)
+  const buttonStyle = {
+    color: "black",
+    backgroundColor: "#f0f2ab",
+    borderRadius: "10px",
+    border: "olive",
+    width: "100%",
+    padding: "10px",
+    margin: "5px",
+  };
+
+
+
+    const [productName, setProductName] = useState("");
+    const [price, setPrice] = useState("");
+    const [currency, setCurrency] = useState("USD");
+    const [image, setImage] = useState(null);
+    const [description, setDescription] = useState("");
+    const [category, setCategory] = useState("Animal");
+    const [quantity, setQuantity] = useState("1");
+    const [showPopup, setShowPopup] = useState(false);
+    const navigate = useNavigate();
+
+    // Handle image upload and preview
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
         const reader = new FileReader();
-        reader.readAsDataURL(compressedFile);
-        reader.onloadend = () => {
-          setImage(reader.result);
-        };
-      }
-    } catch (error) {
-      console.error("Error compressing image:", error);
-      alert("Error uploading image!");
-    }
-  };
+        reader.readAsDataURL(file);
+        reader.onloadend = () => setImage(reader.result);
+        }
+    };
 
-  // ✅ Submit form để kích hoạt popup
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    setShowPopup(true); // Gọi popup ví
-  };
+    // Show the wallet popup instead of immediately creating the product
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        setShowPopup(true);
+    };
 
-  // ✅ Khi xác nhận trong popup ví
-  const handleConfirm = (e) => {
-    e.preventDefault();
+    // Confirm the process: save product and navigate to shop
+    const handleConfirm = (e) => {
+        e.preventDefault();
 
     const newProduct = {
       name: productName.trim(),
@@ -74,9 +129,10 @@ const CreateProduct = () => {
       currency,
       description: description.trim() || "No description available",
       category: category || "Other",
+      quantity: quantity || "1",
       timestamp: new Date().toISOString(),
       id: Date.now(),
-      bought: false, // ✅ Mặc định chưa mua
+      bought: false,
     };
 
     const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
@@ -87,24 +143,24 @@ const CreateProduct = () => {
     navigate("/shop");
   };
 
-  // ✅ Khi huỷ tạo sản phẩm
+  // Cancel product creation (hide wallet popup)
   const handleCancel = () => {
     console.log("Product creation canceled.");
     setShowPopup(false);
   };
 
   return (
-    <div>
+    <div style={pageStyle}>
       <MainNav />
-      <div id="create-product-page" className="main-content">
-        <h1>CREATE NEW PRODUCT</h1>
-
-        <form onSubmit={handleFormSubmit}>
+      <div id="create-product-page" style={containerStyle}>
+        <h1 style={headingStyle}>CREATE NEW PRODUCT</h1>
+        <form onSubmit={handleFormSubmit} style={formStyle}>
           <label>Product Name:</label>
           <input
             type="text"
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
+            style={commonInputStyle}
             required
           />
 
@@ -114,6 +170,7 @@ const CreateProduct = () => {
             placeholder="Enter amount"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            style={commonInputStyle}
             required
           />
 
@@ -121,6 +178,7 @@ const CreateProduct = () => {
           <select
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
+            style={commonInputStyle}
           >
             <option value="USD">$ - USD</option>
             <option value="EUR">€ - EUR</option>
@@ -132,6 +190,7 @@ const CreateProduct = () => {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            style={commonInputStyle}
             required
           />
 
@@ -139,6 +198,7 @@ const CreateProduct = () => {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
+            style={commonInputStyle}
           >
             <option value="Animal">Animal</option>
             <option value="Vegetable">Vegetable</option>
@@ -147,14 +207,38 @@ const CreateProduct = () => {
             <option value="Other">Other</option>
           </select>
 
+          <label>Quantity:</label>
+          <input
+            type="number"
+            placeholder="Enter amount"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+            style={commonInputStyle}
+            required
+          />
+
           <label>Upload Image:</label>
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            style={commonInputStyle}
+          />
 
           {image && (
-            <img src={image} alt="Uploaded Preview" className="preview-img" />
+            <img
+              src={image}
+              alt="Uploaded Preview"
+              style={{ width: "100%", margin: "5px", borderRadius: "5px" }}
+            />
           )}
 
-          <input type="submit" id="create-product" value="Create Product" />
+          <input
+            type="submit"
+            id="create-product"
+            value="Create Product"
+            style={buttonStyle}
+          />
         </form>
 
         {showPopup && (
@@ -166,7 +250,6 @@ const CreateProduct = () => {
           />
         )}
 
-        <Footer />
       </div>
     </div>
   );
