@@ -1,5 +1,6 @@
 import React from "react";
 import { MainNav } from "../components/nav"; 
+import "../styles/home.css"
 
 {/*I add some parts of the css into this bc idk why all in css so lag and even effect on other pages */}
 const Home = () => {
@@ -27,38 +28,6 @@ const Home = () => {
     clipPath: "ellipse(100% 75% at center)"
   };
 
-  const headerStyle = {
-    fontFamily: '"Abril Fatface", sans-serif',
-    position: "absolute",
-    top: "55%",
-    left: "56%",
-    fontSize: "2.5em",
-    transform: "translate(-50%, -50%)",
-    textAlign: "left",
-    color: "#044b4d",
-    zIndex: 2,
-    whiteSpace: "nowrap",
-    backgroundColor: "#f8f4eb",
-    borderRadius: "80px",
-    paddingTop: "17px",
-    paddingLeft: "50px",
-  };
-
-  const descriptionIntro = {
-    position: "absolute",
-    top: "80%",
-    left: "72%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "#095a5d",
-    color: "white",
-    padding: "12px 25px",
-    borderRadius: "30px",
-    fontWeight: "bold",
-    fontFamily: "'Exo 2', sans-serif",
-    fontSize: "1rem",
-    boxShadow: "8px 8px 13px rgba(20, 35, 52, 0.67)",
-    zIndex: 2,
-  };
 
   {/*the main part */}
 
@@ -66,11 +35,12 @@ const Home = () => {
     <>
       <MainNav />
       <div id="home-container" style={homeStyle}>
-        <div id="header" style={headerStyle}>
+        
+        <div id="header">
           <h1 style={{ fontFamily: '"Abril Fatface", sans-serif' }}>HAPPY FARMING</h1>
         </div>
 
-        <div id="description-intro" style={descriptionIntro}>
+        <div id="description-intro">
           <p style={{ margin: 0 }}>Fresh, new, clean products always here for you</p>
         </div>
 
