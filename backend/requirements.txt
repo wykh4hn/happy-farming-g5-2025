@@ -3,3 +3,5 @@ eth-utils
 python-dotenv
 py-solc-x
 fastapi[standard]
+jinja2 
+aiofiles
