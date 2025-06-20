@@ -154,3 +154,13 @@ dist
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.vscode/
+
+# Python venv
+backend/Include/
+backend/Scripts/
+backend/Lib/
+backend/share/
+backend/etc
+backend/pyvenv.cfg
