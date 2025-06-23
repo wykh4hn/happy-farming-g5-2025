@@ -164,3 +164,4 @@ backend/Lib/
 backend/share/
 backend/etc
 backend/pyvenv.cfg
+backend/app/__pycache__
