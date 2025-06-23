@@ -5,3 +5,4 @@ py-solc-x
 fastapi[standard]
 jinja2 
 aiofiles
+mysql-connector-python
