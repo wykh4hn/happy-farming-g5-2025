@@ -1,10 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\artifacts",
-    "\\backend",
-    "\\frontend"
+    "\\backend\\app",
+    "\\backend\\mysql",
+    "\\frontend\\src",
+    "\\frontend\\src\\pages",
+    "\\frontend\\src\\styles"
   ],
-  "SelectedNode": "\\artifacts",
+  "SelectedNode": "\\.gitignore",
   "PreviewInSolutionExplorer": false
 }
