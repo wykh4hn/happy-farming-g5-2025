@@ -133,7 +133,7 @@ async def read_products_with_filter(conditions: List[str], limit: int | None = N
                 ))
             result = session.exec(statement).all()
         return JSONResponse(
-                status_code=201,
+                status_code=HTTP_200_OK,
                 content={
                     "message": "Retrieved product(s) successfully",
                     "content": {idx: prod.model_dump() for idx, prod in enumerate(result)}
@@ -141,7 +141,7 @@ async def read_products_with_filter(conditions: List[str], limit: int | None = N
             )
     except Exception as e:
         return JSONResponse(
-            status_code=500,
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
             content={
                 "message": "Error: Retrieving Products Failed",
                 "error": str(e)
@@ -160,17 +160,18 @@ async def remove_product(id: int) -> JSONResponse:
     try:
         with Session(engine) as session:
             product = get_product_by_id(id)
-            if product.status_code == 201:
-                result = product.
+            if product.status_code == HTTP_200_OK:
+                # result = product.
+                pass
         return JSONResponse(
-            status_code=201,
+            status_code=HTTP_200_OK,
             content={
                 "message": "Product Deleted Successfully"
             }
         )
     except Exception as e:
         return JSONResponse(
-            status_code=500,
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
             content={
                 "message": "Error: Fail to Delete Product",
                 "error": str(e)
@@ -178,7 +179,7 @@ async def remove_product(id: int) -> JSONResponse:
         )
 
 @api_router.patch("/product/{id}")
-async def update_product(id: int, new_values: Dict[str, str]) -> None:
+async def update_product(id: int, new_values: Dict[str, str]) -> JSONResponse:
     """
 
     Args:
@@ -187,9 +188,17 @@ async def update_product(id: int, new_values: Dict[str, str]) -> None:
         
         Update product to use 
     """
-    with Session(engine) as session:
-        pass
-    pass
+    try:
+        with Session(engine) as session:
+            pass
+    except Exception as e:
+        return JSONResponse(
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+            content={
+                "message": "Error: Fail to Update Products",
+                "error": str(e)
+            }
+        )
 
 
 # DO NOT TOUCH ANYTHING BELOW THIS LINE.
