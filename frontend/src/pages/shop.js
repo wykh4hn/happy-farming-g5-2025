@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import { MainNav } from "../components/nav";
 import { Link } from "react-router-dom";
+
+import axios from "axios";
 import "../styles/shop.css";
+
+// we just need to store things into defaultProducts
+
+const api = axios
+  .get("/products")
+  .then(() => {})
+  .catch(() => {})
+  .finally(() => {});
 
 const defaultProducts = [
   //   {

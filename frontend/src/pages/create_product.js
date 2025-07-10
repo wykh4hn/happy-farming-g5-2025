@@ -136,7 +136,9 @@ const CreateProduct = () => {
       .catch((error) => {
         console.log(error);
       })
-      .finally(() => {});
+      .finally(() => {
+        console.log("product created");
+      });
 
     const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
     existingProducts.push(newProduct);
@@ -258,7 +260,7 @@ const CreateProduct = () => {
               onConfirm={handleConfirm}
               onCancel={handleCancel}
             /> */}
-          )}
+          {/* )} */}
         </div>
       </div>
     </>

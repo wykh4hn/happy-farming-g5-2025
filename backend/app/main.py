@@ -163,7 +163,7 @@ async def remove_product(id: int) -> JSONResponse:
     """_summary_
 
     Args:
-        product (ProductModel): Remove all products with ID as id.
+        id (int): Remove all products with ID as id.
         Removal by id
     """
     try:

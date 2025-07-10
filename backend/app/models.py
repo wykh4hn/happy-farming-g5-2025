@@ -50,7 +50,9 @@ class Product(SQLModel, table=True):
     description: str
     categories: str # space seperated
     quantity: int
-    timestamp: datetime
+    
+    # whoops
+    # timestamp: datetime
     
     # we don't need bought, we only assert quantity == 0
     assetType: str
