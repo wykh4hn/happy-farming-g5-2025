@@ -128,6 +128,16 @@ const CreateProduct = () => {
       bought: false,
     };
 
+    axios
+      .post("/create", newProduct)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {});
+
     const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
     existingProducts.push(newProduct);
     localStorage.setItem("products", JSON.stringify(existingProducts));
@@ -150,7 +160,6 @@ const CreateProduct = () => {
           <h1 style={headingStyle} id="heading-container">
             CREATE NEW PRODUCT
           </h1>
-
           <form
             onSubmit={handleFormSubmit}
             style={formStyle}
@@ -239,16 +248,16 @@ const CreateProduct = () => {
               id="create-product"
               value="Create Product"
               style={buttonStyle}
+              onClick={() => {}}
             />
           </form>
-
-          {showPopup && (
+          {/* {showPopup && (
             <WalletPopup
               bidAmount={0.2}
               balance={30033}
               onConfirm={handleConfirm}
               onCancel={handleCancel}
-            />
+            /> */}
           )}
         </div>
       </div>

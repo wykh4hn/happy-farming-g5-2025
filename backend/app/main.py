@@ -1,5 +1,6 @@
-from fastapi import FastAPI, APIRouter 
-from fastapi.responses import JSONResponse
+import os
+from fastapi import FastAPI, APIRouter
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,29 +17,30 @@ from .sql_engine import engine
 # for use in read products with filter
 import operator
 
+
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 # api goes here
 
-@api_router.post("/create-product")
+@api_router.post("/create")
 async def create_product(product: ProductModel) -> JSONResponse:
-    """_summary_
-
+    """
     Args:
         product (ProductModel): Create product and push to database
     """
-    
-    # IS THIS IT LMAO
     try:
+        # Convert ProductModel (Pydantic) to Product (SQLModel)
+        db_product = Product(**product.model_dump())
         with Session(engine) as session:
-            session.add(product)
+            session.add(db_product)
             session.commit()
+            session.refresh(db_product)
         return JSONResponse(
             status_code=HTTP_200_OK,
             content={
                 "message": "Product created successfully.",
-                "product": product.id
+                "product": db_product.id
             }
         )
     except Exception as e:
@@ -46,10 +48,10 @@ async def create_product(product: ProductModel) -> JSONResponse:
             status_code=HTTP_500_INTERNAL_SERVER_ERROR,
             content={
                 "message": "Error: created product failure",
-                "product": product.id,
+                "product": getattr(product, "id", None),
                 "error": str(e)
             }
-        ) 
+        )
         
     
 # needs to return JSON dump, all for frontend
@@ -74,7 +76,7 @@ def get_product_by_id(id: int) -> JSONResponse:
                 status_code=HTTP_200_OK,
                 content={
                     "message": "Retrieved product successfully",
-                    "content": result.id if result is not None else -1
+                    "content": result.model_dump_json() if result is not None else ""
                 }
             )
     except Exception as e:
@@ -235,7 +237,7 @@ async def update_product(id: int, column: str, new_value: str) -> JSONResponse:
                     status_code=HTTP_200_OK,
                     content={
                         "message": "Product updated successfully",
-                        "product": product.id
+                        "product": id
                     }
                 )
             except ValueError:
@@ -264,4 +266,21 @@ app.add_middleware(
         allow_headers=["*"],
     )
 app.include_router(api_router)
-app.mount("/", app=StaticFiles(directory="../frontend/build", html=True), name="app")
+# At the bottom of your file, replace the mounting code with this:
+
+frontend_build_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../frontend/build"))
+
+# Serve static files (JS, CSS, images) from a specific path
+app.mount("/static", StaticFiles(directory=os.path.join(frontend_build_dir, "static")), name="static")
+
+# Handle the root route
+@app.get("/")
+async def serve_index():
+    return FileResponse(os.path.join(frontend_build_dir, "index.html"))
+
+# Handle any other route with the SPA fallback
+@app.get("/{full_path:path}")
+async def spa_fallback(full_path: str):
+    # Return index.html for any route that doesn't match API or static files
+    index_path = os.path.join(frontend_build_dir, "index.html")
+    return FileResponse(index_path)
