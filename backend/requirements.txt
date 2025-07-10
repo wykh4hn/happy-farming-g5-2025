@@ -7,3 +7,6 @@ jinja2
 aiofiles
 mysql-connector-python
 sqlmodel
+
+# required for some reason
+cryptography

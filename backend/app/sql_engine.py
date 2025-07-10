@@ -2,13 +2,18 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 
-load_dotenv()
-HOSTNAME = os.getenv("HOSTNAME")
-USERNAME = os.getenv("USERNAME")
-PASSWORD = os.getenv("PASSWORD")
-DATABASE = os.getenv("DATABASE")
+# Always load .env from the same directory as this file
+dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
+load_dotenv(dotenv_path)
+
+DB_HOSTNAME = os.getenv("DB_HOSTNAME", "localhost")
+DB_USERNAME = os.getenv("DB_USERNAME", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "")
+DB_NAME = os.getenv("DB_NAME", "mysql")
+
+print(f"Connecting to database: {DB_NAME} at {DB_HOSTNAME} with user {DB_USERNAME}")
 
 engine = create_engine(
-    f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}/{DATABASE}"
-)
+    f"mysql+pymysql://{DB_USERNAME}@{DB_HOSTNAME}/{DB_NAME}"
 
+)

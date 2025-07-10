@@ -1,19 +1,20 @@
-from fastapi import FastAPI, APIRouter, 
+from fastapi import FastAPI, APIRouter 
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from fastapi.middleware.cors import CORSMiddleware
 
-from starlette.status import HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_404_NOT_FOUND, HTTP_403_FORBIDDEN
+from starlette.status import HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_404_NOT_FOUND, HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST
 
-from typing import Dict, Literal, Any, List
+from typing import Callable, Dict, Literal, Any, List
 
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 from .models import ProductModel, Product
 from .sql_engine import engine
 
-
+# for use in read products with filter
+import operator
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -37,7 +38,7 @@ async def create_product(product: ProductModel) -> JSONResponse:
             status_code=HTTP_200_OK,
             content={
                 "message": "Product created successfully.",
-                "product": product.model_dump()
+                "product": product.id
             }
         )
     except Exception as e:
@@ -45,35 +46,14 @@ async def create_product(product: ProductModel) -> JSONResponse:
             status_code=HTTP_500_INTERNAL_SERVER_ERROR,
             content={
                 "message": "Error: created product failure",
-                "product": product.model_dump(),
+                "product": product.id,
                 "error": str(e)
             }
         ) 
         
     
-@api_router.get("/products")    
-async def read_all_products(limit: int | None = None) -> JSONResponse:
-    try:
-        with Session(engine) as session:
-            statement = select(Product)
-            if limit is not None:
-                statement = statement.limit(limit)
-            result = session.exec(statement).all()
-            return JSONResponse(
-                status_code=HTTP_200_OK,
-                content={
-                    "message": "Retrieved product(s) successfully",
-                    "content": {idx: prod.model_dump() for idx, prod in enumerate(result)}
-                }
-            )
-    except Exception as e:
-        return JSONResponse(
-            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            content={
-                "message": "Error: Retrieving products failed",
-                "error": str(e)
-            }
-        )
+# needs to return JSON dump, all for frontend
+
 
 @api_router.get("/products/{id}")
 def get_product_by_id(id: int) -> JSONResponse:
@@ -91,33 +71,42 @@ def get_product_by_id(id: int) -> JSONResponse:
             statement = select(Product).where(Product.id == id)
             result = session.exec(statement).one_or_none()
             return JSONResponse(
-                status_code=201,
+                status_code=HTTP_200_OK,
                 content={
-                    "message": "Retrieved product(s) successfully",
-                    "content": result.model_dump() if result is not None else ""
+                    "message": "Retrieved product successfully",
+                    "content": result.id if result is not None else -1
                 }
             )
     except Exception as e:
         return JSONResponse(
-            status_code=500,
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
             content={
                 "message": "Error: Retrieving products failed",
                 "error": str(e)
             }
         )            
 
-async def read_products_with_filter(conditions: List[str], limit: int | None = None) -> Any:
+async def read_products_with_filter(conditions: List[str], limit: int | None = None) -> JSONResponse:
     """_summary_
 
     Args:
-        attribute (Dict[str, str]): Filter attributes for product
-
-    Returns:
-        List[ProductModel]: A list containing the attributes.
-        
+        conditions: List[str].
         Should be in the form of a Python list of conditions of columns
         e.g. ["price > 10", "quantity < 15"]
+
+    Returns:
+        JSONResponse: The result of the operation
+        
+        
     """
+    
+    operator_map: Dict[str, Callable[[Any, Any], Any]] = {
+        "<": operator.lt,
+        ">": operator.gt,
+        "=": operator.eq,
+    }
+    
+    
     try:
         with Session(engine) as session:
             statement = select(Product)
@@ -127,16 +116,22 @@ async def read_products_with_filter(conditions: List[str], limit: int | None = N
             # https://www.youtube.com/watch?v=Cmj8FDbUdF8
             # the ends justify the means
             for condition in conditions:
-                attribute, relation, value = condition.split()
-                statement = statement.where(bool(
-                    eval(f"Product.{attribute} {relation} {value}")
-                ))
+                column, relation, value = condition.split()
+                
+                attr = getattr(Product, column)
+                # ah yes, fine, exquisite, *casting*
+                value = type(attr)(value)
+
+                # what the fuck
+                statement = statement.where(
+                    operator_map[relation](attr, value)
+                )
             result = session.exec(statement).all()
         return JSONResponse(
                 status_code=HTTP_200_OK,
                 content={
                     "message": "Retrieved product(s) successfully",
-                    "content": {idx: prod.model_dump() for idx, prod in enumerate(result)}
+                    "content": [prod.model_dump() for prod in result]
                 }
             )
     except Exception as e:
@@ -147,7 +142,19 @@ async def read_products_with_filter(conditions: List[str], limit: int | None = N
                 "error": str(e)
             }
         )
-    
+
+@api_router.get("/products")    
+async def read_all_products(limit: int | None = None) -> JSONResponse:
+    """_summary_
+
+    Args:
+        limit (int | None, optional): Return the maximum number of products retrieved. None for no limit. Defaults to None.
+        
+
+    Returns:
+        JSONResponse: The result of the operation
+    """
+    return await read_products_with_filter([], limit)
     
 @api_router.delete("/product/{id}")
 async def remove_product(id: int) -> JSONResponse:
@@ -179,23 +186,68 @@ async def remove_product(id: int) -> JSONResponse:
         )
 
 @api_router.patch("/product/{id}")
-async def update_product(id: int, new_values: Dict[str, str]) -> JSONResponse:
+async def update_product(id: int, column: str, new_value: str) -> JSONResponse:
     """
+    Update a specific column of a product with a new value.
 
     Args:
-        attributes (Dict[str, str]): Select set of attributes to identify value(s)
-        new_values (Dict[str, str]): New values to update accordingly.
-        
-        Update product to use 
+        id (int): Product ID to update
+        column (str): Column name to update
+        new_value (str): New value as string (will be converted to appropriate type)
     """
     try:
         with Session(engine) as session:
-            pass
+            # Get product directly from database
+            product = get_product_by_id(id)
+            
+            if product is None:
+                return JSONResponse(
+                    status_code=HTTP_404_NOT_FOUND,
+                    content={"message": f"Product with ID {id} not found"}
+                )
+            
+            # Verify column exists
+            if not hasattr(product, column):
+                return JSONResponse(
+                    status_code=HTTP_400_BAD_REQUEST,
+                    content={"message": f"Column '{column}' does not exist"}
+                )
+            
+            # Get current type and convert new_value accordingly
+            current_value = getattr(product, column)
+            try:
+                if isinstance(current_value, int):
+                    converted_value = int(new_value)
+                elif isinstance(current_value, float):
+                    converted_value = float(new_value)
+                elif isinstance(current_value, bool):
+                    converted_value = new_value.lower() in ("true", "1", "yes")
+                else:
+                    # For strings and other types
+                    converted_value = new_value
+                
+                # Update the attribute
+                setattr(product, column, converted_value)
+                session.add(product)
+                session.commit()
+                
+                return JSONResponse(
+                    status_code=HTTP_200_OK,
+                    content={
+                        "message": "Product updated successfully",
+                        "product": product.id
+                    }
+                )
+            except ValueError:
+                return JSONResponse(
+                    status_code=HTTP_400_BAD_REQUEST,
+                    content={"message": f"Cannot convert '{new_value}' to required type for column '{column}'"}
+                )
     except Exception as e:
         return JSONResponse(
             status_code=HTTP_500_INTERNAL_SERVER_ERROR,
             content={
-                "message": "Error: Fail to Update Products",
+                "message": "Error: Failed to update product",
                 "error": str(e)
             }
         )
@@ -212,4 +264,4 @@ app.add_middleware(
         allow_headers=["*"],
     )
 app.include_router(api_router)
-app.mount("/", app=StaticFiles(directory="../../frontend/build", html=True), name="app")
+app.mount("/", app=StaticFiles(directory="../frontend/build", html=True), name="app")
