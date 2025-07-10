@@ -7,11 +7,11 @@ import "../styles/shop.css";
 
 // we just need to store things into defaultProducts
 
-const api = axios
-  .get("/products")
-  .then(() => {})
-  .catch(() => {})
-  .finally(() => {});
+// const api = axios
+//   .get("/products")
+//   .then(() => {})
+//   .catch(() => {})
+//   .finally(() => {});
 
 const defaultProducts = [
   //   {
