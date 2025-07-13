@@ -72,6 +72,14 @@ def get_product_by_id(id: int) -> JSONResponse:
         with Session(engine) as session:
             statement = select(Product).where(Product.id == id)
             result = session.exec(statement).one_or_none()
+            if result is None:
+                return JSONResponse(
+                    status_code=HTTP_404_NOT_FOUND,
+                    content={
+                        "message": "Product with ID not found",
+                        "content": None
+                    }
+                )
             return JSONResponse(
                 status_code=HTTP_200_OK,
                 content={
@@ -168,10 +176,22 @@ async def remove_product(id: int) -> JSONResponse:
     """
     try:
         with Session(engine) as session:
-            product = get_product_by_id(id)
-            if product.status_code == HTTP_200_OK:
+            get_result = get_product_by_id(id)
+            
+            if get_result.status_code == HTTP_404_NOT_FOUND:
                 # result = product.
-                pass
+                return JSONResponse(
+                    status_code=HTTP_404_NOT_FOUND,
+                    content={
+                        "message": "Product with ID not found"
+                    }
+                )
+                
+            statement = select(Product).where(Product.id == id)
+            # guaranteed to be not none
+            product = session.exec(statement).one()
+            session.delete(product)
+            session.commit()
         return JSONResponse(
             status_code=HTTP_200_OK,
             content={

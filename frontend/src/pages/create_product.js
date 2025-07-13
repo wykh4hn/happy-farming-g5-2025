@@ -129,23 +129,26 @@ const CreateProduct = () => {
     };
 
     axios
-      .post("/create", newProduct)
+      .post("/api/create", newProduct)
       .then((response) => {
         console.log(response);
+        alert("Created product!");
+        navigate("/shop");
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Error creating product:", error);
+        alert("Failed to create product");
       })
       .finally(() => {
         console.log("product created");
       });
 
-    const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
-    existingProducts.push(newProduct);
-    localStorage.setItem("products", JSON.stringify(existingProducts));
+    // const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
+    // existingProducts.push(newProduct);
+    // localStorage.setItem("products", JSON.stringify(existingProducts));
 
-    alert("Product created! Happy farming!");
-    navigate("/shop");
+    // alert("Product created! Happy farming!");
+    // navigate("/shop");
   };
 
   // Cancel product creation (hide wallet popup)
@@ -250,7 +253,7 @@ const CreateProduct = () => {
               id="create-product"
               value="Create Product"
               style={buttonStyle}
-              onClick={() => {}}
+              // onClick={() => {}}
             />
           </form>
           {/* {showPopup && (

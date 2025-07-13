@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 
 # Always load .env from the same directory as this file
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
-load_dotenv(dotenv_path)
+# load_dotenv(dotenv_path)
 
 DB_HOSTNAME = os.getenv("DB_HOSTNAME", "localhost")
 DB_USERNAME = os.getenv("DB_USERNAME", "root")
