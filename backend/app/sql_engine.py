@@ -14,6 +14,9 @@ DB_NAME = os.getenv("DB_NAME", "mysql")
 print(f"Connecting to database: {DB_NAME} at {DB_HOSTNAME} with user {DB_USERNAME}")
 
 engine = create_engine(
-    f"mysql+pymysql://{DB_USERNAME}@{DB_HOSTNAME}/{DB_NAME}"
-
+    f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}/{DB_NAME}"
 )
+
+print(f"Loaded from .env: {DB_USERNAME=}, {DB_PASSWORD=}, {DB_HOSTNAME=}, {DB_NAME=}")
+
+#change match w my local env tho
