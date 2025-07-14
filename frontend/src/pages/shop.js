@@ -26,7 +26,7 @@ const Shop = () => {
     setLoading(true);
     axios
       // what
-      .get("http://127.0.0.1:8000/api/products")
+      .get("/api/products")
       .then((response) => {
         console.log("Response:", response.data);
         if (response.data && response.data.content) {
@@ -44,7 +44,7 @@ const Shop = () => {
       });
   }, []);
 
-  const filteredProducts = defaultProducts.filter((product) => {
+  const filteredProducts = products.filter((product) => {
     const matchSearch =
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase());
