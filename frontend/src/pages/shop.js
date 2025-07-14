@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MainNav } from "../components/nav";
 import { Link } from "react-router-dom";
 
@@ -8,81 +8,41 @@ import "../styles/shop.css";
 // we just need to store things into defaultProducts
 
 // const api = axios
-//   .get("/products")
+//   .get("/api/products")
 //   .then(() => {})
 //   .catch(() => {})
 //   .finally(() => {});
 
-const defaultProducts = [
-  //   {
-  //     name: "LEAF MUSTARD",
-  //     price: "10",
-  //     currency: "USD",
-  //     img: "https://garden.org/pics/2011-11-21/saltmarsh/25621f.jpg",
-  //     description: "Not for salad but still yummy.",
-  //     category: "Vegetable",
-  //     quantity: "12",
-  //     timestamp: new Date().toISOString(),
-  //     id: Date.now(),
-  //     bought: false,
-  //     assetType: "NFT",
-  //     contractAddress: "0x123456789abcdef",
-  //     tokenId: "101",
-  //     owner: "0xabcdef123456789",
-  //     tradeable: true,
-  //   },
-  //   {
-  //     name: "RICE PADDY",
-  //     price: "3",
-  //     currency: "USD",
-  //     img: "https://www.davaocatholicherald.com/wp-content/uploads/2018/04/rice-crop.jpg",
-  //     description: "Come from the field this morning",
-  //     category: "Vegetable",
-  //     quantity: "12",
-  //     timestamp: new Date().toISOString(),
-  //     id: Date.now() + 1,
-  //     bought: false,
-  //     assetType: "NFT",
-  //     contractAddress: "0x123456789abcdef",
-  //     tokenId: "101",
-  //     owner: "0xabcdef123456789",
-  //     tradeable: true,
-  //   },
-  //   {
-  //     name: "MANGO",
-  //     price: "2",
-  //     currency: "USD",
-  //     img: "https://www.freshknowledge.eu/upload/c8e39753-8916-4e3d-84be-c817f8ffac1a_shutterstock_107801765.jpg",
-  //     quantity: "12",
-  //     timestamp: new Date().toISOString(),
-  //     id: Date.now() + 2,
-  //     bought: false,
-  //     assetType: "NFT",
-  //     contractAddress: "0x123456789abcdef",
-  //     tokenId: "101",
-  //     owner: "0xabcdef123456789",
-  //     tradeable: true,
-  //   },
-  //   {
-  //     name: "RICE",
-  //     price: "12",
-  //     currency: "USD",
-  //     img: "https://www.organicfacts.net/wp-content/uploads/rice-1.jpg",
-  //     quantity: "12",
-  //     timestamp: new Date().toISOString(),
-  //     id: Date.now() + 1,
-  //     bought: false,
-  //     assetType: "NFT",
-  //     contractAddress: "0x123456789abcdef",
-  //     tokenId: "101",
-  //     owner: "0xabcdef123456789",
-  //     tradeable: true,
-  //   },
-];
+const defaultProducts = [];
 
 const Shop = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      // what
+      .get("http://127.0.0.1:8000/api/products")
+      .then((response) => {
+        console.log("Response:", response.data);
+        if (response.data && response.data.content) {
+          setProducts(response.data.content);
+        } else {
+          setProducts([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+        setError("Failed to load products");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   const filteredProducts = defaultProducts.filter((product) => {
     const matchSearch =

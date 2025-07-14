@@ -220,7 +220,8 @@ async def update_product(id: int, column: str, new_value: str) -> JSONResponse:
     try:
         with Session(engine) as session:
             # Get product directly from database
-            product = get_product_by_id(id)
+            statement = select(Product).where(Product.id == id)
+            product = session.exec(statement).one_or_none()
             
             if product is None:
                 return JSONResponse(
@@ -257,7 +258,7 @@ async def update_product(id: int, column: str, new_value: str) -> JSONResponse:
                     status_code=HTTP_200_OK,
                     content={
                         "message": "Product updated successfully",
-                        "product": id
+                        "product_id": id
                     }
                 )
             except ValueError:
