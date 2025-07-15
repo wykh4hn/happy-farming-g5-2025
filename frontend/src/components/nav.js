@@ -22,7 +22,7 @@ const MainNav = () => {
           />
         </p>
 
-        <p className="nav-hover"><Link to="/">Home</Link></p>
+        <p className="nav-hover"><Link to="/create-product">Create New Product</Link></p>
         <p className="nav-hover"><Link to="/shop">Shop</Link></p>
 
         <Link to="/create-wallet" id="create-wallet">

@@ -107,32 +107,36 @@ const CreateProduct = () => {
     e.preventDefault();
 
     // Tạo object gửi lên backend, không thêm id hay timestamp
-      const newProduct = {
-        name: productName.trim(),
-        price: parseFloat(price),    
-        img: image || "",
-        currency,
-        description: description.trim() || "No description available",
-        category: category || "Other",
-        quantity: parseInt(quantity),
-        assetType: "NFT",
-        owner: "",
-        tradeable: true,
-        tokenId: "",
-        contractAddress: "",
-      };
+   const newProduct = {
+      name: productName.trim(),
+      price: parseFloat(price) || 0,
+      currency,
+      img: image || "",
+      description: description.trim() || "No description available",
+      category: category || "Other",
+      quantity: parseInt(quantity) || 1,
+      assetType: "NFT",
+      owner: "",
+      tradeable: true,
+      tokenId: "",
+      contractAddress: ""
+    };
 
 
-    axios
-      .post("/api/create", newProduct)
-      
-      .then((response) => {
-        alert("Product created successfully!");
-        navigate("/shop");
-      })
-      .catch((error) => {
-        alert("Error creating product: " + error.message);
+    // Gửi request lên backend để tạo sản phẩm mớiaxios
+    axios.post("/api/create", newProduct, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      alert("Product created successfully!");
+      navigate("/shop");
+    })
+    .catch((error) => {
+      alert("Error creating product: " + error.message);
     });
+
   };
 
 
