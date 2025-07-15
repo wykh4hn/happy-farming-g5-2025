@@ -166,6 +166,9 @@ backend/etc
 backend/pyvenv.cfg
 backend/app/__pycache__
 backend/.env
+backend/app/.env
+backend/app/.env.sample
+backend/app/.env.local
 
 # powershell
 *.ps1

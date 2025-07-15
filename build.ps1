@@ -1,5 +1,8 @@
 # Build and Run Script for the project
 
+Write-Host "Checking git..." -ForegroundColor Green
+git pull
+
 Write-Host "Building frontend..." -ForegroundColor Green
 Set-Location -Path .\frontend
 npm install
