@@ -1,61 +1,22 @@
-from pydantic import BaseModel, ConfigDict, Field
-from datetime import datetime
-import sqlalchemy as sa
-from sqlalchemy.orm import declarative_base
-from typing import List
-from sqlmodel import Field, SQLModel
+from typing import Optional
+from sqlmodel import SQLModel, Field
 
-Base = declarative_base()
-
-class ProductModel(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    metadata: dict[str, str] = Field(alias='metadata_')
-    
-    # data
-    id: int
-    
+class ProductBase(SQLModel):
     name: str
-    price: int
-     
-    # does currency matter if its' all ETH on that Ganace or whatever thing?
-    description: str
-    categories: str # space seperated
+    price: float
+    currency: str
+    img: str = ""
+    description: str = ""
+    category: str = ""
     quantity: int
-    timestamp: datetime
-    
-    # we don't need bought, we only assert quantity == 0
     assetType: str
-    contractAddress: str
-    tokenId: str
-    owner: str
-    
-    # buyable so tradable is always true?
+    owner: str = ""
+    tradeable: bool = True
+    tokenId: str = ""
+    contractAddress: str = ""
 
-    
-class Product(SQLModel, table=True):
-    """_summary_
-    
-    Model of the Product.
+class ProductCreate(ProductBase):
+    pass
 
-    Args:
-        SQLModel (_type_): _description_
-        table (bool, optional): _description_. Defaults to True.
-    """
-    id: int | None = Field(default=None, primary_key=True)
-    
-    name: str
-    price: int
-     
-    # does currency matter if its' all ETH on that Ganace or whatever thing?
-    description: str
-    categories: str # space seperated
-    quantity: int
-    
-    # whoops
-    # timestamp: datetime
-    
-    # we don't need bought, we only assert quantity == 0
-    assetType: str
-    contractAddress: str
-    tokenId: str
-    owner: str
+class Product(ProductBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)

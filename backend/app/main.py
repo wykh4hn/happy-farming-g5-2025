@@ -1,242 +1,82 @@
 import os
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
-
 from fastapi.middleware.cors import CORSMiddleware
+from typing import List, Any, Callable, Dict
 
-from starlette.status import HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_404_NOT_FOUND, HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST
+from sqlmodel import Session, select, SQLModel
 
-from typing import Callable, Dict, Literal, Any, List
-
-from sqlmodel import Field, Session, SQLModel, create_engine, select
-
-from .models import ProductModel, Product
-from .sql_engine import engine
-
-# for use in read products with filter
-import operator
-
+from app.models import Product, ProductCreate
+from app.sql_engine import engine 
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
-# api goes here
-
+# create product 
 @api_router.post("/create")
-async def create_product(product: ProductModel) -> JSONResponse:
-    """
-    Args:
-        product (ProductModel): Create product and push to database
-    """
+async def create_product(product: ProductCreate):
     try:
-        # Convert ProductModel (Pydantic) to Product (SQLModel)
-        db_product = Product(**product.model_dump())
+        db_product = Product(**product.dict())
         with Session(engine) as session:
             session.add(db_product)
             session.commit()
             session.refresh(db_product)
-        return JSONResponse(
-            status_code=HTTP_200_OK,
-            content={
-                "message": "Product created successfully.",
-                "product": db_product.id
-            }
-        )
+        return {"message": "Product created successfully", "product": db_product.model_dump()}
     except Exception as e:
-        return JSONResponse(
-            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            content={
-                "message": "Error: created product failure",
-                "product": getattr(product, "id", None),
-                "error": str(e)
-            }
-        )
-        
-    
-# needs to return JSON dump, all for frontend
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
 
-
-@api_router.get("/products/{id}")
-def get_product_by_id(id: int) -> JSONResponse:
-    """_summary_
-    
-    Gets a single product by its ID.
-    Args:
-        id (int): _description_
-
-    Returns:
-        JSONResponse: _description_
-    """
-    try:
-        with Session(engine) as session:
-            statement = select(Product).where(Product.id == id)
-            result = session.exec(statement).one_or_none()
-            if result is None:
-                return JSONResponse(
-                    status_code=HTTP_404_NOT_FOUND,
-                    content={
-                        "message": "Product with ID not found",
-                        "content": None
-                    }
-                )
-            return JSONResponse(
-                status_code=HTTP_200_OK,
-                content={
-                    "message": "Retrieved product successfully",
-                    "content": result.model_dump_json() if result is not None else ""
-                }
-            )
-    except Exception as e:
-        return JSONResponse(
-            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            content={
-                "message": "Error: Retrieving products failed",
-                "error": str(e)
-            }
-        )            
-
-async def read_products_with_filter(conditions: List[str], limit: int | None = None) -> JSONResponse:
-    """_summary_
-
-    Args:
-        conditions: List[str].
-        Should be in the form of a Python list of conditions of columns
-        e.g. ["price > 10", "quantity < 15"]
-
-    Returns:
-        JSONResponse: The result of the operation
-        
-        
-    """
-    
-    operator_map: Dict[str, Callable[[Any, Any], Any]] = {
-        "<": operator.lt,
-        ">": operator.gt,
-        "=": operator.eq,
-    }
-    
-    
+# get all the products tho
+@api_router.get("/products")
+async def read_all_products(limit: int | None = None):
     try:
         with Session(engine) as session:
             statement = select(Product)
-            if limit is not None:
+            if limit:
                 statement = statement.limit(limit)
-                
-            # https://www.youtube.com/watch?v=Cmj8FDbUdF8
-            # the ends justify the means
-            for condition in conditions:
-                column, relation, value = condition.split()
-                
-                attr = getattr(Product, column)
-                # ah yes, fine, exquisite, *casting*
-                value = type(attr)(value)
-
-                # what the fuck
-                statement = statement.where(
-                    operator_map[relation](attr, value)
-                )
-            result = session.exec(statement).all()
-        return JSONResponse(
-                status_code=HTTP_200_OK,
-                content={
-                    "message": "Retrieved product(s) successfully",
-                    "content": [prod.model_dump() for prod in result]
-                }
-            )
+            products = session.exec(statement).all()
+            return {"message": "Products retrieved", "content": [prod.model_dump() for prod in products]}
     except Exception as e:
-        return JSONResponse(
-            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            content={
-                "message": "Error: Retrieving Products Failed",
-                "error": str(e)
-            }
-        )
+        raise HTTPException(status_code=500, detail=str(e))
 
-@api_router.get("/products")    
-async def read_all_products(limit: int | None = None) -> JSONResponse:
-    """_summary_
-
-    Args:
-        limit (int | None, optional): Return the maximum number of products retrieved. None for no limit. Defaults to None.
-        
-
-    Returns:
-        JSONResponse: The result of the operation
-    """
-    return await read_products_with_filter([], limit)
-    
-@api_router.delete("/product/{id}")
-async def remove_product(id: int) -> JSONResponse:
-    """_summary_
-
-    Args:
-        id (int): Remove all products with ID as id.
-        Removal by id
-    """
+# get product by id
+@api_router.get("/products/{id}")
+async def get_product_by_id(id: int):
     try:
         with Session(engine) as session:
-            get_result = get_product_by_id(id)
-            
-            if get_result.status_code == HTTP_404_NOT_FOUND:
-                # result = product.
-                return JSONResponse(
-                    status_code=HTTP_404_NOT_FOUND,
-                    content={
-                        "message": "Product with ID not found"
-                    }
-                )
-                
-            statement = select(Product).where(Product.id == id)
-            # guaranteed to be not none
-            product = session.exec(statement).one()
+            product = session.get(Product, id)
+            if not product:
+                raise HTTPException(status_code=404, detail="Product not found")
+            return {"message": "Product found", "content": product.model_dump()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# delete them
+@api_router.delete("/product/{id}")
+async def remove_product(id: int):
+    try:
+        with Session(engine) as session:
+            product = session.get(Product, id)
+            if not product:
+                raise HTTPException(status_code=404, detail="Product not found")
             session.delete(product)
             session.commit()
-        return JSONResponse(
-            status_code=HTTP_200_OK,
-            content={
-                "message": "Product Deleted Successfully"
-            }
-        )
+            return {"message": "Product deleted successfully"}
     except Exception as e:
-        return JSONResponse(
-            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            content={
-                "message": "Error: Fail to Delete Product",
-                "error": str(e)
-            }
-        )
+        raise HTTPException(status_code=500, detail=str(e))
 
+# update product by id
 @api_router.patch("/product/{id}")
-async def update_product(id: int, column: str, new_value: str) -> JSONResponse:
-    """
-    Update a specific column of a product with a new value.
-
-    Args:
-        id (int): Product ID to update
-        column (str): Column name to update
-        new_value (str): New value as string (will be converted to appropriate type)
-    """
+async def update_product(id: int, column: str, new_value: str):
     try:
         with Session(engine) as session:
-            # Get product directly from database
-            statement = select(Product).where(Product.id == id)
-            product = session.exec(statement).one_or_none()
-            
-            if product is None:
-                return JSONResponse(
-                    status_code=HTTP_404_NOT_FOUND,
-                    content={"message": f"Product with ID {id} not found"}
-                )
-            
-            # Verify column exists
+            product = session.get(Product, id)
+            if not product:
+                raise HTTPException(status_code=404, detail="Product not found")
             if not hasattr(product, column):
-                return JSONResponse(
-                    status_code=HTTP_400_BAD_REQUEST,
-                    content={"message": f"Column '{column}' does not exist"}
-                )
-            
-            # Get current type and convert new_value accordingly
+                raise HTTPException(status_code=400, detail=f"Column '{column}' does not exist")
             current_value = getattr(product, column)
             try:
                 if isinstance(current_value, int):
@@ -246,62 +86,36 @@ async def update_product(id: int, column: str, new_value: str) -> JSONResponse:
                 elif isinstance(current_value, bool):
                     converted_value = new_value.lower() in ("true", "1", "yes")
                 else:
-                    # For strings and other types
                     converted_value = new_value
-                
-                # Update the attribute
                 setattr(product, column, converted_value)
                 session.add(product)
                 session.commit()
-                
-                return JSONResponse(
-                    status_code=HTTP_200_OK,
-                    content={
-                        "message": "Product updated successfully",
-                        "product_id": id
-                    }
-                )
+                return {"message": "Product updated successfully", "product_id": id}
             except ValueError:
-                return JSONResponse(
-                    status_code=HTTP_400_BAD_REQUEST,
-                    content={"message": f"Cannot convert '{new_value}' to required type for column '{column}'"}
-                )
+                raise HTTPException(status_code=400, detail=f"Cannot convert '{new_value}' to required type")
     except Exception as e:
-        return JSONResponse(
-            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            content={
-                "message": "Error: Failed to update product",
-                "error": str(e)
-            }
-        )
-
+        raise HTTPException(status_code=500, detail=str(e))
 
 # DO NOT TOUCH ANYTHING BELOW THIS LINE.
-
 SQLModel.metadata.create_all(engine)
 app.add_middleware(
     CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(api_router)
-# At the bottom of your file, replace the mounting code with this:
 
+# Serve static frontend (build React)
 frontend_build_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../frontend/build"))
-
-# Serve static files (JS, CSS, images) from a specific path
 app.mount("/static", StaticFiles(directory=os.path.join(frontend_build_dir, "static")), name="static")
 
-# Handle the root route
 @app.get("/")
 async def serve_index():
     return FileResponse(os.path.join(frontend_build_dir, "index.html"))
 
-# Handle any other route with the SPA fallback
 @app.get("/{full_path:path}")
 async def spa_fallback(full_path: str):
-    # Return index.html for any route that doesn't match API or static files
     index_path = os.path.join(frontend_build_dir, "index.html")
     return FileResponse(index_path)
