@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"; 
 import { MainNav } from "../components/nav";
 import { WalletPopup } from "../components/walletPopup";
+import axios from "axios";
 import "../styles/details.css";
 
 const Detail = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState("1");
+  const [showPopup, setShowPopup] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const bgImage = `${process.env.PUBLIC_URL}/background.png`;
   const pageStyle = {
     backgroundImage: `url(${bgImage})`,
@@ -28,54 +37,60 @@ const Detail = () => {
     textAlign: "center",
   };
 
-  const [quantity, setQuantity] = useState("1");
-  const [showPopup, setShowPopup] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`/api/products/${id}`)
+      .then((res) => {
+        if (res.data && res.data.content) {
+          // API trả về product là object JSON string, cần parse
+          const prod = typeof res.data.content === "string"
+            ? JSON.parse(res.data.content)
+            : res.data.content;
+          setProduct(prod);
+        } else {
+          setError("Product not found!");
+        }
+      })
+      .catch(() => setError("Error loading product!"))
+      .finally(() => setLoading(false));
+  }, [id]);
 
-  const product = {
-    name: "Example Product",
-    contractAddress: "0x123456789abcdef",
-    description: "This is a sample product description.",
-    tokenId: "101",
-    price: "50",
-    currency: "USD",
-    img: "https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/happy-cow-smile-tony-rubino.jpg",
-  };
-
-  const handleBuyClick = () => {
-    setShowPopup(true); 
-  };
+  const handleBuyClick = () => setShowPopup(true);
 
   const handleConfirm = () => {
     alert(`You have bought ${product.name} successfully!`);
-    alert(`The payment was successful. ${product.price} ${product.currency} has been deducted from your wallet.`);
-    setShowPopup(false); 
+    alert(
+      `The payment was successful. ${product.price} ${product.currency} has been deducted from your wallet.`
+    );
+    setShowPopup(false);
   };
 
-  const handleCancel = () => {
-    console.log("Purchase canceled.");
-    setShowPopup(false); 
-  };
+  const handleCancel = () => setShowPopup(false);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div style={{ color: "red" }}>{error}</div>;
+  if (!product) return null;
 
   return (
     <>
       <MainNav />
       <div id="shop-container" style={pageStyle}>
         <div style={headerContainerStyle} id="header-container">
-          <h1>DETAIL OF PRODUCT: {product.name.toUpperCase()}</h1>
+          <h1>DETAIL OF PRODUCT: {product.name?.toUpperCase()}</h1>
         </div>
-
         <div className="product-container">
           <div className="img-container">
             <img src={product.img} alt={product.name} className="product-img" />
           </div>
-
           <div className="details-container">
-            <h1>{product.name.toUpperCase()}</h1>
+            <h1>{product.name?.toUpperCase()}</h1>
             <p>Contract Address: {product.contractAddress}</p>
             <p>Token ID: {product.tokenId}</p>
             <p>{product.description}</p>
-            <h2>{product.price} {product.currency}</h2>
-
+            <h2>
+              {product.price} {product.currency}
+            </h2>
             <label>Quantity:</label>
             <input
               type="number"
@@ -85,14 +100,12 @@ const Detail = () => {
               className="input-style"
               required
             />
-
             <button className="buy-button" onClick={handleBuyClick}>
               Buy
             </button>
           </div>
         </div>
-
-        {/* eallet Popup appears after clicking buy */}
+        {/* Wallet Popup appears after clicking buy */}
         {showPopup && (
           <WalletPopup
             bidAmount={parseFloat(product.price)}
