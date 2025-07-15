@@ -101,7 +101,7 @@ const Shop = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("/api/products") // Dùng API mới
+      .get("/api/products") 
       .then((response) => {
         if (response.data && response.data.content) {
           setProducts(response.data.content);
@@ -133,7 +133,7 @@ const Shop = () => {
   });
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div style={{ color: "red" }}>{error}</div>;
+  
 
   return (
     <>

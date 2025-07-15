@@ -1,5 +1,4 @@
 import "../styles/create_product.css";
-import { WalletPopup } from "../components/walletPopup";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainNav } from "../components/nav";
@@ -92,11 +91,10 @@ const CreateProduct = () => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Animal");
   const [quantity, setQuantity] = useState("1");
-  const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
 
   // Handle image upload and preview
-  const handleImageUpload = (event) => {
+   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -105,57 +103,38 @@ const CreateProduct = () => {
     }
   };
 
-  // Show the wallet popup instead of immediately creating the product
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    setShowPopup(true);
-  };
 
-  // Confirm the process: save product and navigate to shop
-  const handleConfirm = (e) => {
-    e.preventDefault();
+    // Tạo object gửi lên backend, không thêm id hay timestamp
+      const newProduct = {
+        name: productName.trim(),
+        price: parseFloat(price),    
+        img: image || "",
+        currency,
+        description: description.trim() || "No description available",
+        category: category || "Other",
+        quantity: parseInt(quantity),
+        assetType: "NFT",
+        owner: "",
+        tradeable: true,
+        tokenId: "",
+        contractAddress: "",
+      };
 
-    const newProduct = {
-      name: productName.trim(),
-      price: price || "0",
-      img: image,
-      currency,
-      description: description.trim() || "No description available",
-      category: category || "Other",
-      quantity: quantity || "1",
-      timestamp: new Date().toISOString(),
-      id: Date.now(),
-      bought: false,
-    };
 
     axios
       .post("/api/create", newProduct)
+      
       .then((response) => {
-        console.log(response);
-        alert("Created product!");
+        alert("Product created successfully!");
         navigate("/shop");
       })
       .catch((error) => {
-        console.log("Error creating product:", error);
-        alert("Failed to create product");
-      })
-      .finally(() => {
-        console.log("product created");
-      });
-
-    // const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
-    // existingProducts.push(newProduct);
-    // localStorage.setItem("products", JSON.stringify(existingProducts));
-
-    // alert("Product created! Happy farming!");
-    // navigate("/shop");
+        alert("Error creating product: " + error.message);
+    });
   };
 
-  // Cancel product creation (hide wallet popup)
-  const handleCancel = () => {
-    console.log("Product creation canceled.");
-    setShowPopup(false);
-  };
 
   return (
     <>
@@ -196,9 +175,9 @@ const CreateProduct = () => {
               style={commonInputStyle}
             >
               <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-              <option value="VND">VND</option>
-              <option value="JPY">JPY</option>
+              <option value="ETH">ETH</option>
+              <option value="USTD">USTD</option>
+              <option value="MATIC">MATIC</option>
             </select>
 
             <label>Description:</label>
@@ -253,7 +232,6 @@ const CreateProduct = () => {
               id="create-product"
               value="Create Product"
               style={buttonStyle}
-              // onClick={() => {}}
             />
           </form>
           {/* {showPopup && (
