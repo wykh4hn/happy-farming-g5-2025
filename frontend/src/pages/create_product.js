@@ -44,7 +44,7 @@ const CreateProduct = () => {
     padding: "15px 40px",
     borderRadius: "50px",
     position: "absolute",
-    top: "20%",
+    top: "10%",
     left: "50%",
     transform: "translate(-50%, -50%)",
   };

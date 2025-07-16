@@ -1,12 +1,15 @@
 {
   "ExpandedNodes": [
     "",
+    "\\backend",
     "\\backend\\app",
+    "\\backend\\contracts",
     "\\backend\\mysql",
+    "\\frontend",
     "\\frontend\\src",
     "\\frontend\\src\\pages",
     "\\frontend\\src\\styles"
   ],
-  "SelectedNode": "\\.gitignore",
+  "SelectedNode": "\\backend\\contracts\\ProductStore.sol",
   "PreviewInSolutionExplorer": false
 }
