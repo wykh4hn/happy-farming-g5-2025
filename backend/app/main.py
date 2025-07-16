@@ -7,7 +7,7 @@ from typing import List, Any, Callable, Dict
 
 from sqlmodel import Session, select, SQLModel
 
-from app.models import Product, ProductCreate
+from app.models import Product, ProductCreate, ProductBase
 from app.sql_engine import engine 
 
 app = FastAPI()
@@ -15,7 +15,7 @@ api_router = APIRouter(prefix="/api")
 
 # create product 
 @api_router.post("/create")
-async def create_product(product: ProductCreate):
+async def create_product(product: ProductBase):
     try:
         db_product = Product(**product.dict())
         with Session(engine) as session:
@@ -95,8 +95,13 @@ async def update_product(id: int, column: str, new_value: str):
                 raise HTTPException(status_code=400, detail=f"Cannot convert '{new_value}' to required type")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+
 
 # DO NOT TOUCH ANYTHING BELOW THIS LINE.
+
+
+
 SQLModel.metadata.create_all(engine)
 app.add_middleware(
     CORSMiddleware,
