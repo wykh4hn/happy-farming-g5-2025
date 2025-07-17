@@ -8,8 +8,8 @@ dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 load_dotenv(dotenv_path)
 
 DB_HOSTNAME = os.getenv("DB_HOSTNAME", "localhost")
-DB_USERNAME = os.getenv("DB_USERNAME", "khanh")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "nq.khanh11")
+DB_USERNAME = os.getenv("DB_USERNAME", "sownbeos")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "07032005")
 DB_NAME = os.getenv("DB_NAME", "mysql")
 
 

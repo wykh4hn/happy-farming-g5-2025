@@ -3,11 +3,13 @@ from fastapi import FastAPI, APIRouter, HTTPException
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List, Any, Callable, Dict
+from typing import List, Any, Callable, Dict, Optional
+from pydantic import BaseModel
+from datetime import datetime
 
-from sqlmodel import Session, select, SQLModel
+from sqlmodel import Session, select, SQLModel, Field
 
-from app.models import Product, ProductCreate, ProductBase
+from app.models import Product, ProductCreate, ProductBase, Purchase, PurchaseCreate, PurchaseBase
 from app.sql_engine import engine 
 
 app = FastAPI()
@@ -96,7 +98,104 @@ async def update_product(id: int, column: str, new_value: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+@api_router.post("/purchase")
+async def record_purchase(purchase: PurchaseCreate):
+    """Record a blockchain purchase in the database"""
+    try:
+        # Verify product exists
+        with Session(engine) as session:
+            product = session.get(Product, purchase.product_id)
+            if not product:
+                raise HTTPException(status_code=404, detail="Product not found")
+            
+            # Check if transaction already recorded (prevent duplicates)
+            existing = session.exec(
+                select(Purchase).where(Purchase.transaction_hash == purchase.transaction_hash)
+            ).first()
+            
+            if existing:
+                raise HTTPException(status_code=400, detail="Transaction already recorded")
+            
+            # Create purchase record
+            db_purchase = Purchase(**purchase.dict())
+            session.add(db_purchase)
+            session.commit()
+            session.refresh(db_purchase)
+            
+            return {"message": "Purchase recorded successfully", "purchase": db_purchase.model_dump()}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
+@api_router.get("/purchases/{buyer_address}")
+async def get_user_purchases(buyer_address: str):
+    """Get all purchases for a specific wallet address"""
+    try:
+        with Session(engine) as session:
+            statement = select(Purchase).where(Purchase.buyer_address == buyer_address)
+            purchases = session.exec(statement).all()
+            
+            # Join with product data
+            purchase_data = []
+            for purchase in purchases:
+                product = session.get(Product, purchase.product_id)
+                purchase_info = purchase.model_dump()
+                purchase_info['product'] = product.model_dump() if product else None
+                purchase_data.append(purchase_info)
+            
+            return {"message": "Purchases retrieved", "content": purchase_data}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/purchases")
+async def get_all_purchases():
+    """Get all purchases (admin endpoint)"""
+    try:
+        with Session(engine) as session:
+            statement = select(Purchase)
+            purchases = session.exec(statement).all()
+            
+            purchase_data = []
+            for purchase in purchases:
+                product = session.get(Product, purchase.product_id)
+                purchase_info = purchase.model_dump()
+                purchase_info['product'] = product.model_dump() if product else None
+                purchase_data.append(purchase_info)
+            
+            return {"message": "All purchases retrieved", "content": purchase_data}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def get_purchase_stats():
+    """Get purchase statistics"""
+    try:
+        with Session(engine) as session:
+            # Total purchases
+            total_purchases = session.exec(select(Purchase)).all()
+            
+            # Total revenue
+            total_revenue = sum(purchase.amount_eth for purchase in total_purchases)
+            
+            # Most popular products
+            product_counts = {}
+            for purchase in total_purchases:
+                product_id = purchase.product_id
+                product_counts[product_id] = product_counts.get(product_id, 0) + 1
+            
+            return {
+                "message": "Stats retrieved",
+                "content": {
+                    "total_purchases": len(total_purchases),
+                    "total_revenue_eth": total_revenue,
+                    "product_purchase_counts": product_counts
+                }
+            }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # DO NOT TOUCH ANYTHING BELOW THIS LINE.
 

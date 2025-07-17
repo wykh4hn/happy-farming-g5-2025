@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MainNav } from "../components/nav";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { ethers } from "ethers";
 import "../styles/shop.css";
 
 const Shop = () => {
@@ -10,6 +11,13 @@ const Shop = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Web3 states
+  const [contract, setContract] = useState(null);
+  const [account, setAccount] = useState(null);
+  const [web3Loading, setWeb3Loading] = useState(true);
+  const [purchaseLoading, setPurchaseLoading] = useState(false);
+  const [purchaseError, setPurchaseError] = useState(null);
 
   const bgImage = `${process.env.PUBLIC_URL}/background.png`;
 
@@ -73,6 +81,7 @@ const Shop = () => {
         textAlign: "left",
         width: "300px",
         position: "relative",
+        paddingBottom: "60px", // More space for buttons
     };
 
     const imgStyle = {
@@ -98,6 +107,48 @@ const Shop = () => {
         boxShadow: "3px 3px 8px rgba(0, 0, 0, 0.3)"
     };
 
+    const buyButtonStyle = {
+        position: "absolute",
+        bottom: "10px",
+        right: "100px", // Position next to Details button
+        backgroundColor: "rgba(76, 175, 80, 0.9)",
+        color: "white",
+        padding: "8px 15px",
+        borderRadius: "5px",
+        border: "none",
+        cursor: "pointer",
+        fontSize: "1rem",
+        boxShadow: "3px 3px 8px rgba(0, 0, 0, 0.3)"
+    };
+
+  // Initialize Web3 connection
+  useEffect(() => {
+    const initWeb3 = async () => {
+      try {
+        // Check if MetaMask is installed
+        if (typeof window.ethereum !== 'undefined') {
+          // Request account access
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          setAccount(accounts[0]);
+          
+          // Initialize contract (you'll need to set this up with your contract address and ABI)
+          // const provider = new ethers.providers.Web3Provider(window.ethereum);
+          // const signer = provider.getSigner();
+          // const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+          // setContract(contract);
+        } else {
+          console.error('MetaMask not found');
+        }
+      } catch (error) {
+        console.error('Error initializing Web3:', error);
+      } finally {
+        setWeb3Loading(false);
+      }
+    };
+
+    initWeb3();
+  }, []);
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -118,7 +169,78 @@ const Shop = () => {
       });
   }, []);
 
-  
+  // Purchase function
+  const buyProduct = async (productId, priceEth) => {
+    setPurchaseLoading(true);
+    setPurchaseError(null);
+    
+    try {
+      // 1. Blockchain transaction
+      console.log('Initiating blockchain transaction...');
+      const tx = await contract.purchaseProduct(productId, { 
+        value: ethers.parseEther(priceEth.toString()) 
+      });
+      
+      console.log('Transaction sent:', tx.hash);
+      
+      // 2. Wait for transaction confirmation
+      await tx.wait();
+      console.log('Transaction confirmed');
+      
+      // 3. Record in FastAPI database
+      const response = await fetch('/api/purchase', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          product_id: productId,
+          transaction_hash: tx.hash,
+          buyer_address: account,
+          amount_eth: parseFloat(priceEth)
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      console.log('Purchase recorded:', result);
+      
+      return { success: true, txHash: tx.hash, purchase: result };
+      
+    } catch (error) {
+      console.error('Purchase failed:', error);
+      
+      let errorMessage = error.message;
+      if (error.code === 4001) {
+        errorMessage = 'Transaction rejected by user';
+      }
+      
+      setPurchaseError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setPurchaseLoading(false);
+    }
+  };
+
+  const handlePurchase = async (productId, price) => {
+    if (!contract || !account) {
+      alert('Please connect your wallet first');
+      return;
+    }
+
+    const result = await buyProduct(productId, price);
+    
+    if (result.success) {
+      alert('Purchase successful!');
+      // Optionally refresh products or update UI
+    } else {
+      alert(`Purchase failed: ${result.error}`);
+    }
+  };
+
   const filteredProducts = products.filter((product) => {
     const matchSearch =
       (product.name || "")
@@ -142,6 +264,16 @@ const Shop = () => {
         {/* Header + Search & Category */}
         <div style={headerContainerStyle}  id="header-container">
           <h1>SHOPPING WITH US</h1>
+          
+          {/* Web3 Status */}
+          {web3Loading ? (
+            <p>Connecting to wallet...</p>
+          ) : account ? (
+            <p>Connected: {account.slice(0, 6)}...{account.slice(-4)}</p>
+          ) : (
+            <p>Please connect your wallet</p>
+          )}
+          
           <div className="search-container" style={searchContainerStyle}>
             <input
               type="text"
@@ -189,12 +321,37 @@ const Shop = () => {
               <p>Quantity: {product.quantity}</p>
               <p>Asset Type: {product.assetType}</p>
               <p>By: {product.owner}</p>
+              
+              {/* Purchase Button */}
+              <button
+                style={buyButtonStyle}
+                onClick={() => handlePurchase(product.id, product.price)}
+                disabled={purchaseLoading || !contract || !account}
+              >
+                {purchaseLoading ? 'Buying...' : 'Buy Now'}
+              </button>
+              
               <Link className="details-button" to={`/details/${product.id}`} style={buttonStyle}>
                 Details
               </Link>
             </div>
           ))}
         </div>
+        
+        {/* Error Display */}
+        {purchaseError && (
+          <div style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            background: 'rgba(255, 0, 0, 0.8)',
+            color: 'white',
+            padding: '10px',
+            borderRadius: '5px'
+          }}>
+            {purchaseError}
+          </div>
+        )}
       </div>
     </>
   );
