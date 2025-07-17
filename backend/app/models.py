@@ -4,11 +4,24 @@ from pydantic import BaseModel
 from datetime import datetime
 
 
+# Product Models
+
+
 class Product(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     description: str
     price: float  # Price in ETH
+    currency: str = "ETH"
+    quantity: int = 1
+    asset_type: str = "digital"
+    category: str = "Other"
+    owner: str
+    img: Optional[str] = None
+    contractAddress: str
+    tokenId: str
+    in_stock: bool = True
+
 
 class ProductBase(BaseModel):
     name: str
@@ -17,7 +30,7 @@ class ProductBase(BaseModel):
     in_stock: bool = True
 
 
-class ProductCreate(SQLModel, table=False):  # ✅ Explicitly say it's not a table
+class ProductCreate(SQLModel, table=False):
     name: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1, max_length=1000)
     price: float = Field(gt=0)
@@ -27,23 +40,32 @@ class ProductCreate(SQLModel, table=False):  # ✅ Explicitly say it's not a tab
     category: str = Field(default="Other", max_length=50)
     owner: str = Field(min_length=42, max_length=42)
     img: Optional[str] = Field(default=None, max_length=500)
+    contractAddress: str = Field(min_length=42, max_length=42)
+    tokenId: str = Field(min_length=1, max_length=100)
+
+
+
+# Purchase Models
+
 
 class Purchase(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     product_id: int = Field(foreign_key="product.id")
-    transaction_hash: str = Field(unique=True)  # Blockchain transaction hash
-    buyer_address: str  # Ethereum wallet address
-    amount_eth: float  # Amount paid in ETH
+    transaction_hash: str = Field(unique=True)
+    buyer_address: str
+    amount_eth: float
     created_at: datetime = Field(default_factory=datetime.utcnow)
     status: str = Field(default="confirmed")  # confirmed, pending, failed
-    block_number: Optional[int] = Field(default=None)  # Blockchain block number
-    gas_used: Optional[int] = Field(default=None)  # Gas used for transaction
+    block_number: Optional[int] = None
+    gas_used: Optional[int] = None
+
 
 class PurchaseBase(SQLModel, table=False):
     product_id: int
     transaction_hash: str
     buyer_address: str
     amount_eth: float
+
 
 class PurchaseCreate(SQLModel, table=False):
     product_id: int

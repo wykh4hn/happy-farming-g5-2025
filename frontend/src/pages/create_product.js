@@ -123,7 +123,7 @@ const CreateProduct = () => {
     };
 
 
-    // Gửi request lên backend để tạo sản phẩm mớiaxios
+    // Gửi request lên backend để tạo sản phẩm mới axios
     axios.post("/api/create", newProduct, {
       headers: {
         "Content-Type": "application/json",

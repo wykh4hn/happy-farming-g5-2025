@@ -64,6 +64,8 @@ contract Marketplace {
         
         emit ProductPurchased(nextPurchaseId, productId, msg.sender, msg.value);
         nextPurchaseId++;
+        
+        product.active = false;
     }
     
     function getPurchases(address user) external view returns (Purchase[] memory) {

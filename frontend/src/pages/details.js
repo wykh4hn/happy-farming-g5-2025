@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; 
+import { useParams } from "react-router-dom";
 import { MainNav } from "../components/nav";
 import { WalletPopup } from "../components/walletPopup";
+import { ethers } from "ethers";
 import axios from "axios";
+import ContractABI from "C:/Users/Admin/source/repos/group-project-may-2025-gr5/frontend/src/contracts/Marketplace.json"; // 💡 ABI imported here
 import "../styles/details.css";
 
 const Detail = () => {
@@ -12,6 +14,10 @@ const Detail = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [account, setAccount] = useState(null);
+  const [balance, setBalance] = useState(null);
+  const [web3Loading, setWeb3Loading] = useState(true);
 
   const bgImage = `${process.env.PUBLIC_URL}/background.png`;
   const pageStyle = {
@@ -37,13 +43,37 @@ const Detail = () => {
     textAlign: "center",
   };
 
+  // Connect wallet and fetch balance
+  useEffect(() => {
+    const initWeb3 = async () => {
+      try {
+        if (typeof window.ethereum !== "undefined") {
+          const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+          setAccount(accounts[0]);
+
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const balanceWei = await provider.getBalance(accounts[0]);
+          const balanceEth = ethers.formatEther(balanceWei);
+          setBalance(balanceEth);
+        } else {
+          console.error("MetaMask not found");
+        }
+      } catch (error) {
+        console.error("Error initializing Web3:", error);
+      } finally {
+        setWeb3Loading(false);
+      }
+    };
+
+    initWeb3();
+  }, []);
+
   useEffect(() => {
     setLoading(true);
     axios
       .get(`/api/products/${id}`)
       .then((res) => {
         if (res.data && res.data.content) {
-          // API trả về product là object JSON string, cần parse
           const prod = typeof res.data.content === "string"
             ? JSON.parse(res.data.content)
             : res.data.content;
@@ -56,14 +86,41 @@ const Detail = () => {
       .finally(() => setLoading(false));
   }, [id]);
 
-  const handleBuyClick = () => setShowPopup(true);
+  const handleBuyClick = () => {
+    if (!account) {
+      alert("Please connect your wallet first");
+      return;
+    }
+    setShowPopup(true);
+  };
 
-  const handleConfirm = () => {
-    alert(`You have bought ${product.name} successfully!`);
-    alert(
-      `The payment was successful. ${product.price} ${product.currency} has been deducted from your wallet.`
-    );
-    setShowPopup(false);
+  const handleConfirm = async () => {
+    try {
+      if (!window.ethereum) throw new Error("MetaMask not found");
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      const contract = new ethers.Contract(product.contractAddress, ContractABI, signer);
+
+      const tx = await contract.buy({
+        value: ethers.parseEther(product.price),
+      });
+
+      await tx.wait();
+
+      alert(`✅ You successfully purchased ${product.name}!`);
+      alert(`💸 ${product.price} ${product.currency} has been transferred.`);
+
+      const balanceWei = await provider.getBalance(account);
+      const balanceEth = ethers.formatEther(balanceWei);
+      setBalance(balanceEth);
+
+      setShowPopup(false);
+    } catch (error) {
+      console.error("Purchase failed:", error);
+      alert(`❌ Purchase failed: ${error.message}`);
+    }
   };
 
   const handleCancel = () => setShowPopup(false);
@@ -78,6 +135,16 @@ const Detail = () => {
       <div id="shop-container" style={pageStyle}>
         <div style={headerContainerStyle} id="header-container">
           <h1>DETAIL OF PRODUCT: {product.name?.toUpperCase()}</h1>
+          {web3Loading ? (
+            <p>Connecting to wallet...</p>
+          ) : account ? (
+            <p>
+              Connected: {account.slice(0, 6)}...{account.slice(-4)} | Balance:{" "}
+              {balance ? parseFloat(balance).toFixed(4) : "0"} ETH
+            </p>
+          ) : (
+            <p>Please connect your wallet</p>
+          )}
         </div>
         <div className="product-container">
           <div className="img-container">
@@ -88,9 +155,7 @@ const Detail = () => {
             <p>Contract Address: {product.contractAddress}</p>
             <p>Token ID: {product.tokenId}</p>
             <p>{product.description}</p>
-            <h2>
-              {product.price} {product.currency}
-            </h2>
+            <h2>{product.price} {product.currency}</h2>
             <label>Quantity:</label>
             <input
               type="number"
@@ -105,11 +170,10 @@ const Detail = () => {
             </button>
           </div>
         </div>
-        {/* Wallet Popup appears after clicking buy */}
         {showPopup && (
           <WalletPopup
             bidAmount={parseFloat(product.price)}
-            balance={30033}
+            balance={balance}
             onConfirm={handleConfirm}
             onCancel={handleCancel}
           />
