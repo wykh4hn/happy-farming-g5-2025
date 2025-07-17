@@ -94,7 +94,7 @@ const Detail = () => {
             <h1>{product.name?.toUpperCase()}</h1>
             <p>Contract Address: {product.contractAddress}</p>
             <p>Token ID: {product.tokenId}</p>
-            <p>{product.description}</p>
+            <p>Description: {product.description}</p>
             <h2>
               {product.price} {product.currency}
             </h2>

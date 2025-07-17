@@ -1,5 +1,7 @@
 # Build and Run Script for the project
 
+#
+
 Write-Host "Checking git..." -ForegroundColor Green
 git pull
 

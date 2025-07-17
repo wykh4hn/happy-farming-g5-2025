@@ -15,7 +15,14 @@ DB_NAME = os.getenv("DB_NAME", "mysql")
 
 print(f"[DEBUG] DB_USERNAME={DB_USERNAME}, DB_PASSWORD={DB_PASSWORD}, DB_HOSTNAME={DB_HOSTNAME}, DB_NAME={DB_NAME}")
 
-engine = create_engine(
-    f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}/{DB_NAME}"
-)
-
+try:
+    engine = create_engine(
+        f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}/{DB_NAME}"
+    )
+    # Test the connection
+    with engine.connect() as conn:
+        print("[DEBUG] Database connection successful")
+except Exception as e:
+    print(f"[ERROR] Database connection failed: {e}")
+    # Continue without database for now
+    engine = None
