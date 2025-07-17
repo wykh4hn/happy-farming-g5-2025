@@ -5,7 +5,9 @@ git pull
 
 Write-Host "Building frontend..." -ForegroundColor Green
 Set-Location -Path .\frontend
-npm install
+Write-Host "Installing npm packages:" -ForegroundColor Green
+npm install 
+Write-Host "Building..." -ForegroundColor Green
 npm run build
 Write-Host "Frontend build complete!" -ForegroundColor Green
 

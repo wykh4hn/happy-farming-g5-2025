@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; 
+import { useParams } from "react-router-dom";
 import { MainNav } from "../components/nav";
 import { WalletPopup } from "../components/walletPopup";
 import axios from "axios";
@@ -42,17 +42,24 @@ const Detail = () => {
     axios
       .get(`/api/products/${id}`)
       .then((res) => {
+        console.log("API Response:", res.data); // Add this for debugging
         if (res.data && res.data.content) {
-          // API trả về product là object JSON string, cần parse
-          const prod = typeof res.data.content === "string"
-            ? JSON.parse(res.data.content)
-            : res.data.content;
+          const prod =
+            typeof res.data.content === "string"
+              ? JSON.parse(res.data.content)
+              : res.data.content;
           setProduct(prod);
+        } else if (res.data) {
+          // Handle case where product data is directly in res.data
+          setProduct(res.data);
         } else {
           setError("Product not found!");
         }
       })
-      .catch(() => setError("Error loading product!"))
+      .catch((error) => {
+        console.error("API Error:", error); // Add this for debugging
+        setError("Error loading product!");
+      })
       .finally(() => setLoading(false));
   }, [id]);
 
