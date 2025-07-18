@@ -2,7 +2,7 @@ import "../styles/create_product.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainNav } from "../components/nav";
-
+import { useEffect } from "react";
 import axios from "axios";
 
 const CreateProduct = () => {
@@ -95,6 +95,24 @@ const CreateProduct = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const connectWallet = async () => {
+      if (window.ethereum) {
+        try {
+          const accounts = await window.ethereum.request({
+            method: "eth_accounts",
+          });
+          if (accounts.length > 0) {
+            setAddress(accounts[0]);
+          }
+        } catch (error) {
+          console.error("Error checking wallet:", error);
+        }
+      }
+    };
+
+    connectWallet();
+  }, []);
   // Handle image upload and preview
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -136,14 +154,18 @@ const CreateProduct = () => {
     return result;
   };
 
-  const handleFormSubmit = (e) => {
+  // Update handleFormSubmit to be async and properly handle wallet connection
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // Get the wallet address first
-    if (!address) {
-      alert("Please connect your wallet first!");
-      getOwner(); // Try to get the address
-      return;
+    // Force wallet connection if not already connected
+    let walletAddress = address;
+    if (!walletAddress) {
+      walletAddress = await getOwner();
+      if (!walletAddress) {
+        alert("Please connect your wallet first!");
+        return;
+      }
     }
 
     const newProduct = {
@@ -152,16 +174,16 @@ const CreateProduct = () => {
       price: parseFloat(price) || 0,
       currency: currency || "ETH",
       quantity: parseInt(quantity) || 1,
-      asset_type: "NFT", // ✅ Fixed field name
+      asset_type: "NFT",
       category: category || "Other",
-      owner: address,
+      owner: walletAddress, // This should now have a value
       img: image || "",
-      contractAddress: generateTokenID(42), // Generate a mock contract address
+      contractAddress: generateTokenID(42),
       tokenId: generateTokenID(15),
       in_stock: true,
     };
 
-    console.log("Sending product data:", newProduct); // Debug log
+    console.log("Sending product data:", newProduct);
 
     axios
       .post("/api/create", newProduct, {
@@ -187,6 +209,35 @@ const CreateProduct = () => {
       <MainNav />
       <div style={pageStyle}>
         <div id="create-product-page" style={containerStyle}>
+          {
+            // Add this before your form
+            <div
+              className="wallet-section"
+              style={{
+                marginBottom: "20px",
+                padding: "15px",
+                border: "2px solid #e0e0e0",
+                borderRadius: "8px",
+              }}
+            >
+              {!address ? (
+                <button
+                  type="button"
+                  onClick={getOwner}
+                  style={{ ...buttonStyle, backgroundColor: "#ff6b35" }}
+                >
+                  Connect MetaMask Wallet
+                </button>
+              ) : (
+                <div style={{ color: "#28a745" }}>
+                  <p>✅ Wallet Connected</p>
+                  <p>
+                    <strong>Address:</strong> {address}
+                  </p>
+                </div>
+              )}
+            </div>
+          }
           <h1 style={headingStyle} id="heading-container">
             CREATE NEW PRODUCT
           </h1>

@@ -13,7 +13,7 @@ if (-not (Test-Path ".\build\index.html")) {
 Write-Host "Frontend build complete!" -ForegroundColor Green
 
 Write-Host "Starting backend..." -ForegroundColor Green
-Set-Location -Path ..\backend
+Set-Location -Path ..\backend\wApp
 
 # Activate virtual environment
 if (Test-Path -Path ".\Scripts\Activate.ps1") {
