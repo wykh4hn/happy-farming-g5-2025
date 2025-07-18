@@ -169,6 +169,7 @@ backend/.env
 backend/app/.env
 backend/app/.env.sample
 backend/app/.env.local
+backend/__pycache__
 
 # powershell
-*.ps1
+# *.ps1

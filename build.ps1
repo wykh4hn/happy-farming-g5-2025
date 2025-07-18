@@ -31,3 +31,5 @@ pip install -r requirements.txt
 # Run the FastAPI application using uvicorn
 Write-Host "Starting FastAPI server..." -ForegroundColor Green
 uvicorn app.main:app --reload
+
+# comment just to track
