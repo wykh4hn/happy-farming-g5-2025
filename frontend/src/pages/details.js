@@ -4,7 +4,7 @@ import { MainNav } from "../components/nav";
 import { WalletPopup } from "../components/walletPopup";
 import { ethers } from "ethers";
 import axios from "axios";
-import ContractABI from "C:/Users/Admin/source/repos/group-project-may-2025-gr5/frontend/src/contracts/Marketplace.json"; // 💡 ABI imported here
+import ContractABI from "../contracts/Marketplace.json";
 import "../styles/details.css";
 
 const Detail = () => {
@@ -48,7 +48,9 @@ const Detail = () => {
     const initWeb3 = async () => {
       try {
         if (typeof window.ethereum !== "undefined") {
-          const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+          const accounts = await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
           setAccount(accounts[0]);
 
           const provider = new ethers.BrowserProvider(window.ethereum);
@@ -76,9 +78,10 @@ const Detail = () => {
         console.log("API Response:", res.data); // Add this for debugging
         if (res.data && res.data.content) {
           // API trả về product là object JSON string, cần parse
-          const prod = typeof res.data.content === "string"
-            ? JSON.parse(res.data.content)
-            : res.data.content;
+          const prod =
+            typeof res.data.content === "string"
+              ? JSON.parse(res.data.content)
+              : res.data.content;
           setProduct(prod);
         } else if (res.data) {
           // Handle case where product data is directly in res.data
@@ -109,7 +112,11 @@ const Detail = () => {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
 
-      const contract = new ethers.Contract(product.contractAddress, ContractABI, signer);
+      const contract = new ethers.Contract(
+        product.contractAddress,
+        ContractABI,
+        signer
+      );
 
       const tx = await contract.buy({
         value: ethers.parseEther(product.price),

@@ -113,7 +113,7 @@ const CreateProduct = () => {
         .request({ method: "eth_requestAccounts" })
         .then((res) => setAddress(res));
     } else {
-      setAddress("");
+      setAddress("0");
     }
   };
   // randomly create id

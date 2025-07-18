@@ -1,35 +1,25 @@
 # Build and Run Script for the project
 
-#
-
-Write-Host "Checking git..." -ForegroundColor Green
-git pull
-
 Write-Host "Building frontend..." -ForegroundColor Green
 Set-Location -Path .\frontend
-Write-Host "Installing npm packages:" -ForegroundColor Green
-npm install 
-Write-Host "Building..." -ForegroundColor Green
 npm run build
+
+# Check if build was successful
+if (-not (Test-Path ".\build\index.html")) {
+    Write-Host "Frontend build failed!" -ForegroundColor Red
+    exit 1
+}
+
 Write-Host "Frontend build complete!" -ForegroundColor Green
 
 Write-Host "Starting backend..." -ForegroundColor Green
 Set-Location -Path ..\backend
 
-# Check if a virtual environment exists and activate it
+# Activate virtual environment
 if (Test-Path -Path ".\Scripts\Activate.ps1") {
-    Write-Host "Activating virtual environment..." -ForegroundColor Yellow
     & .\Scripts\Activate.ps1
-} else {
-    Write-Host "No virtual environment found. Using system Python." -ForegroundColor Yellow
 }
 
-# Install requirements if needed
-Write-Host "Installing/Checking dependencies..." -ForegroundColor Yellow
-pip install -r requirements.txt
-
-# Run the FastAPI application using uvicorn
-Write-Host "Starting FastAPI server..." -ForegroundColor Green
+# Run the FastAPI application
+Write-Host "Backend running at http://localhost:8000" -ForegroundColor Green
 uvicorn app.main:app --reload
-
-# comment just to track
