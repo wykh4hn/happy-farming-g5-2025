@@ -171,5 +171,9 @@ backend/app/.env.sample
 backend/app/.env.local
 backend/__pycache__
 
+backend/wApp/Lib
+backend/wApp/Scripts
+backend/wApp/Include
+
 # powershell
 # *.ps1
