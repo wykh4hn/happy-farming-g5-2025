@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Any, Callable, Dict, Optional
 from pydantic import BaseModel
 from datetime import datetime
+import traceback
 
 from sqlmodel import Session, select, SQLModel, Field
 
@@ -26,7 +27,6 @@ async def create_product(product: ProductBase):
             session.refresh(db_product)
         return {"message": "Product created successfully", "product": db_product.model_dump()}
     except Exception as e:
-        import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -67,6 +67,7 @@ async def remove_product(id: int):
             session.commit()
             return {"message": "Product deleted successfully"}
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 # update product by id
@@ -96,6 +97,7 @@ async def update_product(id: int, column: str, new_value: str):
             except ValueError:
                 raise HTTPException(status_code=400, detail=f"Cannot convert '{new_value}' to required type")
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
     
 @api_router.post("/purchase")
@@ -125,6 +127,7 @@ async def record_purchase(purchase: PurchaseCreate):
             return {"message": "Purchase recorded successfully", "purchase": db_purchase.model_dump()}
     
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 @api_router.get("/purchases/{buyer_address}")
@@ -146,6 +149,7 @@ async def get_user_purchases(buyer_address: str):
             return {"message": "Purchases retrieved", "content": purchase_data}
     
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 @api_router.get("/purchases")
@@ -195,6 +199,7 @@ async def get_purchase_stats():
             }
     
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 # DO NOT TOUCH ANYTHING BELOW THIS LINE.

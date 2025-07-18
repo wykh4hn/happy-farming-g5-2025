@@ -107,13 +107,23 @@ const CreateProduct = () => {
 
   // get address
 
-  const getOwner = () => {
+  const getOwner = async () => {
     if (window.ethereum) {
-      window.ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then((res) => setAddress(res));
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        setAddress(accounts[0]);
+        return accounts[0];
+      } catch (error) {
+        console.error("Error connecting wallet:", error);
+        setAddress("");
+        return null;
+      }
     } else {
-      setAddress("0");
+      alert("Please install MetaMask!");
+      setAddress("");
+      return null;
     }
   };
   // randomly create id
@@ -129,23 +139,30 @@ const CreateProduct = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    // Tạo object gửi lên backend, không thêm id hay timestamp
+    // Get the wallet address first
+    if (!address) {
+      alert("Please connect your wallet first!");
+      getOwner(); // Try to get the address
+      return;
+    }
+
     const newProduct = {
       name: productName.trim(),
-      price: parseFloat(price) || 0,
-      currency,
-      img: image || "",
       description: description.trim() || "No description available",
-      category: category || "Other",
+      price: parseFloat(price) || 0,
+      currency: currency || "ETH",
       quantity: parseInt(quantity) || 1,
-      assetType: "NFT",
+      asset_type: "NFT", // ✅ Fixed field name
+      category: category || "Other",
       owner: address,
-      tradeable: true,
+      img: image || "",
+      contractAddress: generateTokenID(42), // Generate a mock contract address
       tokenId: generateTokenID(15),
-      contractAddress: "",
+      in_stock: true,
     };
 
-    // Gửi request lên backend để tạo sản phẩm mớiaxios
+    console.log("Sending product data:", newProduct); // Debug log
+
     axios
       .post("/api/create", newProduct, {
         headers: {
@@ -157,7 +174,11 @@ const CreateProduct = () => {
         navigate("/shop");
       })
       .catch((error) => {
-        alert("Error creating product: " + error.message);
+        console.error("Full error:", error.response?.data || error.message);
+        alert(
+          "Error creating product: " +
+            (error.response?.data?.detail || error.message)
+        );
       });
   };
 
@@ -192,18 +213,6 @@ const CreateProduct = () => {
               style={commonInputStyle}
               required
             />
-
-            <label>Currency:</label>
-            <select
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-              style={commonInputStyle}
-            >
-              <option value="USD">USD</option>
-              <option value="ETH">ETH</option>
-              <option value="USTD">USTD</option>
-              <option value="MATIC">MATIC</option>
-            </select>
 
             <label>Description:</label>
             <textarea
