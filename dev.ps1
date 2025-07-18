@@ -29,3 +29,5 @@ if (Test-Path -Path ".\Scripts\Activate.ps1") {
 # Run the FastAPI application with auto-reload
 Write-Host "Backend running at http://localhost:8000" -ForegroundColor Green
 uvicorn app.main:app --reload
+
+# lmao

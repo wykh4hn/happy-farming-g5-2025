@@ -5,6 +5,8 @@ import { MainNav } from "../components/nav";
 
 import axios, { isCancel, AxiosError } from "axios";
 
+import { ethers } from "ethers";
+
 const api = axios.create();
 
 const CreateProduct = () => {
@@ -94,7 +96,7 @@ const CreateProduct = () => {
   const navigate = useNavigate();
 
   // Handle image upload and preview
-   const handleImageUpload = (event) => {
+  const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -107,7 +109,7 @@ const CreateProduct = () => {
     e.preventDefault();
 
     // Tạo object gửi lên backend, không thêm id hay timestamp
-   const newProduct = {
+    const newProduct = {
       name: productName.trim(),
       price: parseFloat(price) || 0,
       currency,
@@ -119,11 +121,10 @@ const CreateProduct = () => {
       owner: "",
       tradeable: true,
       tokenId: "",
-      contractAddress: ""
+      contractAddress: "",
     };
 
-
-    // Gửi request lên backend để tạo sản phẩm mới axios
+    // Gửi request lên backend để tạo sản phẩm mớiaxios
     axios.post("/api/create", newProduct, {
       headers: {
         "Content-Type": "application/json",
@@ -138,7 +139,6 @@ const CreateProduct = () => {
     });
 
   };
-
 
   return (
     <>

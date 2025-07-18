@@ -1,11 +1,15 @@
 # Build and Run Script for the project
 
+#
+
 Write-Host "Checking git..." -ForegroundColor Green
 git pull
 
 Write-Host "Building frontend..." -ForegroundColor Green
 Set-Location -Path .\frontend
-npm install
+Write-Host "Installing npm packages:" -ForegroundColor Green
+npm install 
+Write-Host "Building..." -ForegroundColor Green
 npm run build
 Write-Host "Frontend build complete!" -ForegroundColor Green
 
@@ -27,3 +31,5 @@ pip install -r requirements.txt
 # Run the FastAPI application using uvicorn
 Write-Host "Starting FastAPI server..." -ForegroundColor Green
 uvicorn app.main:app --reload
+
+# comment just to track

@@ -10,7 +10,7 @@ module.exports = {
       url: "http://127.0.0.1:7545", // Ganache default URL
       accounts: [
         // Add your Ganache private keys here
-        "0x38f5516f0d9f34e8f9a038fe487a5f2e38b409b17c24ea95f99919cff410e8d2"
+        "0xf7cf333f55866334588fe4f3393cd5eb02543e51e88580110df51dedc953adc4"
       ]
     }
   }

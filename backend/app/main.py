@@ -213,13 +213,20 @@ app.include_router(api_router)
 
 # Serve static frontend (build React)
 frontend_build_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../frontend/build"))
+# app.mount("/static", StaticFiles(directory=os.path.join(frontend_build_dir, "static")), name="static")
+
+# Replace the existing static mount with this:
 app.mount("/static", StaticFiles(directory=os.path.join(frontend_build_dir, "static")), name="static")
 
 @app.get("/")
 async def serve_index():
     return FileResponse(os.path.join(frontend_build_dir, "index.html"))
 
+
 @app.get("/{full_path:path}")
 async def spa_fallback(full_path: str):
-    index_path = os.path.join(frontend_build_dir, "index.html")
-    return FileResponse(index_path)
+    file_location = os.path.join(frontend_build_dir, full_path)
+    if os.path.exists(file_location) and os.path.isfile(file_location):
+        return FileResponse(file_location)
+    # Fallback to index.html for SPA routing
+    return FileResponse(os.path.join(frontend_build_dir, "index.html"))
