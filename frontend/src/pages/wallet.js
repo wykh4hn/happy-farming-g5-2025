@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import { Button, Card } from "react-bootstrap";
 import { MainNav } from "../components/nav";
 import "../styles/wallet.css";
+import { useAsyncError } from "react-router-dom";
 
 function Wallet() {
   // usetstate for storing and retrieving wallet details
@@ -12,6 +13,8 @@ function Wallet() {
     address: "",
     Balance: null,
   });
+
+  const [walletConnected, setWalletConnected] = useState(false);
 
   // Button handler button for handling a
   // request event for metamask
@@ -39,8 +42,10 @@ function Wallet() {
       .then((balance) => {
         // Setting balance
         setdata({
+          address: address,
           Balance: ethers.formatEther(balance),
         });
+        setWalletConnected(true);
       });
   };
 
@@ -62,6 +67,10 @@ function Wallet() {
       <MainNav />
 
       <Card className="text-center">
+        <p>
+          {"Wallet status: " +
+            (walletConnected ? "Connected!" : "Not connected")}
+        </p>
         <Card.Header>
           <strong>Address: </strong>
           {data.address}
