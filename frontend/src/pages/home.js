@@ -2,9 +2,6 @@ import React from "react";
 import { MainNav } from "../components/nav";
 import "../styles/home.css";
 
-{
-  /*I add some parts of the css into this bc idk why all in css so lag and even effect on other pages */
-}
 const Home = () => {
   const bgImage = `${process.env.PUBLIC_URL}/background.png`;
 
@@ -27,10 +24,6 @@ const Home = () => {
     boxShadow: "30px 8px 20px rgba(109, 98, 49, 0.4)",
     clipPath: "ellipse(100% 75% at center)",
   };
-
-  {
-    /*the main part */
-  }
 
   return (
     <>

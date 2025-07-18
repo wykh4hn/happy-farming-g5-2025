@@ -5,7 +5,6 @@ import { ethers } from "ethers";
 import { Button, Card } from "react-bootstrap";
 import { MainNav } from "../components/nav";
 import "../styles/wallet.css";
-import { useAsyncError } from "react-router-dom";
 
 function Wallet() {
   // usetstate for storing and retrieving wallet details

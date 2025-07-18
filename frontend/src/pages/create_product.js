@@ -3,11 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainNav } from "../components/nav";
 
-import axios, { isCancel, AxiosError } from "axios";
-
-import { ethers } from "ethers";
-
-const api = axios.create();
+import axios from "axios";
 
 const CreateProduct = () => {
   const bgImage = `${process.env.PUBLIC_URL}/background1.png`;
@@ -93,6 +89,10 @@ const CreateProduct = () => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Animal");
   const [quantity, setQuantity] = useState("1");
+
+  const [address, setAddress] = useState("");
+  const [tokenID, setTokenID] = useState("");
+
   const navigate = useNavigate();
 
   // Handle image upload and preview
@@ -103,6 +103,27 @@ const CreateProduct = () => {
       reader.readAsDataURL(file);
       reader.onloadend = () => setImage(reader.result);
     }
+  };
+
+  // get address
+
+  const getOwner = () => {
+    if (window.ethereum) {
+      window.ethereum
+        .request({ method: "eth_requestAccounts" })
+        .then((res) => setAddress(res));
+    } else {
+      setAddress("");
+    }
+  };
+  // randomly create id
+  const generateTokenID = (length) => {
+    let result = "";
+    let hexChars = "0123456789abcdef";
+    for (let i = 0; i < length; i++) {
+      result += hexChars[Math.floor(Math.random() * 16)];
+    }
+    return result;
   };
 
   const handleFormSubmit = (e) => {
@@ -118,26 +139,26 @@ const CreateProduct = () => {
       category: category || "Other",
       quantity: parseInt(quantity) || 1,
       assetType: "NFT",
-      owner: "",
+      owner: address,
       tradeable: true,
-      tokenId: "",
+      tokenId: generateTokenID(15),
       contractAddress: "",
     };
 
     // Gửi request lên backend để tạo sản phẩm mớiaxios
-    axios.post("/api/create", newProduct, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then((response) => {
-      alert("Product created successfully!");
-      navigate("/shop");
-    })
-    .catch((error) => {
-      alert("Error creating product: " + error.message);
-    });
-
+    axios
+      .post("/api/create", newProduct, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        alert("Product created successfully!");
+        navigate("/shop");
+      })
+      .catch((error) => {
+        alert("Error creating product: " + error.message);
+      });
   };
 
   return (
