@@ -56,7 +56,7 @@ async def get_product_by_id(id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 # delete them
-@api_router.delete("/delete/{id}")
+@api_router.delete("/product/{id}")
 async def remove_product(id: int):
     try:
         with Session(engine) as session:
