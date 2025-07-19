@@ -120,7 +120,7 @@ const CreateProduct = () => {
     const file = event.target.files[0];
     if (file) {
       const options = {
-        maxSizeMB: 0.5, // Maximum size in MB
+        maxSizeMB: 0.1 / 100, // Maximum size in MB
         maxWidthOrHeight: 800, // Maximum width or height
         useWebWorker: true, // Use web worker for better performance
         fileType: "image/jpeg", // Convert to JPEG for better compression

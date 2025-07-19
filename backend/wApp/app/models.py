@@ -33,7 +33,8 @@ from typing import Optional
 
 
 class Product(SQLModel, table=True):
-    name: str = Field(min_length=1, max_length=200, primary_key=True)
+    # id: Optional[int] = Field(default=None, primary_key=True)
+    name: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1, max_length=1000)
     price: float = Field(gt=0)
     currency: str = Field(default="ETH", max_length=10)
@@ -43,7 +44,7 @@ class Product(SQLModel, table=True):
     owner: str = Field(min_length=42, max_length=42) 
     img: Optional[str] = Field(default=None, max_length=50000)
     contractAddress: str = Field(min_length=42, max_length=42)
-    token_id: str = Field(min_length=1, max_length=100)
+    token_id: str = Field(min_length=1, max_length=100, primary_key=True)
 
 
 
