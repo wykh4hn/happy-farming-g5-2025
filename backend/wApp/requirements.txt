@@ -1,0 +1,13 @@
+web3
+eth-utils
+python-dotenv
+py-solc-x
+fastapi[standard]
+jinja2 
+aiofiles
+mysql-connector-python
+sqlmodel
+pymysql
+
+# required for some reason
+cryptography

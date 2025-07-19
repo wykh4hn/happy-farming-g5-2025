@@ -158,22 +158,29 @@ yarn-error.log*
 .vscode/
 
 # Python venv
-backend/Include/
-backend/Scripts/
-backend/Lib/
+# backend/Include/
+# backend/Scripts/
+# backend/Lib/
 backend/share/
 backend/etc
 backend/pyvenv.cfg
 backend/app/__pycache__
-backend/.env
-backend/app/.env
-backend/app/.env.sample
-backend/app/.env.local
+# backend/.env
+# backend/app/.env
+# backend/app/.env.sample
+# backend/app/.env.local
 backend/__pycache__
 
-backend/wApp/Lib
-backend/wApp/Scripts
-backend/wApp/Include
+# Python virtual environment
+backend/venv/
+backend/wApp/Lib/
+backend/wApp/Scripts/
+backend/wApp/Include/
+backend/wApp/pyvenv.cfg
+
+# Python cache
+backend/__pycache__/
+backend/app/__pycache__/
 
 # powershell
 # *.ps1
