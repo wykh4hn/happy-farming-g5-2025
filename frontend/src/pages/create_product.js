@@ -5,6 +5,8 @@ import { MainNav } from "../components/nav";
 import { useEffect } from "react";
 import axios from "axios";
 
+import imageCompression from "browser-image-compression";
+
 const CreateProduct = () => {
   const bgImage = `${process.env.PUBLIC_URL}/background1.png`;
 
@@ -114,9 +116,23 @@ const CreateProduct = () => {
     connectWallet();
   }, []);
   // Handle image upload and preview
-  const handleImageUpload = (event) => {
+  const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
+      const options = {
+        maxSizeMB: 0.5, // Maximum size in MB
+        maxWidthOrHeight: 800, // Maximum width or height
+        useWebWorker: true, // Use web worker for better performance
+        fileType: "image/jpeg", // Convert to JPEG for better compression
+      };
+
+      const compressedFile = await imageCompression(file, options);
+      console.log(
+        "Compressed file size:",
+        compressedFile.size / 1024 / 1024,
+        "MB"
+      );
+
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => setImage(reader.result);
