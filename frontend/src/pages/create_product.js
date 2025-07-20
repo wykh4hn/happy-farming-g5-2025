@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import axios from "axios";
 
 import imageCompression from "browser-image-compression";
+import { ethers } from "ethers";
+import ContractData from "../contracts/Marketplace.json";
 
 const CreateProduct = () => {
   const bgImage = `${process.env.PUBLIC_URL}/background1.png`;
@@ -186,7 +188,6 @@ const CreateProduct = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // Force wallet connection if not already connected
     let walletAddress = address;
     if (!walletAddress) {
       walletAddress = await getOwner();
@@ -207,29 +208,22 @@ const CreateProduct = () => {
       owner: walletAddress,
       img: image || "",
       contractAddress: generateTokenID(42),
-      tokenId: generateTokenID(15),
+      tokenId: generateTokenID(15), // ← Changed from tokenId to token_id
       in_stock: true,
     };
 
-    console.log("Sending product data:", newProduct);
+      console.log("Saving to database:", newProduct);
 
-    axios
-      .post("/api/create", newProduct, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        alert("Product created successfully!");
-        navigate("/shop");
-      })
-      .catch((error) => {
-        console.error("Full error:", error.response?.data || error.message);
-        alert(
-          "Error creating product: " +
-            (error.response?.data?.detail || error.message)
-        );
+      const response = await axios.post("/api/create", newProduct, {
+        headers: { "Content-Type": "application/json" },
       });
+
+      alert("Product created successfully on blockchain and database!");
+      navigate("/shop");
+    } catch (error) {
+      console.error("Product creation failed:", error);
+      alert("Error creating product: " + (error.reason || error.message));
+    }
   };
 
   return (

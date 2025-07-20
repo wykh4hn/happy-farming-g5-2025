@@ -184,3 +184,6 @@ backend/app/__pycache__/
 
 # powershell
 # *.ps1
+
+*.html
+*.txt

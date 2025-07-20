@@ -7,6 +7,9 @@ import { CreateProduct } from "./pages/create_product";
 import { Wallet } from "./pages/wallet";
 import { Detail } from "./pages/details";
 import { TransactionHistory } from "./pages/trans_history";
+import TestContract from "./testContract";
+
+// In your routes array:
 
 function App() {
   return (
@@ -20,6 +23,7 @@ function App() {
           {/* <Route path="/details" element={<Detail />} /> */}
           <Route path="/details/:id" element={<Detail />} />
           <Route path="/trans-history" element={<TransactionHistory />} />
+          <Route path="/test" element={<TestContract />} />;
         </Routes>
       </Router>
     </div>
