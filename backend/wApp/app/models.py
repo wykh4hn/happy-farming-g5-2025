@@ -26,15 +26,23 @@ from typing import Optional
 #     in_stock: bool = True
 
 
-# class ProductBase(BaseModel):
-#     name: str
-#     description: Optional[str] = None
-#     price: float
-#     in_stock: bool = True
+class ProductBase(BaseModel):
+    name: str
+    description: Optional[str] = ""
+    price: float
+    currency: str = "ETH"
+    quantity: int = 1
+    asset_type: str = "digital"
+    category: str = "Other"
+    owner: str
+    img: Optional[str] = ""
+    contractAddress: str = ""
+    token_id: str = ""
+    in_stock: bool = True
 
 
 class Product(SQLModel, table=True):
-    # id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
     name: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1, max_length=1000)
     price: float = Field(gt=0)
@@ -45,7 +53,9 @@ class Product(SQLModel, table=True):
     owner: str = Field(min_length=42, max_length=42) 
     img: Optional[str] = Field(default=None, sa_column=Column(LONGTEXT))
     contractAddress: str = Field(min_length=42, max_length=42)
-    token_id: str = Field(min_length=1, max_length=100, primary_key=True)
+    token_id: str = Field(min_length=1, max_length=100)
+    in_stock: bool = Field(default=True)
+    
 
 
 

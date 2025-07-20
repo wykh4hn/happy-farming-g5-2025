@@ -11,7 +11,7 @@ import traceback
 
 from sqlmodel import Session, select, SQLModel, Field
 
-from app.models import  Purchase, PurchaseCreate, PurchaseBase, Product
+from app.models import  Purchase, PurchaseCreate, PurchaseBase, Product, ProductBase
 from app.sql_engine import engine 
 
 app = FastAPI()
@@ -19,16 +19,24 @@ api_router = APIRouter(prefix="/api")
 
 # create product 
 @api_router.post("/create")
-async def create_product(product: Product):
+async def create_product(product: ProductBase):  # Use ProductBase instead of Product
     try:
-        # db_product = Product(**product.model_dump())
+        # Convert ProductBase to Product model
+        db_product = Product(**product.dict())
+        
         with Session(engine) as session:
-            session.add(product)
+            session.add(db_product)
             session.commit()
-            session.refresh(product)
-        return {"message": "Product created successfully", "product": product.model_dump()}
+            session.refresh(db_product)
+        
+        return {"message": "Product created successfully", "product": db_product.model_dump()}
     except Exception as e:
+        import traceback
+        print("=== CREATE PRODUCT ERROR ===")
+        print(f"Input data: {product.dict()}")
+        print(f"Error: {str(e)}")
         traceback.print_exc()
+        print("============================")
         raise HTTPException(status_code=500, detail=str(e))
 
 # get all the products tho
@@ -207,7 +215,18 @@ async def get_purchase_stats():
 
 
 
-SQLModel.metadata.create_all(engine)
+if engine is not None:
+    try:
+        print("[DEBUG] Creating database tables...")
+        SQLModel.metadata.create_all(engine)
+        print("[DEBUG] Database tables created successfully")
+    except Exception as e:
+        print(f"[ERROR] Failed to create tables: {e}")
+        print("[WARNING] Running without database")
+else:
+    print("[WARNING] No database connection - some features may not work")
+
+print("[DEBUG] FastAPI app starting...")
 
 app.add_middleware(
     CORSMiddleware,
