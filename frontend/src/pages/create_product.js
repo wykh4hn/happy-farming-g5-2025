@@ -188,29 +188,30 @@ const CreateProduct = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    let walletAddress = address;
-    if (!walletAddress) {
-      walletAddress = await getOwner();
+    try {
+      let walletAddress = address;
       if (!walletAddress) {
-        alert("Please connect your wallet first!");
-        return;
+        walletAddress = await getOwner();
+        if (!walletAddress) {
+          alert("Please connect your wallet first!");
+          return;
+        }
       }
-    }
 
-    const newProduct = {
-      name: productName.trim(),
-      description: description.trim() || "No description available",
-      price: parseFloat(price) || 0,
-      currency: "ETH",
-      quantity: parseInt(quantity) || 1,
-      asset_type: "NFT",
-      category: category || "Other",
-      owner: walletAddress,
-      img: image || "",
-      contractAddress: generateTokenID(42),
-      tokenId: generateTokenID(15), // ← Changed from tokenId to token_id
-      in_stock: true,
-    };
+      const newProduct = {
+        name: productName.trim(),
+        description: description.trim() || "No description available",
+        price: parseFloat(price) || 0,
+        currency: "ETH",
+        quantity: parseInt(quantity) || 1,
+        asset_type: "NFT",
+        category: category || "Other",
+        owner: walletAddress,
+        img: image || "",
+        contractAddress: generateTokenID(42),
+        tokenId: generateTokenID(15), // ← Changed from tokenId to token_id
+        in_stock: true,
+      };
 
       console.log("Saving to database:", newProduct);
 
