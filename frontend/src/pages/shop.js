@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { ethers } from "ethers";
 import "../styles/shop.css";
+import ContractData from "../contracts/Marketplace.json";
 
 const Shop = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -152,23 +153,43 @@ const Shop = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get("/api/products")
-      .then((response) => {
-        if (response.data && response.data.content) {
-          setProducts(response.data.content);
+    const initWeb3 = async () => {
+      try {
+        if (typeof window.ethereum !== "undefined") {
+          const accounts = await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          setAccount(accounts[0]);
+
+          // Initialize contract with proper error handling
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const signer = await provider.getSigner();
+
+          // Check if ContractData has the expected structure
+          console.log("Contract Data:", ContractData);
+
+          if (ContractData && ContractData.address && ContractData.abi) {
+            const contract = new ethers.Contract(
+              ContractData.address,
+              ContractData.abi,
+              signer
+            );
+            setContract(contract);
+            console.log("Contract initialized successfully");
+          } else {
+            console.error("Invalid contract data structure");
+          }
         } else {
-          setProducts([]);
+          console.error("MetaMask not found");
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-        setError("Failed to load products");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      } catch (error) {
+        console.error("Error initializing Web3:", error);
+      } finally {
+        setWeb3Loading(false);
+      }
+    };
+
+    initWeb3();
   }, []);
 
   // Purchase function
@@ -177,19 +198,22 @@ const Shop = () => {
     setPurchaseError(null);
 
     try {
-      // 1. Blockchain transaction
+      if (!contract) {
+        throw new Error("Contract not initialized");
+      }
+
       console.log("Initiating blockchain transaction...");
-      const tx = await contract.purchaseProduct(productId, {
+
+      // Call the correct contract method name from your Solidity contract
+      const tx = await contract.buyProduct(productId, {
         value: ethers.parseEther(priceEth.toString()),
       });
 
       console.log("Transaction sent:", tx.hash);
-
-      // 2. Wait for transaction confirmation
       await tx.wait();
       console.log("Transaction confirmed");
 
-      // 3. Record in FastAPI database
+      // Record in database...
       const response = await fetch("/api/purchase", {
         method: "POST",
         headers: {
@@ -208,19 +232,11 @@ const Shop = () => {
       }
 
       const result = await response.json();
-      console.log("Purchase recorded:", result);
-
       return { success: true, txHash: tx.hash, purchase: result };
     } catch (error) {
       console.error("Purchase failed:", error);
-
-      let errorMessage = error.message;
-      if (error.code === 4001) {
-        errorMessage = "Transaction rejected by user";
-      }
-
-      setPurchaseError(errorMessage);
-      return { success: false, error: errorMessage };
+      setPurchaseError(error.message);
+      return { success: false, error: error.message };
     } finally {
       setPurchaseLoading(false);
     }
