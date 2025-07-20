@@ -18,7 +18,7 @@ Start-ProcessInNewWindow -WorkingDirectory "$PSScriptRoot\frontend" -Command "np
 
 # Start backend with auto-reload
 Write-Host "Starting FastAPI backend server..." -ForegroundColor Cyan
-Set-Location -Path "$PSScriptRoot\backend"
+Set-Location -Path "$PSScriptRoot\backend\wApp"
 
 # Activate virtual environment if it exists
 if (Test-Path -Path ".\Scripts\Activate.ps1") {

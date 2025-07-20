@@ -37,7 +37,7 @@ class ProductBase(BaseModel):
     owner: str
     img: Optional[str] = ""
     contractAddress: str = ""
-    token_id: str = ""
+    tokenId: str = ""
     in_stock: bool = True
 
 
@@ -53,7 +53,7 @@ class Product(SQLModel, table=True):
     owner: str = Field(min_length=42, max_length=42) 
     img: Optional[str] = Field(default=None, sa_column=Column(LONGTEXT))
     contractAddress: str = Field(min_length=42, max_length=42)
-    token_id: str = Field(min_length=1, max_length=100)
+    tokenId: str = Field(min_length=1, max_length=100)
     in_stock: bool = Field(default=True)
     
 

@@ -8,7 +8,7 @@ load_dotenv(dotenv_path)
 # MySQL Workbench default settings
 DB_HOSTNAME = os.getenv("DB_HOSTNAME", "localhost")
 DB_USERNAME = os.getenv("DB_USERNAME", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "a"    )  # Your MySQL password
+DB_PASSWORD = os.getenv("DB_PASSWORD", ""    )  # Your MySQL password
 DB_NAME = os.getenv("DB_NAME", "mysql")
 DB_PORT = os.getenv("DB_PORT", "3306")
 

@@ -20,6 +20,8 @@ const Shop = () => {
   const [purchaseLoading, setPurchaseLoading] = useState(false);
   const [purchaseError, setPurchaseError] = useState(null);
 
+  
+
   const bgImage = `${process.env.PUBLIC_URL}/background.png`;
 
   const homeStyle = {
@@ -122,34 +124,18 @@ const Shop = () => {
     boxShadow: "3px 3px 8px rgba(0, 0, 0, 0.3)",
   };
 
-  // Initialize Web3 connection
   useEffect(() => {
-    const initWeb3 = async () => {
+    const fetchProducts = async () => {
       try {
-        // Check if MetaMask is installed
-        if (typeof window.ethereum !== "undefined") {
-          // Request account access
-          const accounts = await window.ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          setAccount(accounts[0]);
-
-          // Initialize contract (you'll need to set this up with your contract address and ABI)
-          // const provider = new ethers.providers.Web3Provider(window.ethereum);
-          // const signer = provider.getSigner();
-          // const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-          // setContract(contract);
-        } else {
-          console.error("MetaMask not found");
-        }
-      } catch (error) {
-        console.error("Error initializing Web3:", error);
-      } finally {
-        setWeb3Loading(false);
+        const response = await axios.get("/api/products"); // Adjust endpoint if needed
+        setProducts(response.data.content);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to load products");
+        setLoading(false);
       }
     };
-
-    initWeb3();
+    fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -188,6 +174,8 @@ const Shop = () => {
         setWeb3Loading(false);
       }
     };
+
+    
 
     initWeb3();
   }, []);

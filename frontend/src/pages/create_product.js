@@ -207,7 +207,7 @@ const CreateProduct = () => {
       owner: walletAddress,
       img: image || "",
       contractAddress: generateTokenID(42),
-      token_id: generateTokenID(15), // ← Changed from tokenId to token_id
+      tokenId: generateTokenID(15),
       in_stock: true,
     };
 

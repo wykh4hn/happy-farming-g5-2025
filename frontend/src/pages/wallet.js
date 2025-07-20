@@ -17,17 +17,25 @@ function Wallet() {
 
   // Button handler button for handling a
   // request event for metamask
-  const btnhandler = () => {
-    // Asking if metamask is already present or not
-    if (window.ethereum) {
-      // res[0] for fetching a first wallet
-      window.ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then((res) => accountChangeHandler(res[0]));
-    } else {
-      alert("install metamask extension!!");
+const [isConnecting, setIsConnecting] = useState(false);
+
+const btnhandler = async () => {
+  if (window.ethereum) {
+    if (isConnecting) return; // Prevent multiple clicks
+    setIsConnecting(true);
+    try {
+      const res = await window.ethereum.request({ method: "eth_requestAccounts" });
+      accountChangeHandler(res[0]);
+    } catch (error) {
+      console.error("MetaMask connection error:", error);
+      alert(error.message || "Failed to connect wallet.");
+    } finally {
+      setIsConnecting(false);
     }
-  };
+  } else {
+    alert("Please install the MetaMask extension!");
+  }
+};
 
   // getbalance function for getting a balance in
   // a right format with help of ethers
