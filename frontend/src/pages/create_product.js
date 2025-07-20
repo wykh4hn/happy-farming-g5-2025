@@ -212,18 +212,27 @@ const CreateProduct = () => {
       in_stock: true,
     };
 
-      console.log("Saving to database:", newProduct);
+    console.log("Sending product data:", newProduct);
 
-      const response = await axios.post("/api/create", newProduct, {
-        headers: { "Content-Type": "application/json" },
+    axios
+      .post("/api/create", newProduct, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        alert("Product created successfully!");
+        navigate("/shop");
+      })
+      .catch((error) => {
+        console.error("Full error:", error.response?.data || error.message);
+        alert(
+          "Error creating product: " +
+            (error.response?.data?.detail || error.message)
+        );
       });
+  };
 
-      alert("Product created successfully on blockchain and database!");
-      navigate("/shop");
-    } catch (error) {
-      console.error("Product creation failed:", error);
-      alert("Error creating product: " + (error.reason || error.message));
-    }
   };
 
   return (
