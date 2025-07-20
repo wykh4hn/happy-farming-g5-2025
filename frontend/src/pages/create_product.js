@@ -200,14 +200,14 @@ const CreateProduct = () => {
       name: productName.trim(),
       description: description.trim() || "No description available",
       price: parseFloat(price) || 0,
-      currency: currency || "ETH",
+      currency: "ETH",
       quantity: parseInt(quantity) || 1,
       asset_type: "NFT",
       category: category || "Other",
-      owner: walletAddress, // This should now have a value
+      owner: walletAddress,
       img: image || "",
       contractAddress: generateTokenID(42),
-      token_id: generateTokenID(15),
+      token_id: generateTokenID(15), // ← Changed from tokenId to token_id
       in_stock: true,
     };
 
