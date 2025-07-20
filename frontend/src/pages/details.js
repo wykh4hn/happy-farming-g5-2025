@@ -112,14 +112,24 @@ const Detail = () => {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
 
+      // Fix: Extract the ABI array from the imported JSON
+      const contractABI = ContractABI.abi;
+
+      if (!contractABI || !Array.isArray(contractABI)) {
+        throw new Error("Contract ABI is not available or not an array");
+      }
+
       const contract = new ethers.Contract(
         product.contractAddress,
-        ContractABI,
+        contractABI, // Use the extracted ABI array instead of ContractABI
         signer
       );
 
-      const tx = await contract.buy({
-        value: ethers.parseEther(product.price),
+      // Fix: Convert price to string before parsing to Wei
+      const priceString = product.price.toString();
+
+      const tx = await contract.buyProduct(parseInt(product.token_id), {
+        value: ethers.parseEther(priceString), // Convert to string first
       });
 
       await tx.wait();

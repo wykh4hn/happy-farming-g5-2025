@@ -141,10 +141,12 @@ const Shop = () => {
           return;
         }
 
+        const contractABI = ContractData.abi;
+
         console.log("Contract Data type:", typeof ContractData);
         console.log("Contract Address:", ContractData?.address);
         console.log("ABI type:", typeof ContractData?.abi);
-        console.log("ABI isArray:", Array.isArray(ContractData?.abi));
+        console.log("ABI isArray:", Array.isArray(contractABI));
         console.log("ABI length:", ContractData?.abi?.length);
 
         if (typeof window.ethereum !== "undefined") {
@@ -159,7 +161,7 @@ const Shop = () => {
           if (ContractData?.address && Array.isArray(ContractData?.abi)) {
             const contract = new ethers.Contract(
               ContractData.address,
-              ContractData.abi,
+              contractABI,
               signer
             );
             setContract(contract);
@@ -221,7 +223,7 @@ const Shop = () => {
       }
     };
 
-    fetchProducts();
+    fetchProducts(); // <-- This line was missing!
   }, []);
 
   // Purchase function
