@@ -3,7 +3,8 @@ from sqlmodel import SQLModel, Field
 from pydantic import BaseModel
 from datetime import datetime
 
-from sqlalchemy import TEXT, Column
+from sqlalchemy import  Column, TEXT
+from sqlalchemy.dialects.mysql import LONGTEXT
 from typing import Optional
 
 # Product Models
@@ -42,7 +43,7 @@ class Product(SQLModel, table=True):
     asset_type: str = Field(default="digital", max_length=50)
     category: str = Field(default="Other", max_length=50)
     owner: str = Field(min_length=42, max_length=42) 
-    img: Optional[str] = Field(default=None, max_length=50000)
+    img: Optional[str] = Field(default=None, sa_column=Column(LONGTEXT))
     contractAddress: str = Field(min_length=42, max_length=42)
     token_id: str = Field(min_length=1, max_length=100, primary_key=True)
 

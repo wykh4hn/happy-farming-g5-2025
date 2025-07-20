@@ -119,23 +119,35 @@ const CreateProduct = () => {
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      const options = {
-        maxSizeMB: 0.1 / 100, // Maximum size in MB
-        maxWidthOrHeight: 800, // Maximum width or height
-        useWebWorker: true, // Use web worker for better performance
-        fileType: "image/jpeg", // Convert to JPEG for better compression
-      };
+      try {
+        console.log("Original file size:", file.size / 1024 / 1024, "MB");
 
-      const compressedFile = await imageCompression(file, options);
-      console.log(
-        "Compressed file size:",
-        compressedFile.size / 1024 / 1024,
-        "MB"
-      );
+        const options = {
+          maxSizeMB: 0.05, // 500KB max (was too small before)
+          maxWidthOrHeight: 400, // Reasonable dimensions
+          useWebWorker: true,
+          fileType: "image/jpeg",
+          quality: 0.5, // Good quality
+        };
 
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => setImage(reader.result);
+        const compressedFile = await imageCompression(file, options);
+        console.log(
+          "Compressed file size:",
+          compressedFile.size / 1024 / 1024,
+          "MB"
+        );
+
+        // Convert to base64
+        const reader = new FileReader();
+        reader.readAsDataURL(compressedFile); // Use compressed file
+        reader.onloadend = () => {
+          console.log("Base64 length:", reader.result.length);
+          setImage(reader.result);
+        };
+      } catch (error) {
+        console.error("Error compressing image:", error);
+        alert("Error processing image. Please try a smaller image.");
+      }
     }
   };
 
