@@ -4,7 +4,16 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { ethers } from "ethers";
 import "../styles/shop.css";
-import ContractData from "../contracts/Marketplace.json";
+let ContractData;
+try {
+  ContractData = require("../contracts/Marketplace.json");
+} catch (e) {
+  console.error("Failed to load contract data:", e);
+  ContractData = {
+    address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    abi: [],
+  };
+}
 
 const Shop = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -126,24 +135,48 @@ const Shop = () => {
   useEffect(() => {
     const initWeb3 = async () => {
       try {
-        // Check if MetaMask is installed
+        if (!ContractData) {
+          console.error("Contract data is undefined!");
+          setError("Contract data missing");
+          return;
+        }
+
+        console.log("Contract Data type:", typeof ContractData);
+        console.log("Contract Address:", ContractData?.address);
+        console.log("ABI type:", typeof ContractData?.abi);
+        console.log("ABI isArray:", Array.isArray(ContractData?.abi));
+        console.log("ABI length:", ContractData?.abi?.length);
+
         if (typeof window.ethereum !== "undefined") {
-          // Request account access
           const accounts = await window.ethereum.request({
             method: "eth_requestAccounts",
           });
           setAccount(accounts[0]);
 
-          // Initialize contract (you'll need to set this up with your contract address and ABI)
-          // const provider = new ethers.providers.Web3Provider(window.ethereum);
-          // const signer = provider.getSigner();
-          // const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-          // setContract(contract);
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const signer = await provider.getSigner();
+
+          if (ContractData?.address && Array.isArray(ContractData?.abi)) {
+            const contract = new ethers.Contract(
+              ContractData.address,
+              ContractData.abi,
+              signer
+            );
+            setContract(contract);
+            console.log("Contract initialized successfully");
+          } else {
+            console.error("Invalid contract data:", {
+              hasAddress: !!ContractData?.address,
+              abiIsArray: Array.isArray(ContractData?.abi),
+            });
+            setError("Contract configuration error");
+          }
         } else {
-          console.error("MetaMask not found");
+          setError("MetaMask not found");
         }
       } catch (error) {
         console.error("Error initializing Web3:", error);
+        setError(`Web3 error: ${error.message}`);
       } finally {
         setWeb3Loading(false);
       }
@@ -153,58 +186,80 @@ const Shop = () => {
   }, []);
 
   useEffect(() => {
-    const initWeb3 = async () => {
+    const fetchProducts = async () => {
       try {
-        if (typeof window.ethereum !== "undefined") {
-          const accounts = await window.ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          setAccount(accounts[0]);
+        setLoading(true);
+        setError(null);
 
-          // Initialize contract with proper error handling
-          const provider = new ethers.BrowserProvider(window.ethereum);
-          const signer = await provider.getSigner();
+        console.log("Fetching products from API...");
+        const response = await axios.get("/api/products");
 
-          // Check if ContractData has the expected structure
-          console.log("Contract Data:", ContractData);
+        console.log("API Response:", response.data);
 
-          if (ContractData && ContractData.address && ContractData.abi) {
-            const contract = new ethers.Contract(
-              ContractData.address,
-              ContractData.abi,
-              signer
-            );
-            setContract(contract);
-            console.log("Contract initialized successfully");
-          } else {
-            console.error("Invalid contract data structure");
-          }
+        if (
+          response.data &&
+          response.data.content &&
+          Array.isArray(response.data.content)
+        ) {
+          setProducts(response.data.content);
+          console.log(
+            `Successfully loaded ${response.data.content.length} products`
+          );
         } else {
-          console.error("MetaMask not found");
+          console.warn("Invalid API response structure:", response.data);
+          setProducts([]);
+          setError("Invalid product data received");
         }
       } catch (error) {
-        console.error("Error initializing Web3:", error);
+        console.error("Error fetching products:", error);
+        setError(
+          "Failed to load products. Please check if the backend is running."
+        );
+        setProducts([]);
       } finally {
-        setWeb3Loading(false);
+        setLoading(false);
       }
     };
 
-    initWeb3();
+    fetchProducts();
   }, []);
 
   // Purchase function
-  const buyProduct = async (productId, priceEth) => {
+  const buyProduct = async (databaseProductId, priceEth) => {
     setPurchaseLoading(true);
     setPurchaseError(null);
 
     try {
+      console.log("Starting purchase process...");
+
       if (!contract) {
         throw new Error("Contract not initialized");
       }
 
-      console.log("Initiating blockchain transaction...");
+      if (!ContractData || !ContractData.abi) {
+        throw new Error("Contract ABI not available");
+      }
 
-      // Call the correct contract method name from your Solidity contract
+      console.log("Getting product from database:", databaseProductId);
+      const productResponse = await axios.get(
+        `/api/products/${databaseProductId}`
+      );
+      const product = productResponse.data.content;
+
+      console.log("Product data:", product);
+      const blockchainProductId = product.token_id;
+
+      if (!blockchainProductId) {
+        throw new Error("Product not found on blockchain");
+      }
+
+      console.log("Buying product on blockchain:", blockchainProductId);
+      console.log("Price in ETH:", priceEth);
+
+      // Make sure blockchainProductId is a number
+      const productId = parseInt(blockchainProductId) || 1;
+
+      console.log("Calling contract.buyProduct with ID:", productId);
       const tx = await contract.buyProduct(productId, {
         value: ethers.parseEther(priceEth.toString()),
       });
@@ -213,14 +268,14 @@ const Shop = () => {
       await tx.wait();
       console.log("Transaction confirmed");
 
-      // Record in database...
+      // Record in database
       const response = await fetch("/api/purchase", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          product_id: productId,
+          product_id: databaseProductId,
           transaction_hash: tx.hash,
           buyer_address: account,
           amount_eth: parseFloat(priceEth),
@@ -235,7 +290,18 @@ const Shop = () => {
       return { success: true, txHash: tx.hash, purchase: result };
     } catch (error) {
       console.error("Purchase failed:", error);
-      setPurchaseError(error.message);
+
+      // Handle specific errors
+      if (error.code === "CALL_EXCEPTION") {
+        setPurchaseError(
+          "Contract call failed - product may not exist on blockchain"
+        );
+      } else if (error.message.includes("ABI")) {
+        setPurchaseError("Contract ABI error - check console for details");
+      } else {
+        setPurchaseError(error.message);
+      }
+
       return { success: false, error: error.message };
     } finally {
       setPurchaseLoading(false);

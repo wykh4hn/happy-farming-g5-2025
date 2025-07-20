@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import axios from "axios";
 
 import imageCompression from "browser-image-compression";
+import { ethers } from "ethers";
+import ContractData from "../contracts/Marketplace.json";
 
 const CreateProduct = () => {
   const bgImage = `${process.env.PUBLIC_URL}/background1.png`;
@@ -186,7 +188,6 @@ const CreateProduct = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // Force wallet connection if not already connected
     let walletAddress = address;
     if (!walletAddress) {
       walletAddress = await getOwner();
@@ -196,40 +197,77 @@ const CreateProduct = () => {
       }
     }
 
-    const newProduct = {
-      name: productName.trim(),
-      description: description.trim() || "No description available",
-      price: parseFloat(price) || 0,
-      currency: "ETH",
-      quantity: parseInt(quantity) || 1,
-      asset_type: "NFT",
-      category: category || "Other",
-      owner: walletAddress,
-      img: image || "",
-      contractAddress: generateTokenID(42),
-      token_id: generateTokenID(15), // ← Changed from tokenId to token_id
-      in_stock: true,
-    };
+    try {
+      // Step 1: Create product on blockchain first
+      console.log("Creating product on blockchain...");
 
-    console.log("Sending product data:", newProduct);
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(
+        ContractData.address,
+        ContractData.abi,
+        signer
+      );
 
-    axios
-      .post("/api/create", newProduct, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        alert("Product created successfully!");
-        navigate("/shop");
-      })
-      .catch((error) => {
-        console.error("Full error:", error.response?.data || error.message);
-        alert(
-          "Error creating product: " +
-            (error.response?.data?.detail || error.message)
-        );
+      // Convert price to Wei
+      const priceInWei = ethers.parseEther(price.toString());
+
+      // Create product on blockchain
+      const tx = await contract.createProduct(
+        productName.trim(),
+        description.trim() || "No description available",
+        priceInWei
+      );
+
+      console.log("Transaction sent:", tx.hash);
+      await tx.wait();
+      console.log("Product created on blockchain");
+
+      // Get the product ID from the transaction receipt
+      const receipt = await tx.wait();
+      const productCreatedEvent = receipt.logs.find((log) => {
+        try {
+          const parsed = contract.interface.parseLog(log);
+          return parsed.name === "ProductCreated";
+        } catch {
+          return false;
+        }
       });
+
+      let blockchainProductId = null;
+      if (productCreatedEvent) {
+        const parsed = contract.interface.parseLog(productCreatedEvent);
+        blockchainProductId = parsed.args.productId.toString();
+      }
+
+      // Step 2: Save to database with blockchain product ID
+      const newProduct = {
+        name: productName.trim(),
+        description: description.trim() || "No description available",
+        price: parseFloat(price) || 0,
+        currency: "ETH",
+        quantity: parseInt(quantity) || 1,
+        asset_type: "NFT",
+        category: category || "Other",
+        owner: walletAddress,
+        img: image || "",
+        contractAddress: ContractData.address,
+        token_id: blockchainProductId || generateTokenID(15),
+        in_stock: true,
+      };
+
+      console.log("Saving to database:", newProduct);
+
+      const response = await axios.post("/api/create", newProduct, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      alert("Product created successfully on blockchain and database!");
+      navigate("/shop");
+    } catch (error) {
+      console.error("Product creation failed:", error);
+      alert("Error creating product: " + (error.reason || error.message));
+    }
   };
 
   return (

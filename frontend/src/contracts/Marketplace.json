@@ -1,255 +1,129 @@
 {
-  "address": "0x066A3bdb0dD8b743Df7D0B69bb69DA3285f97507",
+  "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
   "abi": [
     {
-      "type": "event",
-      "anonymous": false,
-      "name": "ProductCreated",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "productId",
-          "indexed": true
-        },
-        {
-          "type": "string",
-          "name": "name",
-          "indexed": false
-        },
-        {
-          "type": "uint256",
-          "name": "price",
-          "indexed": false
-        }
-      ]
-    },
-    {
-      "type": "event",
-      "anonymous": false,
-      "name": "ProductPurchased",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "purchaseId",
-          "indexed": true
-        },
-        {
-          "type": "uint256",
-          "name": "productId",
-          "indexed": true
-        },
-        {
-          "type": "address",
-          "name": "buyer",
-          "indexed": true
-        },
-        {
-          "type": "uint256",
-          "name": "amount",
-          "indexed": false
-        }
-      ]
-    },
-    {
-      "type": "function",
-      "name": "buyProduct",
-      "constant": false,
-      "stateMutability": "payable",
-      "payable": true,
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "productId"
-        }
-      ],
-      "outputs": []
-    },
-    {
-      "type": "function",
-      "name": "createProduct",
-      "constant": false,
-      "payable": false,
-      "inputs": [
-        {
-          "type": "string",
-          "name": "name"
-        },
-        {
-          "type": "string",
-          "name": "description"
-        },
-        {
-          "type": "uint256",
-          "name": "price"
-        }
-      ],
-      "outputs": []
-    },
-    {
-      "type": "function",
-      "name": "getPurchases",
-      "constant": true,
+      "inputs": [],
+      "name": "nextProductId",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
-      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "nextPurchaseId",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
-        {
-          "type": "address",
-          "name": "user"
-        }
+        { "internalType": "string", "name": "name", "type": "string" },
+        { "internalType": "string", "name": "description", "type": "string" },
+        { "internalType": "uint256", "name": "price", "type": "uint256" }
       ],
+      "name": "createProduct",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "uint256", "name": "productId", "type": "uint256" }
+      ],
+      "name": "buyProduct",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "user", "type": "address" }
+      ],
+      "name": "getPurchases",
       "outputs": [
         {
-          "type": "tuple[]",
-          "name": "",
           "components": [
             {
-              "type": "uint256",
-              "name": "purchaseId"
+              "internalType": "uint256",
+              "name": "purchaseId",
+              "type": "uint256"
             },
             {
-              "type": "uint256",
-              "name": "productId"
+              "internalType": "uint256",
+              "name": "productId",
+              "type": "uint256"
             },
+            { "internalType": "address", "name": "buyer", "type": "address" },
             {
-              "type": "address",
-              "name": "buyer"
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
             },
-            {
-              "type": "uint256",
-              "name": "timestamp"
-            },
-            {
-              "type": "uint256",
-              "name": "amount"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "function",
-      "name": "nextProductId",
-      "constant": true,
-      "stateMutability": "view",
-      "payable": false,
-      "inputs": [],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": ""
-        }
-      ]
-    },
-    {
-      "type": "function",
-      "name": "nextPurchaseId",
-      "constant": true,
-      "stateMutability": "view",
-      "payable": false,
-      "inputs": [],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": ""
-        }
-      ]
-    },
-    {
-      "type": "function",
-      "name": "products",
-      "constant": true,
-      "stateMutability": "view",
-      "payable": false,
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": ""
+            { "internalType": "uint256", "name": "amount", "type": "uint256" }
+          ],
+          "internalType": "struct Marketplace.Purchase[]",
+          "name": "",
+          "type": "tuple[]"
         }
       ],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "name": "name"
-        },
-        {
-          "type": "string",
-          "name": "description"
-        },
-        {
-          "type": "uint256",
-          "name": "price"
-        },
-        {
-          "type": "address",
-          "name": "seller"
-        },
-        {
-          "type": "bool",
-          "name": "active"
-        }
-      ]
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      "type": "function",
-      "name": "purchases",
-      "constant": true,
-      "stateMutability": "view",
-      "payable": false,
+      "anonymous": false,
       "inputs": [
         {
-          "type": "uint256",
-          "name": ""
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "productId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
         }
       ],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": "purchaseId"
-        },
-        {
-          "type": "uint256",
-          "name": "productId"
-        },
-        {
-          "type": "address",
-          "name": "buyer"
-        },
-        {
-          "type": "uint256",
-          "name": "timestamp"
-        },
-        {
-          "type": "uint256",
-          "name": "amount"
-        }
-      ]
+      "name": "ProductCreated",
+      "type": "event"
     },
     {
-      "type": "function",
-      "name": "userPurchases",
-      "constant": true,
-      "stateMutability": "view",
-      "payable": false,
+      "anonymous": false,
       "inputs": [
         {
-          "type": "address",
-          "name": ""
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "purchaseId",
+          "type": "uint256"
         },
         {
-          "type": "uint256",
-          "name": ""
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "productId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
         }
       ],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": ""
-        }
-      ]
+      "name": "ProductPurchased",
+      "type": "event"
     }
   ]
 }
