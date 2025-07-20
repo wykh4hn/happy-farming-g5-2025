@@ -1,0 +1,41 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "C:\\Users\\duc\\Documents\\group-project-may-2025-gr5\\backend\\dApp\\contracts\\Marketplace.sol": {
+      "lastModificationDate": 1752812059226,
+      "contentHash": "129f088f1918842de343622c0b0e5b3c",
+      "sourceName": "contracts/Marketplace.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Marketplace"
+      ]
+    }
+  }
+}

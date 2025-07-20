@@ -11,7 +11,7 @@ const Shop = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Web3 states
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState(null);
@@ -21,126 +21,128 @@ const Shop = () => {
 
   const bgImage = `${process.env.PUBLIC_URL}/background.png`;
 
-    const homeStyle = {
-        backgroundImage: `url(${bgImage})`,
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-        minHeight: "100vh",
-    };
+  const homeStyle = {
+    backgroundImage: `url(${bgImage})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+    minHeight: "100vh",
+  };
 
-    const headerContainerStyle = {
-        position: "absolute",
-        top: "90px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "80%",
-        background: "rgba(188, 222, 214, 0.9)",
-        padding: "20px",
-        borderRadius: "10px",
-        boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-        textAlign: "center",
-    };
+  const headerContainerStyle = {
+    position: "absolute",
+    top: "90px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "80%",
+    background: "rgba(188, 222, 214, 0.9)",
+    padding: "20px",
+    borderRadius: "10px",
+    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+    textAlign: "center",
+  };
 
-    const searchContainerStyle = {
-        marginTop: "20px",
-        display: "flex",
-        justifyContent: "center",
-        gap: "20px"
-    };
+  const searchContainerStyle = {
+    marginTop: "20px",
+    display: "flex",
+    justifyContent: "center",
+    gap: "20px",
+  };
 
-    const inputStyle = {
-        padding: "10px",
-        fontSize: "16px",
-        borderRadius: "5px",
-        border: "1px solid #ccc",
-        width: "200px"
-    };
+  const inputStyle = {
+    padding: "10px",
+    fontSize: "16px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+    width: "200px",
+  };
 
-    const selectStyle = {
-        padding: "10px",
-        fontSize: "16px",
-        borderRadius: "5px",
-        border: "1px solid #ccc",
-        width: "200px",
-    };
+  const selectStyle = {
+    padding: "10px",
+    fontSize: "16px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+    width: "200px",
+  };
 
-    const productsContainerStyle = {
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "center",
-        marginTop: "290px", 
-    };
+  const productsContainerStyle = {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    marginTop: "290px",
+  };
 
-    const productStyle = {
-        background: "rgba(255, 255, 255, 0.8)",
-        margin: "10px",
-        padding: "20px",
-        borderRadius: "10px",
-        textAlign: "left",
-        width: "300px",
-        position: "relative",
-        paddingBottom: "60px", // More space for buttons
-    };
+  const productStyle = {
+    background: "rgba(255, 255, 255, 0.8)",
+    margin: "10px",
+    padding: "20px",
+    borderRadius: "10px",
+    textAlign: "left",
+    width: "300px",
+    position: "relative",
+    paddingBottom: "60px", // More space for buttons
+  };
 
-    const imgStyle = {
-        width: "100%",
-        height: "200px",
-        maxHeight: "200px",
-        display: "block",
-        objectFit: "cover",
-        borderRadius: "10px"
-    };
-    
-    const buttonStyle = {
-        position: "absolute",
-        bottom: "10px",
-        right: "10px",
-        backgroundColor: "rgba(188, 222, 214, 0.9)",
-        color: "black",
-        padding: "8px 15px",
-        borderRadius: "5px",
-        border: "none",
-        cursor: "pointer",
-        fontSize: "1rem",
-        boxShadow: "3px 3px 8px rgba(0, 0, 0, 0.3)"
-    };
+  const imgStyle = {
+    width: "100%",
+    height: "200px",
+    maxHeight: "200px",
+    display: "block",
+    objectFit: "cover",
+    borderRadius: "10px",
+  };
 
-    const buyButtonStyle = {
-        position: "absolute",
-        bottom: "10px",
-        right: "100px", // Position next to Details button
-        backgroundColor: "rgba(76, 175, 80, 0.9)",
-        color: "white",
-        padding: "8px 15px",
-        borderRadius: "5px",
-        border: "none",
-        cursor: "pointer",
-        fontSize: "1rem",
-        boxShadow: "3px 3px 8px rgba(0, 0, 0, 0.3)"
-    };
+  const buttonStyle = {
+    position: "absolute",
+    bottom: "10px",
+    right: "10px",
+    backgroundColor: "rgba(188, 222, 214, 0.9)",
+    color: "black",
+    padding: "8px 15px",
+    borderRadius: "5px",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "1rem",
+    boxShadow: "3px 3px 8px rgba(0, 0, 0, 0.3)",
+  };
+
+  const buyButtonStyle = {
+    position: "absolute",
+    bottom: "10px",
+    right: "100px", // Position next to Details button
+    backgroundColor: "rgba(76, 175, 80, 0.9)",
+    color: "white",
+    padding: "8px 15px",
+    borderRadius: "5px",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "1rem",
+    boxShadow: "3px 3px 8px rgba(0, 0, 0, 0.3)",
+  };
 
   // Initialize Web3 connection
   useEffect(() => {
     const initWeb3 = async () => {
       try {
         // Check if MetaMask is installed
-        if (typeof window.ethereum !== 'undefined') {
+        if (typeof window.ethereum !== "undefined") {
           // Request account access
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const accounts = await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
           setAccount(accounts[0]);
-          
+
           // Initialize contract (you'll need to set this up with your contract address and ABI)
           // const provider = new ethers.providers.Web3Provider(window.ethereum);
           // const signer = provider.getSigner();
           // const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
           // setContract(contract);
         } else {
-          console.error('MetaMask not found');
+          console.error("MetaMask not found");
         }
       } catch (error) {
-        console.error('Error initializing Web3:', error);
+        console.error("Error initializing Web3:", error);
       } finally {
         setWeb3Loading(false);
       }
@@ -152,7 +154,7 @@ const Shop = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("/api/products") 
+      .get("/api/products")
       .then((response) => {
         if (response.data && response.data.content) {
           setProducts(response.data.content);
@@ -173,51 +175,50 @@ const Shop = () => {
   const buyProduct = async (productId, priceEth) => {
     setPurchaseLoading(true);
     setPurchaseError(null);
-    
+
     try {
       // 1. Blockchain transaction
-      console.log('Initiating blockchain transaction...');
-      const tx = await contract.purchaseProduct(productId, { 
-        value: ethers.parseEther(priceEth.toString()) 
+      console.log("Initiating blockchain transaction...");
+      const tx = await contract.purchaseProduct(productId, {
+        value: ethers.parseEther(priceEth.toString()),
       });
-      
-      console.log('Transaction sent:', tx.hash);
-      
+
+      console.log("Transaction sent:", tx.hash);
+
       // 2. Wait for transaction confirmation
       await tx.wait();
-      console.log('Transaction confirmed');
-      
+      console.log("Transaction confirmed");
+
       // 3. Record in FastAPI database
-      const response = await fetch('/api/purchase', {
-        method: 'POST',
+      const response = await fetch("/api/purchase", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           product_id: productId,
           transaction_hash: tx.hash,
           buyer_address: account,
-          amount_eth: parseFloat(priceEth)
-        })
+          amount_eth: parseFloat(priceEth),
+        }),
       });
-      
+
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
-      
+
       const result = await response.json();
-      console.log('Purchase recorded:', result);
-      
+      console.log("Purchase recorded:", result);
+
       return { success: true, txHash: tx.hash, purchase: result };
-      
     } catch (error) {
-      console.error('Purchase failed:', error);
-      
+      console.error("Purchase failed:", error);
+
       let errorMessage = error.message;
       if (error.code === 4001) {
-        errorMessage = 'Transaction rejected by user';
+        errorMessage = "Transaction rejected by user";
       }
-      
+
       setPurchaseError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
@@ -227,14 +228,14 @@ const Shop = () => {
 
   const handlePurchase = async (productId, price) => {
     if (!contract || !account) {
-      alert('Please connect your wallet first');
+      alert("Please connect your wallet first");
       return;
     }
 
     const result = await buyProduct(productId, price);
-    
+
     if (result.success) {
-      alert('Purchase successful!');
+      alert("Purchase successful!");
       // Optionally refresh products or update UI
     } else {
       alert(`Purchase failed: ${result.error}`);
@@ -243,9 +244,7 @@ const Shop = () => {
 
   const filteredProducts = products.filter((product) => {
     const matchSearch =
-      (product.name || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
+      (product.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
       (product.description || "")
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
@@ -255,25 +254,26 @@ const Shop = () => {
   });
 
   if (loading) return <div>Loading...</div>;
-  
 
   return (
     <>
       <MainNav />
       <div style={homeStyle} className="home">
         {/* Header + Search & Category */}
-        <div style={headerContainerStyle}  id="header-container">
+        <div style={headerContainerStyle} id="header-container">
           <h1>SHOPPING WITH US</h1>
-          
+
           {/* Web3 Status */}
           {web3Loading ? (
             <p>Connecting to wallet...</p>
           ) : account ? (
-            <p>Connected: {account.slice(0, 6)}...{account.slice(-4)}</p>
+            <p>
+              Connected: {account.slice(0, 6)}...{account.slice(-4)}
+            </p>
           ) : (
             <p>Please connect your wallet</p>
           )}
-          
+
           <div className="search-container" style={searchContainerStyle}>
             <input
               type="text"
@@ -320,35 +320,47 @@ const Shop = () => {
               </p>
               <p>Quantity: {product.quantity}</p>
               <p>Asset Type: {product.assetType}</p>
-              <p>By: {product.owner}</p>
-              
+              <p>Token ID: {product.token_id}</p>
+              <p>
+                Owner:{" "}
+                {product.owner
+                  ? `${product.owner.slice(0, 6)}...${product.owner.slice(-4)}`
+                  : "Unknown"}
+              </p>
+
               {/* Purchase Button */}
               <button
                 style={buyButtonStyle}
                 onClick={() => handlePurchase(product.id, product.price)}
                 disabled={purchaseLoading || !contract || !account}
               >
-                {purchaseLoading ? 'Buying...' : 'Buy Now'}
+                {purchaseLoading ? "Buying..." : "Buy Now"}
               </button>
-              
-              <Link className="details-button" to={`/details/${product.id}`} style={buttonStyle}>
+
+              <Link
+                className="details-button"
+                to={`/details/${product.id}`}
+                style={buttonStyle}
+              >
                 Details
               </Link>
             </div>
           ))}
         </div>
-        
+
         {/* Error Display */}
         {purchaseError && (
-          <div style={{
-            position: 'fixed',
-            top: '20px',
-            right: '20px',
-            background: 'rgba(255, 0, 0, 0.8)',
-            color: 'white',
-            padding: '10px',
-            borderRadius: '5px'
-          }}>
+          <div
+            style={{
+              position: "fixed",
+              top: "20px",
+              right: "20px",
+              background: "rgba(255, 0, 0, 0.8)",
+              color: "white",
+              padding: "10px",
+              borderRadius: "5px",
+            }}
+          >
             {purchaseError}
           </div>
         )}

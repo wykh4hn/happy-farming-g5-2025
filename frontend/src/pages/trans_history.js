@@ -15,9 +15,10 @@ for (let i = 0; i < testN; i++) {
 for (let i = 0; i < testX.length; i++) {
   testY.push(Math.random() * 100);
 }
-{/*As i said, i use some parts of css quite lag can not load so i use this */}
+{
+  /*As i said, i use some parts of css quite lag can not load so i use this */
+}
 const TransactionHistory = () => {
-
   const headerStyle = {
     fontFamily: '"Abril Fatface", sans-serif',
     fontSize: "2.5em",
@@ -26,17 +27,17 @@ const TransactionHistory = () => {
     backgroundColor: "#f8f4eb",
     padding: "15px 40px",
     borderRadius: "50px",
-    position: "relative", 
+    position: "relative",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     width: "80%",
     margin: "30px auto",
-    marginTop: "110px" 
+    marginTop: "110px",
   };
 
   const chartRef = useRef(null);
-  
+
   useEffect(() => {
     // Clear previous chart
     d3.select(chartRef.current).selectAll("*").remove();
@@ -91,47 +92,12 @@ const TransactionHistory = () => {
       .call(d3.axisLeft(y));
   }, []);
 
-  const defaultHistory = [
-    { 
-      name: "LEAF MUSTARD", 
-      deducted: " - 24 USD", 
-      img: "https://garden.org/pics/2011-11-21/saltmarsh/25621f.jpg", 
-      quantity: "2", 
-      timestamp: new Date().toISOString(), 
-      id: Date.now(), 
-      status: "Purchased" },
-    { 
-      name: "RICE PADDY", 
-      deducted: " - 24 USD", 
-      img: "https://www.davaocatholicherald.com/wp-content/uploads/2018/04/rice-crop.jpg", 
-      quantity: "2", 
-      timestamp: new Date().toISOString(), 
-      id: Date.now() + 1, 
-      bought: true, 
-      status: "Purchased" },
-    { 
-      name: "MANGO", 
-      deducted: " - 24 USD", 
-      img: "https://www.freshknowledge.eu/upload/c8e39753-8916-4e3d-84be-c817f8ffac1a_shutterstock_107801765.jpg", 
-      quantity: "2", 
-      timestamp: new Date().toISOString(), 
-      id: Date.now() + 2, bought: false, 
-      status: "Purchased" },
-    { 
-      name: "RICE", 
-      deducted: " - 24 USD", 
-      img: "https://www.organicfacts.net/wp-content/uploads/rice-1.jpg", 
-      quantity: "2", 
-      timestamp: new Date().toISOString(), 
-      id: Date.now() + 1, 
-      bought: false, 
-      status: "Purchased" },
-  ];
+  const defaultHistory = [];
 
   return (
     <div>
       <MainNav />
-      
+
       <div id="transaction-history" className="main-content">
         <h1 style={headerStyle}>YOUR TRANSACTION HISTORY</h1>
         <p>View your recent spendings:</p>
@@ -143,18 +109,29 @@ const TransactionHistory = () => {
 
       <div id="transaction-history-info">
         <h2>Transaction History</h2>
-        <p>This is a simple line chart showing your recent transactions. The X-axis represents the transaction number, and the Y-axis represents the amount spent in each transaction.</p>
-        <p>You can use this chart to track your spending habits and make informed decisions about your purchases.</p>
+        <p>
+          This is a simple line chart showing your recent transactions. The
+          X-axis represents the transaction number, and the Y-axis represents
+          the amount spent in each transaction.
+        </p>
+        <p>
+          You can use this chart to track your spending habits and make informed
+          decisions about your purchases.
+        </p>
       </div>
 
       <div id="transaction-history-list">
         <h2>Recent Transactions</h2>
         <p>Your past transaction is here</p>
-        <br/>
+        <br />
         <div className="transaction-container">
           {defaultHistory.map((transaction) => (
             <div key={transaction.id} className="transaction-item">
-              <img src={transaction.img} alt={transaction.name} className="transaction-img" />
+              <img
+                src={transaction.img}
+                alt={transaction.name}
+                className="transaction-img"
+              />
               <div>
                 <h4>{transaction.name}</h4>
                 <p>{transaction.deducted}</p>

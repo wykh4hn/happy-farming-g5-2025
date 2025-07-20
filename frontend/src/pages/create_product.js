@@ -283,7 +283,7 @@ const CreateProduct = () => {
               required
             />
 
-            <label>Price:</label>
+            <label>Price in ETH:</label>
             <input
               type="number"
               placeholder="Enter amount"
