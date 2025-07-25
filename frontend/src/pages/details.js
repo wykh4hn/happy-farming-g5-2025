@@ -104,7 +104,6 @@ const Detail = () => {
     }
     setShowPopup(true);
   };
-
   const handleConfirm = async () => {
     try {
       if (!window.ethereum) throw new Error("MetaMask not found");
@@ -119,20 +118,66 @@ const Detail = () => {
         throw new Error("Contract ABI is not available or not an array");
       }
 
+      // Fix: Use the deployed contract address from ContractABI instead of product.contractAddress
+      const contractAddress = ContractABI.address;
+      if (!contractAddress) {
+        throw new Error("Contract address not found in deployment file");
+      }
+
+      console.log("Using contract address:", contractAddress);
+
       const contract = new ethers.Contract(
-        product.contractAddress,
-        contractABI, // Use the extracted ABI array instead of ContractABI
+        contractAddress, // Use the deployed contract address
+        contractABI,
         signer
       );
+
+      // Fix: Use the correct token ID field and validate
+      const tokenId = product.tokenId || product.token_id;
+      if (!tokenId) {
+        throw new Error("Product token ID not found");
+      }
+
+      const parsedTokenId = parseInt(tokenId);
+      if (isNaN(parsedTokenId)) {
+        throw new Error(`Invalid token ID: ${tokenId}`);
+      }
+
+      console.log("Using token ID:", parsedTokenId);
 
       // Fix: Convert price to string before parsing to Wei
       const priceString = product.price.toString();
 
-      const tx = await contract.buyProduct(parseInt(product.token_id), {
-        value: ethers.parseEther(priceString), // Convert to string first
+      const tx = await contract.buyProduct(parsedTokenId, {
+        value: ethers.parseEther(priceString),
       });
 
-      await tx.wait();
+      console.log("Transaction sent:", tx.hash);
+      const receipt = await tx.wait();
+      console.log("Transaction confirmed");
+
+      // Add purchase to database after successful blockchain transaction
+      const response = await fetch("/api/purchase", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product_id: parseInt(id), // Use the product ID from URL params
+          transaction_hash: tx.hash,
+          buyer_address: account,
+          amount_eth: parseFloat(product.price),
+          block_number: receipt.blockNumber,
+          gas_used: receipt.gasUsed,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const purchaseResult = await response.json();
+      console.log("Purchase recorded in database:", purchaseResult);
 
       alert(`✅ You successfully purchased ${product.name}!`);
       alert(`💸 ${product.price} ${product.currency} has been transferred.`);
@@ -144,7 +189,13 @@ const Detail = () => {
       setShowPopup(false);
     } catch (error) {
       console.error("Purchase failed:", error);
-      alert(`❌ Purchase failed: ${error.message}`);
+      if (error.message.includes("API error")) {
+        alert(
+          `❌ Purchase completed on blockchain but failed to record in database: ${error.message}`
+        );
+      } else {
+        alert(`❌ Purchase failed: ${error.message}`);
+      }
     }
   };
 

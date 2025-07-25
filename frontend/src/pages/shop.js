@@ -29,8 +29,6 @@ const Shop = () => {
   const [purchaseLoading, setPurchaseLoading] = useState(false);
   const [purchaseError, setPurchaseError] = useState(null);
 
-  
-
   const bgImage = `${process.env.PUBLIC_URL}/background.png`;
 
   const homeStyle = {
@@ -133,48 +131,46 @@ const Shop = () => {
     boxShadow: "3px 3px 8px rgba(0, 0, 0, 0.3)",
   };
 
-
-
-useEffect(() => {
-  const initWeb3 = async () => {
-    try {
-      if (typeof window.ethereum !== "undefined") {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        setAccount(accounts[0]);
-
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
-
-        if (ContractData?.address && Array.isArray(ContractData?.abi)) {
-          const contract = new ethers.Contract(
-            ContractData.address,
-            ContractData.abi, // <-- use ContractData.abi here
-            signer
-          );
-          setContract(contract);
-          console.log("Contract initialized successfully");
-        } else {
-          console.error("Invalid contract data:", {
-            hasAddress: !!ContractData?.address,
-            abiIsArray: Array.isArray(ContractData?.abi),
+  useEffect(() => {
+    const initWeb3 = async () => {
+      try {
+        if (typeof window.ethereum !== "undefined") {
+          const accounts = await window.ethereum.request({
+            method: "eth_requestAccounts",
           });
-          setError("Contract configuration error");
-        }
-      } else {
-        setError("MetaMask not found");
-      }
-    } catch (error) {
-      console.error("Error initializing Web3:", error);
-      setError(`Web3 error: ${error.message}`);
-    } finally {
-      setWeb3Loading(false);
-    }
-  };
+          setAccount(accounts[0]);
 
-  initWeb3();
-}, []);
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const signer = await provider.getSigner();
+
+          if (ContractData?.address && Array.isArray(ContractData?.abi)) {
+            const contract = new ethers.Contract(
+              ContractData.address,
+              ContractData.abi, // <-- use ContractData.abi here
+              signer
+            );
+            setContract(contract);
+            console.log("Contract initialized successfully");
+          } else {
+            console.error("Invalid contract data:", {
+              hasAddress: !!ContractData?.address,
+              abiIsArray: Array.isArray(ContractData?.abi),
+            });
+            setError("Contract configuration error");
+          }
+        } else {
+          setError("MetaMask not found");
+        }
+      } catch (error) {
+        console.error("Error initializing Web3:", error);
+        setError(`Web3 error: ${error.message}`);
+      } finally {
+        setWeb3Loading(false);
+      }
+    };
+
+    initWeb3();
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -270,6 +266,11 @@ useEffect(() => {
           transaction_hash: tx.hash,
           buyer_address: account,
           amount_eth: parseFloat(priceEth),
+          // Fix: Convert BigInt values
+          block_number: receipt?.blockNumber
+            ? Number(receipt.blockNumber)
+            : null,
+          gas_used: receipt?.gasUsed ? Number(receipt.gasUsed) : null,
         }),
       });
 

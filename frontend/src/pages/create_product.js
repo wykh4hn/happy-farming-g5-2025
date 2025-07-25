@@ -213,27 +213,28 @@ const CreateProduct = () => {
         in_stock: true,
       };
 
-    console.log("Sending product data:", newProduct);
+      console.log("Sending product data:", newProduct);
 
-    axios
-      .post("/api/create", newProduct, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        alert("Product created successfully!");
-        navigate("/shop");
-      })
-      .catch((error) => {
-        console.error("Full error:", error.response?.data || error.message);
-        alert(
-          "Error creating product: " +
-            (error.response?.data?.detail || error.message)
-        );
-      });
-  };
-
+      axios
+        .post("/api/create", newProduct, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          alert("Product created successfully!");
+          navigate("/shop");
+        })
+        .catch((error) => {
+          console.error("Full error:", error.response?.data || error.message);
+          alert(
+            "Error creating product: " +
+              (error.response?.data?.detail || error.message)
+          );
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
