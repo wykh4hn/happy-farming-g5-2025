@@ -252,7 +252,7 @@ const Shop = () => {
       });
 
       console.log("Transaction sent:", tx.hash);
-      await tx.wait();
+      const receipt = await tx.wait();
       console.log("Transaction confirmed");
 
       // Record in database
