@@ -24,6 +24,15 @@ Set-Location -Path "$PSScriptRoot\backend\wApp"
 if (Test-Path -Path ".\Scripts\Activate.ps1") {
     & .\Scripts\Activate.ps1
     Write-Host "Virtual environment activated." -ForegroundColor Yellow
+} else {
+    Write-Host "Virtual environment not found. Creating one..." -ForegroundColor Yellow
+    python -m venv .
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Failed to create virtual environment!" -ForegroundColor Red
+        exit 1
+    }
+    & .\Scripts\Activate.ps1
+    Write-Host "Virtual environment created and activated." -ForegroundColor Green
 }
 
 # Run the FastAPI application with auto-reload
