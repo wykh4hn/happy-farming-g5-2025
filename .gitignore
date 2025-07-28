@@ -187,3 +187,5 @@ backend/app/__pycache__/
 
 *.html
 *.txt
+
+backend/wApp/app/__pycache__

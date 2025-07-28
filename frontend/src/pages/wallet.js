@@ -17,25 +17,27 @@ function Wallet() {
 
   // Button handler button for handling a
   // request event for metamask
-const [isConnecting, setIsConnecting] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
 
-const btnhandler = async () => {
-  if (window.ethereum) {
-    if (isConnecting) return; // Prevent multiple clicks
-    setIsConnecting(true);
-    try {
-      const res = await window.ethereum.request({ method: "eth_requestAccounts" });
-      accountChangeHandler(res[0]);
-    } catch (error) {
-      console.error("MetaMask connection error:", error);
-      alert(error.message || "Failed to connect wallet.");
-    } finally {
-      setIsConnecting(false);
+  const btnhandler = async () => {
+    if (window.ethereum) {
+      if (isConnecting) return; // Prevent multiple clicks
+      setIsConnecting(true);
+      try {
+        const res = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        accountChangeHandler(res[0]);
+      } catch (error) {
+        console.error("MetaMask connection error:", error);
+        alert(error.message || "Failed to connect wallet.");
+      } finally {
+        setIsConnecting(false);
+      }
+    } else {
+      alert("Please install the MetaMask extension!");
     }
-  } else {
-    alert("Please install the MetaMask extension!");
-  }
-};
+  };
 
   // getbalance function for getting a balance in
   // a right format with help of ethers
@@ -50,7 +52,7 @@ const btnhandler = async () => {
         // Setting balance
         setdata({
           address: address,
-          Balance: ethers.formatEther(balance),
+          Balance: ethers.formatEther(balance) + " ETH",
         });
         setWalletConnected(true);
       });
