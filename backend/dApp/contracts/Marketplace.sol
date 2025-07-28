@@ -37,9 +37,15 @@ contract Marketplace is Ownable, Pausable, ReentrancyGuard {
     event ProductPurchased(uint256 indexed purchaseId, uint256 indexed productId, address indexed buyer, uint256 amount);
     event ProductDeactivated(uint256 indexed productId);
 
+    constructor(address initialOwner) Ownable(initialOwner) {
+        
+    }
+
     // === Product Creation ===
     function createProduct(string memory name, string memory description, uint256 price) external whenNotPaused {
         require(price > 0, "Price must be greater than zero");
+        require(bytes(name).length > 0, "Name cannot be empty");
+        require(bytes(description).length > 0, "Description cannot be empty");
 
         _productIds.increment();
         uint256 productId = _productIds.current();
@@ -70,15 +76,21 @@ contract Marketplace is Ownable, Pausable, ReentrancyGuard {
             productId: productId,
             buyer: msg.sender,
             timestamp: block.timestamp,
-            amount: msg.value
+            amount: product.price
         });
 
         userPurchases[msg.sender].push(purchaseId);
 
-        product.seller.transfer(msg.value);
+        product.active = false; // State change before external call
 
-        emit ProductPurchased(purchaseId, productId, msg.sender, msg.value);
-        product.active = false;
+        product.seller.transfer(product.price);
+
+        // Refund any excess amount sent by the buyer
+        if (msg.value > product.price) {
+            payable(msg.sender).transfer(msg.value - product.price);
+        }
+
+        emit ProductPurchased(purchaseId, productId, msg.sender, product.price);
     }
 
     // === Get Purchases by User ===
