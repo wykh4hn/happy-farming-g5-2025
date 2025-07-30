@@ -37,9 +37,9 @@ contract Marketplace is Ownable, Pausable, ReentrancyGuard {
     event ProductPurchased(uint256 indexed purchaseId, uint256 indexed productId, address indexed buyer, uint256 amount);
     event ProductDeactivated(uint256 indexed productId);
 
-    constructor(address initialOwner) Ownable(initialOwner) {
+    // constructor(address initialOwner) Ownable(initialOwner) {
         
-    }
+    // }
 
     // === Product Creation ===
     function createProduct(string memory name, string memory description, uint256 price) external whenNotPaused {
