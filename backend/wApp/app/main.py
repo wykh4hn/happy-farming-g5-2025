@@ -44,7 +44,8 @@ async def create_product(product: ProductBase):  # Use ProductBase instead of Pr
 async def read_all_products(limit: int | None = None):
     try:
         with Session(engine) as session:
-            statement = select(Product)
+            # Only return products that are in stock
+            statement = select(Product).where(Product.in_stock == True)
             if limit:
                 statement = statement.limit(limit)
             products = session.exec(statement).all()
@@ -118,23 +119,27 @@ async def record_purchase(purchase: PurchaseCreate):
             product = session.get(Product, purchase.product_id)
             if not product:
                 raise HTTPException(status_code=404, detail="Product not found")
-            
+
             # Check if transaction already recorded (prevent duplicates)
             existing = session.exec(
                 select(Purchase).where(Purchase.transaction_hash == purchase.transaction_hash)
             ).first()
-            
+
             if existing:
                 raise HTTPException(status_code=400, detail="Transaction already recorded")
-            
+
             # Create purchase record
             db_purchase = Purchase(**purchase.dict())
             session.add(db_purchase)
             session.commit()
             session.refresh(db_purchase)
-            
-            return {"message": "Purchase recorded successfully", "purchase": db_purchase.model_dump()}
-    
+
+            # Mark product as sold (in_stock = False)
+            product.in_stock = False
+            session.add(product)
+            session.commit()
+
+            return {"message": "Purchase recorded successfully and product marked as sold", "purchase": db_purchase.model_dump()}
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
