@@ -12,6 +12,10 @@ const TransactionHistory = () => {
   const [error, setError] = useState(null);
   const chartRef = useRef(null);
 
+  // Summary stats
+  const totalSpent = transactions.reduce((sum, t) => sum + (t.amount_eth || 0), 0);
+  const totalTx = transactions.length;
+
   useEffect(() => {
     const fetchHistory = async () => {
       try {
@@ -84,18 +88,28 @@ const TransactionHistory = () => {
   }, [transactions]);
 
   return (
-    <div>
+    <div style={{ background: "#f8f9fa", minHeight: "100vh" }}>
       <MainNav />
-      <div className="main-content" id="transaction-history">
-        <h1>YOUR TRANSACTION HISTORY</h1>
-        <p>View your recent spendings:</p>
-        <div id="chart-container">
+      <div className="main-content" id="transaction-history" style={{ maxWidth: 900, margin: "auto", padding: 24 }}>
+        <h1 style={{ fontWeight: 700, fontSize: "2.2em", color: "#044b4d", marginBottom: 8 }}>Transaction History</h1>
+        <div style={{ display: "flex", gap: 24, flexWrap: "wrap", marginBottom: 32 }}>
+          <div style={{ background: "#fffbe6", borderRadius: 12, boxShadow: "0 2px 8px #eee", padding: 24, minWidth: 220 }}>
+            <h2 style={{ color: "#0077cc", margin: 0 }}>Total Spent</h2>
+            <p style={{ fontSize: "1.5em", fontWeight: 600, margin: "8px 0" }}>{totalSpent.toFixed(3)} ETH</p>
+          </div>
+          <div style={{ background: "#e6f7ff", borderRadius: 12, boxShadow: "0 2px 8px #eee", padding: 24, minWidth: 220 }}>
+            <h2 style={{ color: "#28a745", margin: 0 }}>Transactions</h2>
+            <p style={{ fontSize: "1.5em", fontWeight: 600, margin: "8px 0" }}>{totalTx}</p>
+          </div>
+        </div>
+        <div id="chart-container" style={{ background: "#fff", borderRadius: 12, boxShadow: "0 2px 8px #eee", padding: 24, marginBottom: 32 }}>
+          <h3 style={{ color: "#0077cc", marginBottom: 16 }}>Spending Over Time</h3>
           <div ref={chartRef}></div>
         </div>
       </div>
 
-      <div id="transaction-history-list">
-        <h2>Recent Transactions</h2>
+      <div id="transaction-history-list" style={{ maxWidth: 900, margin: "auto", padding: 24 }}>
+        <h2 style={{ color: "#044b4d", fontWeight: 700 }}>Recent Transactions</h2>
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
@@ -103,14 +117,23 @@ const TransactionHistory = () => {
         ) : transactions.length === 0 ? (
           <p>No transactions found.</p>
         ) : (
-          <div className="transaction-container">
+          <div className="transaction-container" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
             {transactions.map((t) => (
-              <div key={t.id} className="transaction-item">
-                <h4>{t.product_name || "Product"}</h4>
-                <p>Amount: {t.amount_eth} ETH</p>
-                <p>Status: {t.status || "Confirmed"}</p>
-                <p>Hash: {t.transaction_hash}</p>
-                <p>Date: {t.timestamp || t.date}</p>
+              <div key={t.id} className="transaction-item" style={{ background: "#fff", borderRadius: 10, boxShadow: "0 1px 4px #eee", padding: 18, display: "flex", alignItems: "center", gap: 18 }}>
+                {t.product && t.product.img ? (
+                  <img src={t.product.img} alt={t.product.name} style={{ width: 60, height: 60, objectFit: "cover", borderRadius: 8, marginRight: 18, border: "1px solid #eee" }} />
+                ) : (
+                  <div style={{ width: 60, height: 60, background: "#f0f0f0", borderRadius: 8, marginRight: 18, display: "flex", alignItems: "center", justifyContent: "center", color: "#bbb" }}>
+                    <span style={{ fontSize: 32 }}>🛒</span>
+                  </div>
+                )}
+                <div style={{ flex: 1 }}>
+                  <h4 style={{ margin: 0, color: "#0077cc" }}>{(t.product && t.product.name) || t.product_name || "Product"}</h4>
+                  <p style={{ margin: "4px 0", fontWeight: 500 }}>Amount: <span style={{ color: "#28a745" }}>{t.amount_eth} ETH</span></p>
+                  <p style={{ margin: "4px 0" }}>Status: <span style={{ color: t.status === "failed" ? "#dc3545" : "#0077cc" }}>{t.status || "Confirmed"}</span></p>
+                  <p style={{ margin: "4px 0" }}>Hash: <span style={{ fontFamily: "monospace", fontSize: "0.95em" }}>{t.transaction_hash}</span></p>
+                  <p style={{ margin: "4px 0" }}>Date: {t.timestamp ? new Date(t.timestamp).toLocaleString() : t.date}</p>
+                </div>
               </div>
             ))}
           </div>
