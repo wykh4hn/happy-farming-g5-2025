@@ -1,6 +1,6 @@
 // This is for imply and connect MetaMask to this.
 // Importing modules
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { Button, Card } from "react-bootstrap";
 import { MainNav } from "../components/nav";
@@ -30,7 +30,21 @@ function Wallet() {
         accountChangeHandler(res[0]);
       } catch (error) {
         console.error("MetaMask connection error:", error);
-        alert(error.message || "Failed to connect wallet.");
+        // Fix: Properly handle error object
+        let errorMessage = "Failed to connect wallet.";
+
+        if (error.message) {
+          errorMessage = error.message;
+        } else if (error.code === 4001) {
+          errorMessage = "User rejected the connection request.";
+        } else if (error.code === -32002) {
+          errorMessage =
+            "MetaMask is already processing a request. Please wait.";
+        } else if (typeof error === "string") {
+          errorMessage = error;
+        }
+
+        alert(errorMessage);
       } finally {
         setIsConnecting(false);
       }
@@ -41,21 +55,22 @@ function Wallet() {
 
   // getbalance function for getting a balance in
   // a right format with help of ethers
-  const getbalance = (address) => {
-    // Requesting balance method
-    window.ethereum
-      .request({
-        method: "eth_getBalance",
-        params: [address, "latest"],
-      })
-      .then((balance) => {
-        // Setting balance
-        setdata({
-          address: address,
-          Balance: ethers.formatEther(balance) + " ETH",
-        });
-        setWalletConnected(true);
+  const getbalance = async (address) => {
+    try {
+      // Fix: Use modern ethers approach
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const balance = await provider.getBalance(address);
+
+      // Setting balance
+      setdata({
+        address: address,
+        Balance: ethers.formatEther(balance) + " ETH",
       });
+      setWalletConnected(true);
+    } catch (error) {
+      console.error("Error getting balance:", error);
+      alert("Failed to get wallet balance.");
+    }
   };
 
   // Function for getting handling all events
@@ -63,11 +78,54 @@ function Wallet() {
     // Setting an address data
     setdata({
       address: account,
+      Balance: "Loading...",
     });
 
     // Setting a balance
     getbalance(account);
   };
+
+  // Check if wallet is already connected on component mount
+  useEffect(() => {
+    const checkConnection = async () => {
+      if (window.ethereum) {
+        try {
+          const accounts = await window.ethereum.request({
+            method: "eth_accounts",
+          });
+          if (accounts.length > 0) {
+            accountChangeHandler(accounts[0]);
+          }
+        } catch (error) {
+          console.error("Error checking wallet connection:", error);
+        }
+      }
+    };
+
+    checkConnection();
+
+    // Listen for account changes
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", (accounts) => {
+        if (accounts.length > 0) {
+          accountChangeHandler(accounts[0]);
+        } else {
+          setdata({ address: "", Balance: null });
+          setWalletConnected(false);
+        }
+      });
+
+      // Cleanup listener on unmount
+      return () => {
+        if (window.ethereum.removeListener) {
+          window.ethereum.removeListener(
+            "accountsChanged",
+            accountChangeHandler
+          );
+        }
+      };
+    }
+  }, []);
 
   return (
     <div className="Wallet">
@@ -82,15 +140,23 @@ function Wallet() {
         </p>
         <Card.Header>
           <strong>Address: </strong>
-          {data.address}
+          {data.address || "Not connected"}
         </Card.Header>
         <Card.Body>
           <Card.Text>
             <strong>Balance: </strong>
-            {data.Balance}
+            {data.Balance || "0 ETH"}
           </Card.Text>
-          <Button onClick={btnhandler} variant="primary">
-            Connect to wallet
+          <Button
+            onClick={btnhandler}
+            variant="primary"
+            disabled={isConnecting || walletConnected}
+          >
+            {isConnecting
+              ? "Connecting..."
+              : walletConnected
+              ? "Connected"
+              : "Connect to wallet"}
           </Button>
         </Card.Body>
       </Card>

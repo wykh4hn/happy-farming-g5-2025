@@ -51,7 +51,7 @@ class Product(SQLModel, table=True):
     asset_type: str = Field(default="digital", max_length=50)
     category: str = Field(default="Other", max_length=50)
     owner: str = Field(min_length=42, max_length=42) 
-    img: Optional[str] = Field(default=None, sa_column=Column(LONGTEXT))
+    img: Optional[str] = Field(default=None, sa_column=Column(TEXT))
     contractAddress: str = Field(min_length=42, max_length=42)
     tokenId: str = Field(min_length=1, max_length=100)
     in_stock: bool = Field(default=True)
