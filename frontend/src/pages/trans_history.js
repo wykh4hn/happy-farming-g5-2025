@@ -87,16 +87,10 @@ const TransactionHistory = () => {
       .call(d3.axisLeft(y));
   }, [transactions]);
 
-  const totalSpent = transactions.reduce((acc, tran) => {
-    const amount = tran.amount_eth || 0;
-    const qty = tran.quantity || 1;
-    return acc + amount * qty;
-  }, 0);
 
   return (
     <div style={{ background: "#f8f9fa", minHeight: "100vh" }}>
       <MainNav />
-<<<<<<< HEAD
       <div className="main-content" id="transaction-history" style={{ maxWidth: 900, margin: "auto", padding: 24 }}>
         <h1 style={{ fontWeight: 700, fontSize: "2.2em", color: "#044b4d", marginBottom: 8 }}>Transaction History</h1>
         <div style={{ display: "flex", gap: 24, flexWrap: "wrap", marginBottom: 32 }}>
@@ -111,32 +105,6 @@ const TransactionHistory = () => {
         </div>
         <div id="chart-container" style={{ background: "#fff", borderRadius: 12, boxShadow: "0 2px 8px #eee", padding: 24, marginBottom: 32 }}>
           <h3 style={{ color: "#0077cc", marginBottom: 16 }}>Spending Over Time</h3>
-=======
-
-      <div className="main-content" id="transaction-history">
-        <h1 style={{
-          fontFamily: '"Abril Fatface", sans-serif',
-          fontSize: "2.5em",
-          textAlign: "center",
-          color: "#044b4d",
-          backgroundColor: "#f8f4eb",
-          padding: "15px 40px",
-          borderRadius: "50px",
-          position: "relative",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "80%",
-          margin: "30px auto",
-          marginTop: "110px"
-        }}>
-          YOUR TRANSACTION HISTORY
-        </h1>
-
-        <p style={{ textAlign: "center" }}>View your recent spendings:</p>
-
-        <div id="chart-container">
->>>>>>> d4318c1a92b9d3d7a1e4b9be3dfc5cb0d742d82e
           <div ref={chartRef}></div>
         </div>
 
@@ -150,7 +118,6 @@ const TransactionHistory = () => {
         <p>This is a simple line chart showing your recent transactions. The X-axis represents the transaction number, and the Y-axis represents the amount spent in each transaction (including quantity).</p>
       </div>
 
-<<<<<<< HEAD
       <div id="transaction-history-list" style={{ maxWidth: 900, margin: "auto", padding: 24 }}>
         <h2 style={{ color: "#044b4d", fontWeight: 700 }}>Recent Transactions</h2>
         {loading ? (
@@ -181,42 +148,6 @@ const TransactionHistory = () => {
             ))}
           </div>
         )}
-=======
-      <div id="transaction-history-list">
-        <h2>Recent Transactions</h2>
-        <p>Your past transaction is here</p>
-        <br />
-        <div className="transaction-container">
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p className="error">{error}</p>
-          ) : transactions.length === 0 ? (
-            <p>No transaction found.</p>
-          ) : (
-            transactions.map((transaction) => {
-              const product = transaction.product || {};
-              return (
-                <div key={transaction.id} className="transaction-item">
-                  <img
-                    src={product.img || "/default-product.png"}
-                    alt={product.name || "Product Image"}
-                    className="transaction-img"
-                  />
-                  <div>
-                    <h4>{product.name || "Unnamed Product"}</h4>
-                    <p><b>{transaction.amount_eth} ETH</b></p>
-                    <p>Status: {transaction.status || "Confirmed"}</p>
-                    <p style={{ fontSize: "0.95em", color: "#888" }}>
-                      {new Date(transaction.timestamp).toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
->>>>>>> d4318c1a92b9d3d7a1e4b9be3dfc5cb0d742d82e
       </div>
     </div>
   );
