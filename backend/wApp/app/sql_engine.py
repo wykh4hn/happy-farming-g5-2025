@@ -18,11 +18,12 @@ engine = None
 
 try:
     engine = create_engine(
-        f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}:{DB_PORT}/{DB_NAME}",
+        # f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}:{DB_PORT}/{DB_NAME}",
+        f"sqlite:///products.db",
         echo=False,
         pool_timeout=20,
         pool_recycle=3600,
-        connect_args={"connect_timeout": 10}
+        # connect_args={"connect_timeout": 10}
     )
     # Test connection
     with engine.connect() as conn:
