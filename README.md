@@ -78,6 +78,8 @@ flask run
 
 ```
 ### 3. Frontend (React.js)
+
+```bash
 # Navigate to the frontend directory
 cd frontend
 
