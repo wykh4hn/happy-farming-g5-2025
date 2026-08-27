@@ -50,3 +50,43 @@ npx hardhat node
 
 # Open a NEW terminal, deploy the contracts to the local network
 npx hardhat run scripts/deploy.js --network localhost
+
+```
+### 2. Backend API (Python, Flask, MySQL)
+The backend requires a running MySQL service. Make sure you have created a local database for the project (e.g., happy_farming_db).
+
+``` bash 
+# Navigate to the backend directory
+cd backend
+
+# Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
+
+# Install required Python packages
+pip install -r requirements.txt
+
+# Set up your environment variables
+# Create a .env file and add your MySQL URI and Contract Address
+# Example: DATABASE_URL=mysql+pymysql://user:password@localhost/happy_farming_db
+
+# Run database migrations/schema creation
+python models.py  # Or your specific DB setup script
+
+# Start the Flask server
+flask run
+
+```
+### 3. Frontend (React.js)
+# Navigate to the frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start the React development server
+npm start
+
+```
+
+~have fun -đức, sơn, khanh
